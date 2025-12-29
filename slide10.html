@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HiQurate Ops - Go-To-Market Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235',
+                            dim: '#334155',
+                            purple: '#8B5CF6',
+                            green: '#10B981',
+                            orange: '#F59E0B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(6, 182, 212, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* SVG Pattern Background to replace gradients */
+        .grid-pattern {
+            background-color: #0B1120;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%231E293B' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .card-hover-effect {
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+
+</head>
+<body class="bg-gray-900 m-0 p-0 overflow-hidden">
+<div class="w-[1280px] h-[720px]  bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-pattern">
+<!-- Header -->
+<div class="h-20 flex items-center px-12 border-b border-cyber-light bg-cyber-dark z-20 shrink-0">
+<div class="flex items-center gap-2">
+<img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
+<span class="font-sans font-bold text-lg tracking-wider">HiQurate <span class="text-cyber-accent">Ops</span></span>
+</div>
+<div class="ml-auto flex items-center gap-4">
+<span class="text-xs font-mono text-slate-500">10 / 11</span>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col p-10 relative z-10">
+<!-- Title Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<div class="w-8 h-1 bg-cyber-purple rounded-full"></div>
+<p class="text-xs font-mono text-cyber-purple tracking-widest uppercase">Acquisition &amp; Growth</p>
+</div>
+<h2 class="text-4xl font-extrabold font-sans tracking-tight text-white">Go-To-Market Strategy</h2>
+</div>
+<div class="flex items-center gap-3 bg-cyber-surface border border-cyber-light rounded-lg px-4 py-2">
+<i class="fa-solid fa-bullhorn text-cyber-purple"></i>
+<p class="text-sm font-mono text-slate-300">Targeted &amp; Efficient</p>
+</div>
+</div>
+<!-- Funnel Channels Grid -->
+<div class="flex-1 flex gap-4 mb-6">
+<!-- Channel 1: Founder-Led -->
+<div class="flex-1 bg-cyber-surface border border-cyber-light hover:border-cyber-purple rounded-xl p-5 flex flex-col card-hover-effect group">
+<div class="w-12 h-12 rounded-lg bg-cyber-dark border border-cyber-dim flex items-center justify-center text-cyber-purple mb-4 group-hover:text-white group-hover:bg-cyber-purple transition-colors">
+<i class="fa-solid fa-person-chalkboard text-xl"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-2">Founder-Led Awareness</h3>
+<div class="flex-1">
+<p class="text-sm text-slate-400 leading-relaxed mb-2">Building trust through direct engagement.</p>
+<div class="space-y-1">
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-purple"></i> Leadership sessions
+                            </p>
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-purple"></i> Industry forums
+                            </p>
+</div>
+</div>
+</div>
+<!-- Channel 2: Referrals -->
+<div class="flex-1 bg-cyber-surface border border-cyber-light hover:border-cyber-accent rounded-xl p-5 flex flex-col card-hover-effect group">
+<div class="w-12 h-12 rounded-lg bg-cyber-dark border border-cyber-dim flex items-center justify-center text-cyber-accent mb-4 group-hover:text-white group-hover:bg-cyber-accent transition-colors">
+<i class="fa-solid fa-handshake-simple text-xl"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-2">Referrals &amp; Partnerships</h3>
+<div class="flex-1">
+<p class="text-sm text-slate-400 leading-relaxed mb-2">Leveraging trusted networks for intro.</p>
+<div class="space-y-1">
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-accent"></i> MSPs &amp; IT Providers
+                            </p>
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-accent"></i> Audit firms &amp; Cloud
+                            </p>
+</div>
+</div>
+</div>
+<!-- Channel 3: Targeted Outreach -->
+<div class="flex-1 bg-cyber-surface border border-cyber-light hover:border-cyber-glow rounded-xl p-5 flex flex-col card-hover-effect group">
+<div class="w-12 h-12 rounded-lg bg-cyber-dark border border-cyber-dim flex items-center justify-center text-cyber-glow mb-4 group-hover:text-cyber-dark group-hover:bg-cyber-glow transition-colors">
+<i class="fa-solid fa-crosshairs text-xl"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-2">Targeted Outreach</h3>
+<div class="flex-1">
+<p class="text-sm text-slate-400 leading-relaxed mb-2">Problem-led approach to specific verticals.</p>
+<div class="space-y-1">
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-glow"></i> Regulated SMBs
+                            </p>
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-glow"></i> Low-cost threat snaps
+                            </p>
+</div>
+</div>
+</div>
+<!-- Channel 4: Assessment-Led -->
+<div class="flex-1 bg-cyber-surface border border-cyber-light hover:border-cyber-green rounded-xl p-5 flex flex-col card-hover-effect group">
+<div class="w-12 h-12 rounded-lg bg-cyber-dark border border-cyber-dim flex items-center justify-center text-cyber-green mb-4 group-hover:text-white group-hover:bg-cyber-green transition-colors">
+<i class="fa-solid fa-file-medical text-xl"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-2">Assessment-Led</h3>
+<div class="flex-1">
+<p class="text-sm text-slate-400 leading-relaxed mb-2">Assessments as the gateway to deals.</p>
+<div class="space-y-1">
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-green"></i> Paid entry points
+                            </p>
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-green"></i> Conversion to retainer
+                            </p>
+</div>
+</div>
+</div>
+<!-- Channel 5: Thought Leadership -->
+<div class="flex-1 bg-cyber-surface border border-cyber-light hover:border-cyber-orange rounded-xl p-5 flex flex-col card-hover-effect group">
+<div class="w-12 h-12 rounded-lg bg-cyber-dark border border-cyber-dim flex items-center justify-center text-cyber-orange mb-4 group-hover:text-white group-hover:bg-cyber-orange transition-colors">
+<i class="fa-solid fa-lightbulb text-xl"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-2">Thought Leadership</h3>
+<div class="flex-1">
+<p class="text-sm text-slate-400 leading-relaxed mb-2">Education over marketing noise.</p>
+<div class="space-y-1">
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-orange"></i> Practical blogs
+                            </p>
+<p class="text-xs text-slate-500 flex items-center gap-2">
+<i class="fa-solid fa-circle text-[4px] text-cyber-orange"></i> Case-driven insights
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Outcome Banner -->
+<div class="h-24 bg-cyber-light/20 border border-cyber-dim rounded-xl flex items-center justify-between px-8 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-cyber-purple"></div>
+<div class="flex items-center gap-6 z-10">
+<div class="w-10 h-10 rounded-full bg-cyber-purple/20 flex items-center justify-center border border-cyber-purple/50">
+<i class="fa-solid fa-chart-line text-cyber-purple"></i>
+</div>
+<div>
+<h4 class="text-white font-bold text-lg">Strategic Outcome</h4>
+<p class="text-sm text-slate-400">Ensuring efficient market penetration</p>
+</div>
+</div>
+<div class="flex items-center gap-8 z-10">
+<div class="text-right">
+<p class="text-xs font-mono text-cyber-glow uppercase">Acquisition</p>
+<p class="text-white font-bold">Low CAC</p>
+</div>
+<div class="w-px h-8 bg-cyber-dim"></div>
+<div class="text-right">
+<p class="text-xs font-mono text-cyber-green uppercase">Growth</p>
+<p class="text-white font-bold">Credibility-Led</p>
+</div>
+<div class="w-px h-8 bg-cyber-dim"></div>
+<div class="text-right">
+<p class="text-xs font-mono text-cyber-accent uppercase">Revenue</p>
+<p class="text-white font-bold">Sustainable</p>
+</div>
+</div>
+<!-- Background glow -->
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-cyber-purple/10 blur-3xl rounded-full -z-0"></div>
+</div>
+</div>
+<!-- Background Decorative Elements -->
+<div class="absolute bottom-0 left-0 w-full h-1 bg-cyber-surface z-10"></div>
+<div class="absolute top-20 right-20 w-32 h-32 border border-cyber-dim/30 rounded-full opacity-20"></div>
+<div class="absolute top-10 right-10 w-64 h-64 border border-cyber-dim/20 rounded-full opacity-20"></div>
+</div>
+</body>
+</html>
+
+

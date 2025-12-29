@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HiQurate Ops - Core Offerings</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235',
+                            dim: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        /* Custom scrollbar for overflow content if needed */
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(6, 182, 212, 0.5);
+            border-radius: 2px;
+        }
+    </style>
+
+</head>
+<body class="bg-gray-900 m-0 p-0 overflow-hidden">
+<div class="w-[1280px] h-[720px]  bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
+<!-- Header -->
+<div class="h-20 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20 shrink-0">
+<div class="flex items-center gap-2">
+<img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
+<span class="font-sans font-bold text-lg tracking-wider">HiQurate <span class="text-cyber-accent">Ops</span></span>
+</div>
+<div class="ml-auto flex items-center gap-4">
+<span class="text-xs font-mono text-slate-500">05 / 11</span>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col p-10 relative z-10">
+<!-- Page Title Area -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<div class="w-8 h-1 bg-cyber-accent rounded-full"></div>
+<p class="text-xs font-mono text-cyber-glow tracking-widest uppercase">What We Do</p>
+</div>
+<h2 class="text-4xl font-extrabold font-sans tracking-tight text-white">Core Offerings</h2>
+</div>
+<div class="max-w-md text-right hidden">
+<!-- Optional secondary text if needed -->
+</div>
+</div>
+<!-- Services Grid 2x3 Layout -->
+<div class="grid grid-cols-3 grid-rows-2 gap-5 flex-1">
+<!-- Service 1: Ops & Monitoring -->
+<div class="bg-cyber-surface/60 border border-cyber-light rounded-xl p-6 hover:border-cyber-accent/50 hover:bg-cyber-surface/80 transition-all duration-300 group flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<i class="fa-solid fa-tower-broadcast text-6xl text-cyber-accent"></i>
+</div>
+<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim mb-4 group-hover:border-cyber-accent transition-colors">
+<i class="fa-solid fa-eye text-cyber-glow"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-3">Security Operations &amp; Monitoring</h3>
+<ul class="space-y-2 text-sm text-slate-400 font-light flex-1">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>SOC operations &amp; continuous monitoring</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Daily threat detection, alert triage &amp; response</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Security posture &amp; hygiene management</span>
+</li>
+</ul>
+</div>
+<!-- Service 2: Assessments -->
+<div class="bg-cyber-surface/60 border border-cyber-light rounded-xl p-6 hover:border-cyber-accent/50 hover:bg-cyber-surface/80 transition-all duration-300 group flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<i class="fa-solid fa-magnifying-glass-chart text-6xl text-cyber-accent"></i>
+</div>
+<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim mb-4 group-hover:border-cyber-accent transition-colors">
+<i class="fa-solid fa-clipboard-check text-cyber-glow"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-3">Security Assessments</h3>
+<ul class="space-y-2 text-sm text-slate-400 font-light flex-1">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Readiness &amp; gap assessments</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Environmental &amp; control maturity reviews</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Attack surface management visibility</span>
+</li>
+</ul>
+</div>
+<!-- Service 3: Incident Response -->
+<div class="bg-cyber-surface/60 border border-cyber-light rounded-xl p-6 hover:border-cyber-accent/50 hover:bg-cyber-surface/80 transition-all duration-300 group flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<i class="fa-solid fa-truck-medical text-6xl text-cyber-accent"></i>
+</div>
+<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim mb-4 group-hover:border-cyber-accent transition-colors">
+<i class="fa-solid fa-fire-extinguisher text-cyber-glow"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-3">Incident Response &amp; Recovery</h3>
+<ul class="space-y-2 text-sm text-slate-400 font-light flex-1">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Incident investigation &amp; containment</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Root cause analysis &amp; guidance</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Support during high-impact events</span>
+</li>
+</ul>
+</div>
+<!-- Service 4: Advisory & GRC -->
+<div class="bg-cyber-surface/60 border border-cyber-light rounded-xl p-6 hover:border-cyber-accent/50 hover:bg-cyber-surface/80 transition-all duration-300 group flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<i class="fa-solid fa-scale-balanced text-6xl text-cyber-accent"></i>
+</div>
+<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim mb-4 group-hover:border-cyber-accent transition-colors">
+<i class="fa-solid fa-file-contract text-cyber-glow"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-3">Advisory &amp; GRC</h3>
+<ul class="space-y-2 text-sm text-slate-400 font-light flex-1">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Security governance &amp; risk advisory</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Policy, compliance &amp; maturity guidance</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Executive-level risk visibility</span>
+</li>
+</ul>
+</div>
+<!-- Service 5: Implementation -->
+<div class="bg-cyber-surface/60 border border-cyber-light rounded-xl p-6 hover:border-cyber-accent/50 hover:bg-cyber-surface/80 transition-all duration-300 group flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<i class="fa-solid fa-screwdriver-wrench text-6xl text-cyber-accent"></i>
+</div>
+<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim mb-4 group-hover:border-cyber-accent transition-colors">
+<i class="fa-solid fa-layer-group text-cyber-glow"></i>
+</div>
+<h3 class="text-lg font-bold font-sans text-white mb-3">Implementation &amp; Operations</h3>
+<ul class="space-y-2 text-sm text-slate-400 font-light flex-1">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Tool implementation &amp; optimisation</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Alignment with business needs</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-check text-cyber-accent/70 mt-1 text-[10px]"></i>
+<span>Ongoing operational support</span>
+</li>
+</ul>
+</div>
+<!-- Block 6: Philosophy / Quote -->
+<div class="bg-gradient-to-br from-cyber-blue to-cyber-dark border border-cyber-accent/30 rounded-xl p-6 flex flex-col justify-center items-center text-center relative overflow-hidden">
+<div class="absolute inset-0 bg-cyber-accent/5"></div>
+<div class="relative z-10">
+<div class="w-12 h-1 bg-cyber-accent mx-auto mb-4 rounded-full"></div>
+<p class="text-lg text-white font-medium italic leading-relaxed">
+                            "Our focus is on solving the <span class="text-cyber-glow font-bold not-italic">right problems</span> in the <span class="text-cyber-glow font-bold not-italic">right order</span>, not on selling tools."
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Elements -->
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-cyber-dark to-transparent pointer-events-none z-0"></div>
+</div>
+</body>
+</html>
+
+
