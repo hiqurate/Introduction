@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>HiQurate Ops - What's Broken</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - What's Broken</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -33,10 +37,10 @@
             }
         }
     </script>
-<style>
+    <style>
         .grid-bg {
             background-color: #0B1120;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
@@ -44,110 +48,232 @@
     </style>
 
 </head>
+
 <body class="bg-gray-900 m-0 p-0 overflow-hidden">
-<div class="w-[1280px] h-[720px]  bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-bg">
-<!-- Top Navigation / Header -->
-<div class="h-20 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20">
-<div class="flex items-center gap-2">
-<img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
-<span class="font-sans font-bold text-lg tracking-wider">HiQurate <span class="text-cyber-accent">Ops</span></span>
-</div>
-<div class="ml-auto flex items-center gap-4">
-<span class="text-xs font-mono text-slate-500">03 / 11</span>
-</div>
-</div>
-<!-- Main Content Container -->
-<div class="flex-1 flex p-12 gap-12 relative z-10">
-<!-- Left Column: The Context (Market Disconnect) -->
-<div class="w-[35%] flex flex-col justify-center">
-<div class="inline-flex items-center gap-2 mb-4">
-<span class="w-2 h-2 bg-cyber-danger rounded-full animate-pulse"></span>
-<p class="text-xs font-mono text-cyber-danger tracking-widest uppercase">Market Gap Analysis</p>
-</div>
-<h2 class="text-4xl font-extrabold font-sans leading-tight mb-6">
-                    What’s <span class="text-cyber-danger">Broken</span> in Today’s Cybersecurity?
-                </h2>
-<p class="text-slate-300 text-lg leading-relaxed mb-8 font-light">
-                    Large enterprises can afford premium consulting. <strong class="text-white font-medium">Small and mid-sized businesses cannot.</strong>
-</p>
-<div class="p-6 bg-cyber-surface rounded-xl border-l-4 border-cyber-danger shadow-lg">
-<h3 class="text-white font-bold font-sans mb-3 flex items-center gap-2">
-<i class="fa-solid fa-triangle-exclamation text-cyber-danger"></i>
-                        The Accessibility Gap
-                    </h3>
-<p class="text-sm text-slate-400 leading-relaxed mb-4">
-                        Most enterprise security services are <span class="text-white">expensive</span>, <span class="text-white">over-engineered</span>, and fundamentally <span class="text-white">inaccessible</span> to SMBs, especially in India.
+    <div class="w-[1280px] h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-bg">
+        <!-- Top Navigation / Header -->
+        <div class="h-16 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
+                <span class="font-sans font-bold text-lg tracking-wider">HiQurate <span
+                        class="text-cyber-accent">Ops</span></span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-500">03 / 11</span>
+            </div>
+        </div>
+
+        <!-- Main Content Container -->
+        <div class="flex-1 flex p-8 gap-8 relative z-10">
+            <!-- Left Column: Title + Personal Story -->
+            <div class="w-[38%] flex flex-col justify-center">
+                <div class="inline-flex items-center gap-2 mb-3">
+                    <span class="w-2 h-2 bg-cyber-danger rounded-full animate-pulse"></span>
+                    <p class="text-xs font-mono text-cyber-danger tracking-widest uppercase">10 Years of Observations
                     </p>
-<div class="w-full bg-cyber-dark h-2 rounded-full overflow-hidden">
-<div class="h-full bg-cyber-light w-full relative">
-<div class="absolute left-0 top-0 h-full bg-cyber-accent w-[20%]"></div>
-<div class="absolute right-0 top-0 h-full bg-cyber-danger w-[60%]"></div>
-</div>
-</div>
-<div class="flex justify-between text-[10px] font-mono text-slate-500 mt-2">
-<span>Accessible Solutions</span>
-<span class="text-cyber-danger">Unmet Needs</span>
-</div>
-</div>
-</div>
-<!-- Right Column: The 4 Gaps Matrix -->
-<div class="w-[65%] flex flex-col">
-<h3 class="text-xl font-bold font-sans mb-6 text-white flex items-center gap-3">
-<span class="bg-cyber-light px-2 py-1 rounded text-sm text-cyber-glow font-mono">04</span>
-                    Key Gaps Identified
-                </h3>
-<div class="grid grid-cols-2 grid-rows-2 gap-4 flex-1">
-<!-- Gap 1 -->
-<div class="bg-cyber-surface/50 border border-cyber-light hover:border-cyber-accent/50 transition-all p-6 rounded-lg group hover:bg-cyber-surface">
-<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center mb-4 text-cyber-warning group-hover:scale-110 transition-transform">
-<i class="fa-regular fa-eye-slash text-xl"></i>
-</div>
-<h4 class="text-white font-bold mb-2">Low Awareness</h4>
-<p class="text-sm text-slate-400">Real-world cyber risks are often misunderstood or underestimated across industries.</p>
-</div>
-<!-- Gap 2 -->
-<div class="bg-cyber-surface/50 border border-cyber-light hover:border-cyber-accent/50 transition-all p-6 rounded-lg group hover:bg-cyber-surface">
-<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center mb-4 text-cyber-warning group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-toggle-off text-xl"></i>
-</div>
-<h4 class="text-white font-bold mb-2">Optional Mindset</h4>
-<p class="text-sm text-slate-400">Security is treated as a "nice-to-have" add-on rather than a business-critical function.</p>
-</div>
-<!-- Gap 3 -->
-<div class="bg-cyber-surface/50 border border-cyber-light hover:border-cyber-accent/50 transition-all p-6 rounded-lg group hover:bg-cyber-surface">
-<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center mb-4 text-cyber-warning group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-screwdriver-wrench text-xl"></i>
-</div>
-<h4 class="text-white font-bold mb-2">Tool-First Vendors</h4>
-<p class="text-sm text-slate-400">Vendors focus on selling licenses and boxes instead of actually reducing business risk.</p>
-</div>
-<!-- Gap 4 -->
-<div class="bg-cyber-surface/50 border border-cyber-light hover:border-cyber-accent/50 transition-all p-6 rounded-lg group hover:bg-cyber-surface">
-<div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center mb-4 text-cyber-warning group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-compass text-xl"></i>
-</div>
-<h4 class="text-white font-bold mb-2">No Clear Priority</h4>
-<p class="text-sm text-slate-400">SMBs lack understanding of what to fix first, leading to paralysis or wasted budget.</p>
-</div>
-</div>
-<!-- Bottom Impact Strip -->
-<div class="mt-6 p-4 bg-gradient-to-r from-cyber-danger/10 to-transparent border border-cyber-danger/30 rounded-lg flex items-center gap-4">
-<div class="w-8 h-8 rounded-full bg-cyber-danger/20 flex items-center justify-center shrink-0">
-<i class="fa-solid fa-bolt text-cyber-danger text-sm"></i>
-</div>
-<div>
-<p class="text-sm text-white font-medium">
-<span class="text-cyber-danger font-bold">The Cost:</span> A single incident can lead to financial loss, operational disruption, and long-term reputational damage.
+                </div>
+                <h2 class="text-3xl font-extrabold font-sans leading-tight mb-4">
+                    What's <span class="text-cyber-danger">Broken</span> in Today's Cybersecurity?
+                </h2>
+
+                <!-- Personal Experience Callout -->
+                <div
+                    class="bg-gradient-to-r from-cyber-surface to-transparent border-l-4 border-cyber-accent p-4 rounded-r-lg mb-5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-quote-left text-cyber-accent text-sm"></i>
+                        <p class="text-[10px] font-mono text-cyber-accent uppercase tracking-wider">From My Experience
                         </p>
-</div>
-</div>
-</div>
-</div>
-<!-- Decorative Background Elements -->
-<div class="absolute top-1/4 left-1/2 w-96 h-96 bg-cyber-accent/5 rounded-full blur-3xl -z-10"></div>
-<div class="absolute bottom-0 right-0 w-64 h-64 border-t border-l border-cyber-light/30 rounded-tl-3xl opacity-20"></div>
-</div>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed italic">
+                        "I've seen the same patterns repeat across enterprises. These aren't just stats. This is what I
+                        witnessed firsthand."
+                    </p>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="p-4 bg-cyber-surface rounded-xl border-l-4 border-cyber-danger shadow-lg">
+                    <h3 class="text-white font-bold font-sans mb-2 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-triangle-exclamation text-cyber-danger"></i>
+                        The Core Problem
+                    </h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Security budgets are spent on <span class="text-white">tools</span>, not <span
+                            class="text-white">outcomes</span>.
+                        Organizations buy solutions they don't fully deploy, hire talent they can't retain, and chase
+                        compliance over actual security.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column: Charts & Data Stories -->
+            <div class="w-[62%] flex flex-col gap-3">
+                <!-- Top Row: Two Charts -->
+                <div class="flex gap-4 flex-1">
+                    <!-- Chart 1: Where Security Budget Goes -->
+                    <div class="flex-1 bg-cyber-surface/60 border border-cyber-light rounded-lg p-3 flex flex-col">
+                        <div class="flex items-center justify-between mb-1">
+                            <p class="text-xs font-mono text-cyber-glow uppercase tracking-wider">Where Budget Goes</p>
+                            <span class="text-[10px] text-slate-500 font-mono">50+ audits</span>
+                        </div>
+                        <div id="budgetChart" class="w-full flex-1 min-h-[200px]"></div>
+                        <p class="text-[10px] text-slate-500 text-center mt-1">Only 15% on actual risk reduction</p>
+                    </div>
+
+                    <!-- Chart 2: Security Maturity Gap -->
+                    <div class="flex-1 bg-cyber-surface/60 border border-cyber-light rounded-lg p-3 flex flex-col">
+                        <div class="flex items-center justify-between mb-1">
+                            <p class="text-xs font-mono text-cyber-glow uppercase tracking-wider">Maturity vs Reality
+                            </p>
+                            <span class="text-[10px] text-slate-500 font-mono">Enterprise Avg.</span>
+                        </div>
+                        <div id="maturityChart" class="w-full flex-1 min-h-[200px]"></div>
+                        <p class="text-[10px] text-slate-500 text-center mt-1">Perceived vs Actual security</p>
+                    </div>
+                </div>
+
+                <!-- Middle Row: Real-Life Consequences -->
+                <div class="bg-cyber-surface/60 border border-cyber-light rounded-lg p-4">
+                    <p class="text-sm font-mono text-cyber-danger uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>Real-Life Consequences
+                    </p>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 shrink-0 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-building-circle-xmark text-red-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-sm mb-1">Business Shutdown</p>
+                                <p class="text-slate-400 text-xs">Companies shut down within months of a breach.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div
+                                class="w-10 h-10 shrink-0 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-user-slash text-orange-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-sm mb-1">Leadership Exits</p>
+                                <p class="text-slate-400 text-xs">CISOs and CTOs terminated after incidents.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div
+                                class="w-10 h-10 shrink-0 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-handshake-slash text-yellow-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-sm mb-1">Client Trust Lost</p>
+                                <p class="text-slate-400 text-xs">Major contracts cancelled - reputation hit.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: Key Patterns -->
+                <div class="flex gap-4">
+                    <div
+                        class="flex-1 bg-gradient-to-br from-red-900/20 to-cyber-surface border border-red-500/30 rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-red-400 font-bold text-sm">73%</span>
+                            </div>
+                            <p class="text-xs font-bold text-white">Ignored Alerts</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400">Security alerts dismissed as false positives.</p>
+                    </div>
+                    <div
+                        class="flex-1 bg-gradient-to-br from-orange-900/20 to-cyber-surface border border-orange-500/30 rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-orange-400 font-bold text-sm">86%</span>
+                            </div>
+                            <p class="text-xs font-bold text-white">Unused Features</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400">Tools deployed at 20% of capability.</p>
+                    </div>
+                    <div
+                        class="flex-1 bg-gradient-to-br from-yellow-900/20 to-cyber-surface border border-yellow-500/30 rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-yellow-400 font-bold text-sm">91%</span>
+                            </div>
+                            <p class="text-xs font-bold text-white">Human Error</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400">Breaches traced to employee mistakes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorative Background Elements -->
+    <div class="absolute top-1/4 left-1/2 w-96 h-96 bg-cyber-accent/5 rounded-full blur-3xl -z-10"></div>
+    </div>
+
+    <script>
+        // Budget Pie Chart
+        var budgetChart = echarts.init(document.getElementById('budgetChart'));
+        budgetChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+            series: [{
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 4, borderColor: '#0B1120', borderWidth: 2 },
+                label: { show: false },
+                data: [
+                    { value: 40, name: 'Tools & Licenses', itemStyle: { color: '#F59E0B' } },
+                    { value: 25, name: 'Compliance', itemStyle: { color: '#8B5CF6' } },
+                    { value: 20, name: 'Staffing', itemStyle: { color: '#3B82F6' } },
+                    { value: 15, name: 'Risk Reduction', itemStyle: { color: '#06B6D4' } }
+                ]
+            }]
+        });
+
+        // Maturity Radar Chart
+        var maturityChart = echarts.init(document.getElementById('maturityChart'));
+        maturityChart.setOption({
+            radar: {
+                indicator: [
+                    { name: 'Detection', max: 100 },
+                    { name: 'Response', max: 100 },
+                    { name: 'Prevention', max: 100 },
+                    { name: 'Awareness', max: 100 },
+                    { name: 'Recovery', max: 100 }
+                ],
+                shape: 'polygon',
+                splitNumber: 3,
+                axisName: { color: '#94A3B8', fontSize: 9 },
+                splitLine: { lineStyle: { color: '#334155' } },
+                splitArea: { show: false },
+                axisLine: { lineStyle: { color: '#334155' } }
+            },
+            series: [{
+                type: 'radar',
+                data: [
+                    {
+                        value: [85, 80, 90, 75, 70],
+                        name: 'Perceived',
+                        lineStyle: { color: '#22D3EE', width: 2 },
+                        areaStyle: { color: 'rgba(34, 211, 238, 0.2)' },
+                        symbol: 'circle',
+                        symbolSize: 4,
+                        itemStyle: { color: '#22D3EE' }
+                    },
+                    {
+                        value: [35, 25, 45, 20, 30],
+                        name: 'Actual',
+                        lineStyle: { color: '#EF4444', width: 2, type: 'dashed' },
+                        areaStyle: { color: 'rgba(239, 68, 68, 0.1)' },
+                        symbol: 'circle',
+                        symbolSize: 4,
+                        itemStyle: { color: '#EF4444' }
+                    }
+                ]
+            }]
+        });
+    </script>
 </body>
+
 </html>
-
-

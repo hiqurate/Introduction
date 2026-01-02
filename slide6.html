@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>HiQurate Ops - Future Roadmap</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - Business Model</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -21,8 +24,8 @@
                             glow: '#22D3EE',
                             surface: '#182235',
                             dim: '#334155',
-                            purple: '#8B5CF6',
-                            purpleGlow: '#A78BFA'
+                            green: '#10B981',
+                            purple: '#8B5CF6'
                         }
                     },
                     fontFamily: {
@@ -34,9 +37,9 @@
             }
         }
     </script>
-<style>
+    <style>
         .cyber-grid {
-            background-image: 
+            background-image:
                 linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
@@ -44,151 +47,191 @@
     </style>
 
 </head>
+
 <body class="bg-gray-900 m-0 p-0 overflow-hidden">
-<div class="w-[1280px] h-[720px]  bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
-<!-- Header -->
-<div class="h-20 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20 shrink-0">
-<div class="flex items-center gap-2">
-<img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
-<span class="font-sans font-bold text-lg tracking-wider">HiQurate <span class="text-cyber-accent">Ops</span></span>
-</div>
-<div class="ml-auto flex items-center gap-4">
-<span class="text-xs font-mono text-slate-500">06 / 11</span>
-</div>
-</div>
-<!-- Main Content -->
-<div class="flex-1 flex flex-col p-12 relative z-10">
-<!-- Title Section -->
-<div class="flex justify-between items-end mb-8">
-<div>
-<div class="flex items-center gap-2 mb-2">
-<div class="w-8 h-1 bg-cyber-purple rounded-full"></div>
-<p class="text-xs font-mono text-cyber-purpleGlow tracking-widest uppercase">Innovation Roadmap</p>
-</div>
-<h2 class="text-4xl font-extrabold font-sans tracking-tight text-white">Future Roadmap &amp; Innovation</h2>
-</div>
-<div class="flex items-center gap-2 px-4 py-2 border border-cyber-light rounded-lg bg-cyber-surface/50">
-<i class="fa-solid fa-rocket text-cyber-purple"></i>
-<p class="text-xs text-slate-300 font-mono">Long-Term Vision: Services to Products</p>
-</div>
-</div>
-<!-- Roadmap Cards Container -->
-<div class="flex-1 flex gap-6 items-stretch relative">
-<!-- Connecting Line Background -->
-<div class="absolute top-1/2 left-0 w-full h-1 bg-cyber-light/50 -translate-y-1/2 z-0 hidden lg:block"></div>
-<!-- Card 1: Secure AI Solutions -->
-<div class="flex-1 flex flex-col relative z-10 group">
-<!-- Timeline Node -->
-<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-cyber-dark border-2 border-cyber-light rounded-full z-20 group-hover:border-cyber-purple transition-colors hidden"></div>
-<div class="bg-cyber-surface/80 border border-cyber-light h-full rounded-xl p-8 flex flex-col relative overflow-hidden group-hover:border-cyber-purple/50 transition-all duration-300 shadow-lg backdrop-blur-sm">
-<!-- Accent Top Bar -->
-<div class="absolute top-0 left-0 w-full h-1 bg-cyber-purple/50 group-hover:bg-cyber-purple transition-colors"></div>
-<!-- Icon -->
-<div class="w-14 h-14 bg-cyber-dark rounded-xl flex items-center justify-center border border-cyber-dim mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-cyber-purple/10">
-<i class="fa-solid fa-brain text-2xl text-cyber-purpleGlow"></i>
-</div>
-<h3 class="text-xl font-bold font-sans text-white mb-4">Secure AI Solutions</h3>
-<ul class="space-y-4 text-sm text-slate-300 font-light flex-1">
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-purple mt-1 text-xs"></i>
-<p>Development of custom AI chatbots using <span class="text-white font-medium">Small Language Models</span>.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-purple mt-1 text-xs"></i>
-<p>Trained on organisation-specific data and workflows.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-purple mt-1 text-xs"></i>
-<p>Designed with <span class="text-white font-medium">security, data privacy</span>, and access control at the core.</p>
-</li>
-</ul>
-<div class="mt-6 pt-4 border-t border-cyber-light/50">
-<p class="text-xs font-mono text-cyber-purpleGlow opacity-70">PHASE 1: FOUNDATION</p>
-</div>
-</div>
-</div>
-<!-- Arrow Connector 1 -->
-<div class="w-8 flex items-center justify-center text-cyber-dim z-10">
-<i class="fa-solid fa-chevron-right text-2xl opacity-50"></i>
-</div>
-<!-- Card 2: Agentic AI -->
-<div class="flex-1 flex flex-col relative z-10 group">
-<div class="bg-cyber-surface/80 border border-cyber-light h-full rounded-xl p-8 flex flex-col relative overflow-hidden group-hover:border-cyber-accent/50 transition-all duration-300 shadow-lg backdrop-blur-sm">
-<!-- Accent Top Bar -->
-<div class="absolute top-0 left-0 w-full h-1 bg-cyber-accent/50 group-hover:bg-cyber-accent transition-colors"></div>
-<!-- Icon -->
-<div class="w-14 h-14 bg-cyber-dark rounded-xl flex items-center justify-center border border-cyber-dim mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-cyber-accent/10">
-<i class="fa-solid fa-robot text-2xl text-cyber-glow"></i>
-</div>
-<h3 class="text-xl font-bold font-sans text-white mb-4">Agentic AI for Security</h3>
-<ul class="space-y-4 text-sm text-slate-300 font-light flex-1">
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-accent mt-1 text-xs"></i>
-<p>Reducing manual effort through <span class="text-white font-medium">AI-driven workflows</span>.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-accent mt-1 text-xs"></i>
-<p>Automated gap assessments and risk analysis.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-cyber-accent mt-1 text-xs"></i>
-<p>Alignment with industry best practices (NIST, ISO) and scoring.</p>
-</li>
-</ul>
-<div class="mt-6 pt-4 border-t border-cyber-light/50">
-<p class="text-xs font-mono text-cyber-glow opacity-70">PHASE 2: AUTOMATION</p>
-</div>
-</div>
-</div>
-<!-- Arrow Connector 2 -->
-<div class="w-8 flex items-center justify-center text-cyber-dim z-10">
-<i class="fa-solid fa-chevron-right text-2xl opacity-50"></i>
-</div>
-<!-- Card 3: Outcome Insights -->
-<div class="flex-1 flex flex-col relative z-10 group">
-<div class="bg-cyber-surface/80 border border-cyber-light h-full rounded-xl p-8 flex flex-col relative overflow-hidden group-hover:border-green-500/50 transition-all duration-300 shadow-lg backdrop-blur-sm">
-<!-- Accent Top Bar -->
-<div class="absolute top-0 left-0 w-full h-1 bg-green-500/50 group-hover:bg-green-500 transition-colors"></div>
-<!-- Icon -->
-<div class="w-14 h-14 bg-cyber-dark rounded-xl flex items-center justify-center border border-cyber-dim mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-green-500/10">
-<i class="fa-solid fa-chart-line text-2xl text-green-400"></i>
-</div>
-<h3 class="text-xl font-bold font-sans text-white mb-4">Outcome-Driven Insights</h3>
-<ul class="space-y-4 text-sm text-slate-300 font-light flex-1">
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-green-500 mt-1 text-xs"></i>
-<p>Clear visibility into current <span class="text-white font-medium">security posture</span>.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-green-500 mt-1 text-xs"></i>
-<p>Understanding of exposure and priority risks.</p>
-</li>
-<li class="flex gap-3">
-<i class="fa-solid fa-check text-green-500 mt-1 text-xs"></i>
-<p>Leadership-level clarity on where the organisation stands.</p>
-</li>
-</ul>
-<div class="mt-6 pt-4 border-t border-cyber-light/50">
-<p class="text-xs font-mono text-green-400 opacity-70">PHASE 3: INTELLIGENCE</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Bottom Statement -->
-<div class="mt-8 flex justify-center">
-<div class="px-8 py-3 bg-cyber-surface rounded-full border border-cyber-light flex items-center gap-3 shadow-lg">
-<div class="w-2 h-2 rounded-full bg-cyber-glow animate-pulse"></div>
-<p class="text-sm font-medium text-slate-300">
-                The long-term goal is to evolve from <span class="text-white border-b border-dotted border-slate-500">services-led engagements</span> to <span class="text-cyber-glow font-bold">scalable, product-enabled solutions</span>.
-            </p>
-</div>
-</div>
-</div>
-<!-- Background Elements -->
-<div class="absolute top-20 right-0 w-96 h-96 bg-cyber-purple/10 blur-[100px] rounded-full pointer-events-none -z-10"></div>
-<div class="absolute bottom-0 left-20 w-64 h-64 bg-cyber-accent/5 blur-[80px] rounded-full pointer-events-none -z-10"></div>
-</div>
+    <div
+        class="w-[1280px] h-[720px]  bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
+        <!-- Header -->
+        <div
+            class="h-20 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20 shrink-0">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
+                <span class="font-sans font-bold text-lg tracking-wider">HiQurate <span
+                        class="text-cyber-accent">Ops</span></span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-500">06 / 11</span>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col p-10 gap-6 relative z-10">
+            <!-- Title Section -->
+            <div class="flex justify-between items-end">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-8 h-1 bg-cyber-green rounded-full"></div>
+                        <p class="text-xs font-mono text-cyber-green tracking-widest uppercase">Engagement Model</p>
+                    </div>
+                    <h2 class="text-3xl font-extrabold font-sans tracking-tight text-white">Business Model</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-mono text-slate-400">Phase-Wise Approach</span>
+                </div>
+            </div>
+            <!-- Primary Phase Flow -->
+            <div class="flex gap-4 items-stretch h-[320px]">
+                <!-- Phase 1 -->
+                <div
+                    class="flex-1 bg-cyber-surface/60 border border-cyber-light hover:border-cyber-accent/50 rounded-xl p-6 relative flex flex-col group transition-all duration-300">
+                    <div
+                        class="absolute -top-3 left-6 px-3 py-1 bg-cyber-dark border border-cyber-accent text-cyber-glow text-xs font-mono font-bold rounded">
+                        PHASE 01</div>
+                    <div class="mb-4 mt-2 flex justify-between items-start">
+                        <div
+                            class="w-12 h-12 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim text-cyber-glow">
+                            <i class="fa-solid fa-camera-retro text-xl"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-500 uppercase">Entry &amp; Trust</span>
+                    </div>
+                    <h3 class="text-lg font-bold font-sans text-white mb-1">Threat Snapshot</h3>
+                    <p class="text-xs text-cyber-accent mb-4">Low-Cost Entry Point</p>
+                    <div class="flex-1 space-y-2">
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            Externally exposed vulnerabilities
+                        </p>
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            Data leaks &amp; dark web exposure
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-cyber-light/50">
+                        <p class="text-xs font-mono text-white/70"><span class="text-cyber-accent">Goal:</span>
+                            Awareness &amp; Trust</p>
+                    </div>
+                </div>
+                <!-- Connector 1 -->
+                <div class="flex flex-col justify-center items-center w-8 text-cyber-dim">
+                    <i class="fa-solid fa-arrow-right-long text-2xl opacity-50"></i>
+                </div>
+                <!-- Phase 2 -->
+                <div
+                    class="flex-1 bg-cyber-surface/60 border border-cyber-light hover:border-cyber-green/50 rounded-xl p-6 relative flex flex-col group transition-all duration-300 shadow-lg shadow-cyber-green/5">
+                    <div
+                        class="absolute -top-3 left-6 px-3 py-1 bg-cyber-dark border border-cyber-green text-green-400 text-xs font-mono font-bold rounded">
+                        PHASE 02</div>
+                    <div class="mb-4 mt-2 flex justify-between items-start">
+                        <div
+                            class="w-12 h-12 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim text-green-400">
+                            <i class="fa-solid fa-clipboard-list text-xl"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-500 uppercase">Deep Assessment</span>
+                    </div>
+                    <h3 class="text-lg font-bold font-sans text-white mb-1">Security Assessment</h3>
+                    <p class="text-xs text-green-400 mb-4">Comprehensive Paid Review</p>
+                    <div class="flex-1 space-y-2">
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            Environment &amp; posture review
+                        </p>
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            NIST/ISO aligned gap analysis
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-cyber-light/50">
+                        <p class="text-xs font-mono text-white/70"><span class="text-green-400">Goal:</span> Clarity
+                            &amp; Roadmap</p>
+                    </div>
+                </div>
+                <!-- Connector 2 -->
+                <div class="flex flex-col justify-center items-center w-8 text-cyber-dim">
+                    <i class="fa-solid fa-arrow-right-long text-2xl opacity-50"></i>
+                </div>
+                <!-- Phase 3 -->
+                <div
+                    class="flex-1 bg-cyber-surface/60 border border-cyber-light hover:border-cyber-purple/50 rounded-xl p-6 relative flex flex-col group transition-all duration-300">
+                    <div
+                        class="absolute -top-3 left-6 px-3 py-1 bg-cyber-dark border border-cyber-purple text-cyber-purple text-xs font-mono font-bold rounded">
+                        PHASE 03</div>
+                    <div class="mb-4 mt-2 flex justify-between items-start">
+                        <div
+                            class="w-12 h-12 bg-cyber-dark rounded-lg flex items-center justify-center border border-cyber-dim text-cyber-purple">
+                            <i class="fa-solid fa-infinity text-xl"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-500 uppercase">Execution</span>
+                    </div>
+                    <h3 class="text-lg font-bold font-sans text-white mb-1">Continuous Security</h3>
+                    <p class="text-xs text-cyber-purple mb-4">Implementation &amp; Ops</p>
+                    <div class="flex-1 space-y-2">
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            Tool implementation &amp; monitoring
+                        </p>
+                        <p class="text-sm text-slate-300 flex gap-2">
+                            <i class="fa-solid fa-angle-right text-cyber-dim mt-1 text-xs"></i>
+                            Gradual posture uplift
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-cyber-light/50">
+                        <p class="text-xs font-mono text-white/70"><span class="text-cyber-purple">Goal:</span>
+                            Resilience</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Parallel Options Section -->
+            <div
+                class="flex-1 bg-gradient-to-r from-cyber-surface to-cyber-dark border border-cyber-light/50 rounded-xl p-6 relative flex items-center gap-8">
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyber-dim rounded-l-xl"></div>
+                <!-- Label -->
+                <div class="w-1/4 shrink-0 border-r border-cyber-light/50 pr-6">
+                    <h3 class="text-xl font-bold font-sans text-white mb-2">Parallel Subscriptions</h3>
+                    <p class="text-sm text-slate-400">Flexible options for organisations not yet ready for full SOC
+                        services.</p>
+                </div>
+                <!-- Options Grid -->
+                <div class="flex-1 grid grid-cols-3 gap-6">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-cyber-dark border border-cyber-light flex items-center justify-center text-cyber-accent">
+                            <i class="fa-solid fa-crosshairs text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white">Quarterly ASM</p>
+                            <p class="text-[10px] text-slate-500">Attack Surface Mgmt</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-cyber-dark border border-cyber-light flex items-center justify-center text-cyber-accent">
+                            <i class="fa-solid fa-clipboard-check text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white">Periodic Reviews</p>
+                            <p class="text-[10px] text-slate-500">Posture &amp; Environment</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-cyber-dark border border-cyber-light flex items-center justify-center text-cyber-accent">
+                            <i class="fa-solid fa-graduation-cap text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white">Security Awareness</p>
+                            <p class="text-[10px] text-slate-500">Employee Programs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Background Elements -->
+        <div
+            class="absolute top-1/4 right-0 w-96 h-96 bg-cyber-accent/5 blur-[100px] rounded-full pointer-events-none -z-10">
+        </div>
+        <div
+            class="absolute bottom-0 left-20 w-64 h-64 bg-cyber-purple/5 blur-[80px] rounded-full pointer-events-none -z-10">
+        </div>
+    </div>
 </body>
+
 </html>
-
-

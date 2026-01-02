@@ -1,229 +1,479 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Presentation — HiQurate Ops</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-  :root{--slide-w:1280;--slide-h:720}
-  html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,-apple-system,Arial}
-  .app{height:100%;display:flex;flex-direction:column;background:#071025;color:#fff}
-  .topbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;background:linear-gradient(90deg,rgba(255,255,255,0.03),transparent);flex-wrap:wrap}
-  .title{font-weight:600}
-  .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
-  button.control{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit;padding:8px 12px;border-radius:8px;cursor:pointer}
-  .stage-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
-  /* keep the stage the intended slide size but make it responsively sized using CSS so it fills available space */
-  .stage{
-    /* responsive sizing: prefer the original slide width but constrain by viewport width/height and preserve 16:9 */
-    width: min(1280px, calc(100vw - 160px), calc((100vh - 120px) * (16/9)));
-    aspect-ratio: 16/9;
-    height: auto;
-    box-shadow:0 30px 80px rgba(2,6,23,0.8);
-    background:#000;overflow:hidden;transform:none;display:block;margin:0 auto;
-  }
-  .stage iframe{width:100%;height:100%;border:0;background:transparent}
-  .nav{position:absolute;left:12px;right:12px;bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-  .nav .left,.nav .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .btn-big{background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;color:#fff;transition:all 0.2s}
-  .btn-big:hover{background:rgba(0,0,0,0.65);border-color:rgba(255,255,255,0.12)}
-  .counter{font-family:monospace;background:rgba(0,0,0,0.35);padding:6px 10px;border-radius:8px;white-space:nowrap}
-  .thumbs{position:absolute;left:16px;top:72px;display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto}
-  .thumbs button{width:140px;height:48px;border:1px solid rgba(255,255,255,0.04);background:#0c1522;color:#ddd;text-align:left;padding:6px 8px;border-radius:8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  /* collapsed state (hidden) — use JS to toggle this class */
-  .thumbs.collapsed{display:none}
-  /* small expand tab when thumbs are hidden */
-  .thumb-toggle-tab{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:56px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:8px;border:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;cursor:pointer}
-  .thumb-toggle-tab i{color:#9aa9b8;font-size:14px}
-  /* responsive */
-  @media (max-width:900px){
-    .thumbs{display:none}
-    .topbar{height:64px}
-    .nav{bottom:16px;left:8px;right:8px;gap:6px}
-    .btn-big{padding:8px;font-size:12px}
-    .counter{padding:4px 8px;font-size:12px}
-  }
-  @media (max-width:768px){
-    .topbar{height:56px;padding:0 12px}
-    .title{font-size:14px}
-    .controls{gap:6px}
-    button.control{padding:6px 10px}
-    .stage{width: min(100vw - 32px, calc((100vh - 100px) * (16/9)))}
-    .nav{bottom:12px;left:6px;right:6px}
-    .btn-big{padding:6px 8px;font-size:11px}
-    .counter{padding:4px 6px;font-size:11px}
-  }
-  @media (max-width:480px){
-    .topbar{height:52px;padding:0 8px;gap:8px}
-    .title{font-size:12px}
-    .title i{margin-right:4px}
-    .controls{gap:4px}
-    button.control{padding:5px 8px;font-size:12px}
-    .stage{width: calc(100vw - 16px)}
-    .nav{bottom:8px;left:4px;right:4px;gap:4px}
-    .btn-big{padding:5px 6px;font-size:10px}
-    .counter{padding:3px 5px;font-size:10px}
-    .nav .left{gap:4px}
-    .nav .right{gap:4px}
-  }
-  /* make stage scale to fit while preserving aspect ratio */
-  .scaler{display:flex;align-items:center;justify-content:center;transform:none}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Presentation — HiQurate Ops</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --slide-w: 1280;
+      --slide-h: 720
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, Inter, -apple-system, Arial
+    }
+
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #071025;
+      color: #fff
+    }
+
+    .topbar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent);
+      flex-wrap: wrap
+    }
+
+    .title {
+      font-weight: 600
+    }
+
+    .controls {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    button.control {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: inherit;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer
+    }
+
+    .stage-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative
+    }
+
+    /* keep the stage the intended slide size but make it responsively sized using CSS so it fills available space */
+    .stage {
+      /* responsive sizing: prefer the original slide width but constrain by viewport width/height and preserve 16:9 */
+      width: min(1280px, calc(100vw - 160px), calc((100vh - 120px) * (16/9)));
+      aspect-ratio: 16/9;
+      height: auto;
+      box-shadow: 0 30px 80px rgba(2, 6, 23, 0.8);
+      background: #000;
+      overflow: hidden;
+      transform: none;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .stage iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: transparent
+    }
+
+    .nav {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .nav .left,
+    .nav .right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .btn-big {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      transition: all 0.2s
+    }
+
+    .btn-big:hover {
+      background: rgba(0, 0, 0, 0.65);
+      border-color: rgba(255, 255, 255, 0.12)
+    }
+
+    .counter {
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 10px;
+      border-radius: 8px;
+      white-space: nowrap
+    }
+
+    .thumbs {
+      position: absolute;
+      left: 16px;
+      top: 72px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 60vh;
+      overflow: auto
+    }
+
+    .thumbs button {
+      width: 140px;
+      height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: #0c1522;
+      color: #ddd;
+      text-align: left;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    /* collapsed state (hidden) — use JS to toggle this class */
+    .thumbs.collapsed {
+      display: none
+    }
+
+    /* small expand tab when thumbs are hidden */
+    .thumb-toggle-tab {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 56px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer
+    }
+
+    .thumb-toggle-tab i {
+      color: #9aa9b8;
+      font-size: 14px
+    }
+
+    /* responsive */
+    @media (max-width:900px) {
+      .thumbs {
+        display: none
+      }
+
+      .topbar {
+        height: 64px
+      }
+
+      .nav {
+        bottom: 16px;
+        left: 8px;
+        right: 8px;
+        gap: 6px
+      }
+
+      .btn-big {
+        padding: 8px;
+        font-size: 12px
+      }
+
+      .counter {
+        padding: 4px 8px;
+        font-size: 12px
+      }
+    }
+
+    @media (max-width:768px) {
+      .topbar {
+        height: 56px;
+        padding: 0 12px
+      }
+
+      .title {
+        font-size: 14px
+      }
+
+      .controls {
+        gap: 6px
+      }
+
+      button.control {
+        padding: 6px 10px
+      }
+
+      .stage {
+        width: min(100vw - 32px, calc((100vh - 100px) * (16/9)))
+      }
+
+      .nav {
+        bottom: 12px;
+        left: 6px;
+        right: 6px
+      }
+
+      .btn-big {
+        padding: 6px 8px;
+        font-size: 11px
+      }
+
+      .counter {
+        padding: 4px 6px;
+        font-size: 11px
+      }
+    }
+
+    @media (max-width:480px) {
+      .topbar {
+        height: 52px;
+        padding: 0 8px;
+        gap: 8px
+      }
+
+      .title {
+        font-size: 12px
+      }
+
+      .title i {
+        margin-right: 4px
+      }
+
+      .controls {
+        gap: 4px
+      }
+
+      button.control {
+        padding: 5px 8px;
+        font-size: 12px
+      }
+
+      .stage {
+        width: calc(100vw - 16px)
+      }
+
+      .nav {
+        bottom: 8px;
+        left: 4px;
+        right: 4px;
+        gap: 4px
+      }
+
+      .btn-big {
+        padding: 5px 6px;
+        font-size: 10px
+      }
+
+      .counter {
+        padding: 3px 5px;
+        font-size: 10px
+      }
+
+      .nav .left {
+        gap: 4px
+      }
+
+      .nav .right {
+        gap: 4px
+      }
+    }
+
+    /* make stage scale to fit while preserving aspect ratio */
+    .scaler {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: none
+    }
+  </style>
 </head>
+
 <body>
-<div class="app">
-  <div class="topbar">
-    <div class="title"><i class="fa-solid fa-shield-halved"></i> HiQurate Ops — Pitch</div>
-    <div class="controls">
-      <button id="prev" class="control" title="Previous (←)"><i class="fa-solid fa-arrow-left"></i></button>
-      <button id="next" class="control" title="Next (→)"><i class="fa-solid fa-arrow-right"></i></button>
-      <button id="toggle-thumbs" class="control" title="Toggle thumbnails"><i class="fa-solid fa-th"></i></button>
-      <button id="enter-present" class="control" title="Enter fullscreen / present"><i class="fa-solid fa-expand"></i></button>
-    </div>
-  </div>
-  <div class="stage-wrap">
-    <div class="thumbs" id="thumbs" aria-hidden="true"></div>
-    <div class="scaler" id="scaler" style="--s:1">
-      <div class="stage" id="stage">
-        <iframe id="frame" src="slide1.html" title="slide" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+  <div class="app">
+    <div class="topbar">
+      <div class="title"><i class="fa-solid fa-shield-halved"></i> HiQurate Ops — Pitch</div>
+      <div class="controls">
+        <button id="prev" class="control" title="Previous (←)"><i class="fa-solid fa-arrow-left"></i></button>
+        <button id="next" class="control" title="Next (→)"><i class="fa-solid fa-arrow-right"></i></button>
+        <button id="toggle-thumbs" class="control" title="Toggle thumbnails"><i class="fa-solid fa-th"></i></button>
+        <button id="enter-present" class="control" title="Enter fullscreen / present"><i
+            class="fa-solid fa-expand"></i></button>
       </div>
     </div>
-    <div class="nav">
-      <div class="left">
-        <div class="btn-big" id="prev2" role="button"><i class="fa-solid fa-chevron-left"></i></div>
-        <div class="btn-big" id="next2" role="button"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="stage-wrap">
+      <div class="thumbs" id="thumbs" aria-hidden="true"></div>
+      <div class="scaler" id="scaler" style="--s:1">
+        <div class="stage" id="stage">
+          <iframe id="frame" src="slide1.html" title="slide"
+            sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+        </div>
       </div>
-      <div class="right">
-        <div class="counter" id="counter">1 / 1</div>
-        <!-- Circular Loop Navigation -->
-        <div class="btn-big" id="loop-nav" role="button" title="Loop back to Slide 1" style="cursor: pointer; margin-left: 12px;">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-            <path d="M21 3v5h-5"></path>
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-            <path d="M3 21v-5h5"></path>
-          </svg>
+      <div class="nav">
+        <div class="left">
+          <div class="btn-big" id="prev2" role="button"><i class="fa-solid fa-chevron-left"></i></div>
+          <div class="btn-big" id="next2" role="button"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+        <div class="right">
+          <div class="counter" id="counter">1 / 1</div>
+          <!-- Circular Loop Navigation -->
+          <div class="btn-big" id="loop-nav" role="button" title="Loop back to Slide 1"
+            style="cursor: pointer; margin-left: 12px;">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="width: 20px; height: 20px;">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+              <path d="M21 3v5h-5"></path>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+              <path d="M3 21v-5h5"></path>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<script>
-(function(){
-  // list of slide files (auto-edit this list if you add/remove files)
-  const slides = [
-    'slide1.html','slide2.html','slide3.html','slide4.html','slide5.html','slide6.html','slide7.html','slide8.html','slide9.html','slide10.html','slide11.html'
-  ];
-  let idx = 0;
-  const frame = document.getElementById('frame');
-  const counter = document.getElementById('counter');
-  const thumbs = document.getElementById('thumbs');
-  const scaler = document.getElementById('scaler');
-  const stage = document.getElementById('stage');
+  <script>
+    (function () {
+      // list of slide files (auto-edit this list if you add/remove files)
+      const slides = [
+        'slide1.html', 'slide2.html', 'slide3.html', 'slide4.html', 'slide5.html', 'slide6.html', 'slide7.html', 'slide8.html', 'slide9.html', 'slide10.html', 'slide11.html'
+      ];
+      let idx = 0;
+      const frame = document.getElementById('frame');
+      const counter = document.getElementById('counter');
+      const thumbs = document.getElementById('thumbs');
+      const scaler = document.getElementById('scaler');
+      const stage = document.getElementById('stage');
 
-  // human-friendly slide titles (user-provided)
-  const titles = [
-    'HiQurate Ops',
-    'Why We Started',
-    `What’s Broken in Today’s Cybersecurity for SMBs`,
-    'Vision and Mission',
-    'What We Do',
-    'Future Roadmap and Innovation',
-    'Business Model',
-    'Revenue Streams',
-    'Why HiQurate Ops is Different',
-    'Go-To-Market Strategy',
-    `Let’s Build a Safer Digital Future`
-  ];
+      // human-friendly slide titles (user-provided)
+      const titles = [
+        'HiQurate Ops',
+        'Why We Started',
+        `What’s Broken in Today’s Cybersecurity for SMBs`,
+        'Vision and Mission',
+        'What We Do',
+        'Business Model',
+        'Future Roadmap and Innovation',
+        'Revenue Streams',
+        'Why HiQurate Ops is Different',
+        'Go-To-Market Strategy',
+        `Let’s Build a Safer Digital Future`
+      ];
 
-  function clamp(v){return Math.max(0,Math.min(v,slides.length-1));}
-  function update(){
-    frame.src = slides[idx];
-    counter.textContent = (idx+1) + ' / ' + slides.length;
-    [...thumbs.children].forEach((b,i)=>b.style.outline = i===idx ? '2px solid rgba(99,102,241,0.9)' : 'none');
-    // update window title to reflect current slide
-    try{ document.title = 'Presentation — ' + (titles[idx] || slides[idx]); }catch(e){}
-  }
+      function clamp(v) { return Math.max(0, Math.min(v, slides.length - 1)); }
+      function update() {
+        frame.src = slides[idx];
+        counter.textContent = (idx + 1) + ' / ' + slides.length;
+        [...thumbs.children].forEach((b, i) => b.style.outline = i === idx ? '2px solid rgba(99,102,241,0.9)' : 'none');
+        // update window title to reflect current slide
+        try { document.title = 'Presentation — ' + (titles[idx] || slides[idx]); } catch (e) { }
+      }
 
-  // populate thumbnails using the friendly titles (no numeric prefix)
-  slides.forEach((s,i)=>{
-    const b = document.createElement('button');
-    const label = (titles[i] || s.replace('.html',''));
-    b.textContent = label;
-    b.setAttribute('title', label);
-    b.setAttribute('aria-label', label);
-    b.addEventListener('click',()=>{ idx = i; update(); });
-    thumbs.appendChild(b);
-  });
+      // populate thumbnails using the friendly titles (no numeric prefix)
+      slides.forEach((s, i) => {
+        const b = document.createElement('button');
+        const label = (titles[i] || s.replace('.html', ''));
+        b.textContent = label;
+        b.setAttribute('title', label);
+        b.setAttribute('aria-label', label);
+        b.addEventListener('click', () => { idx = i; update(); });
+        thumbs.appendChild(b);
+      });
 
-  // start with thumbnails hidden (collapsed) to save space; user can toggle
-  thumbs.classList.add('collapsed');
-  // create a small tab to expand thumbnails
-  const tab = document.createElement('div');
-  tab.className = 'thumb-toggle-tab';
-  tab.title = 'Show slides';
-  tab.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-  tab.addEventListener('click', ()=>{
-    const showing = !thumbs.classList.contains('collapsed');
-    if(showing){ thumbs.classList.add('collapsed'); tab.innerHTML = '<i class="fa-solid fa-chevron-right"></i>'; }
-    else{ thumbs.classList.remove('collapsed'); tab.innerHTML = '<i class="fa-solid fa-chevron-left"></i>'; }
-  });
-  // add the tab into the stage-wrap so it sits over the left edge
-  document.querySelector('.stage-wrap').appendChild(tab);
+      // start with thumbnails hidden (collapsed) to save space; user can toggle
+      thumbs.classList.add('collapsed');
+      // create a small tab to expand thumbnails
+      const tab = document.createElement('div');
+      tab.className = 'thumb-toggle-tab';
+      tab.title = 'Show slides';
+      tab.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+      tab.addEventListener('click', () => {
+        const showing = !thumbs.classList.contains('collapsed');
+        if (showing) { thumbs.classList.add('collapsed'); tab.innerHTML = '<i class="fa-solid fa-chevron-right"></i>'; }
+        else { thumbs.classList.remove('collapsed'); tab.innerHTML = '<i class="fa-solid fa-chevron-left"></i>'; }
+      });
+      // add the tab into the stage-wrap so it sits over the left edge
+      document.querySelector('.stage-wrap').appendChild(tab);
 
-  // navigation
-  function next(){ idx = clamp(idx+1); update(); }
-  function prev(){ idx = clamp(idx-1); update(); }
-  document.getElementById('next').addEventListener('click', next);
-  document.getElementById('prev').addEventListener('click', prev);
-  document.getElementById('next2').addEventListener('click', next);
-  document.getElementById('prev2').addEventListener('click', prev);
+      // navigation
+      function next() { idx = clamp(idx + 1); update(); }
+      function prev() { idx = clamp(idx - 1); update(); }
+      document.getElementById('next').addEventListener('click', next);
+      document.getElementById('prev').addEventListener('click', prev);
+      document.getElementById('next2').addEventListener('click', next);
+      document.getElementById('prev2').addEventListener('click', prev);
 
-  // loop navigation (back to slide 1)
-  document.getElementById('loop-nav').addEventListener('click', ()=>{ idx = 0; update(); });
+      // loop navigation (back to slide 1)
+      document.getElementById('loop-nav').addEventListener('click', () => { idx = 0; update(); });
 
-  // toggle thumbs
-  document.getElementById('toggle-thumbs').addEventListener('click', ()=>{
-    thumbs.classList.toggle('collapsed');
-    // update tab icon
-    const icon = tab.querySelector('i');
-    if(thumbs.classList.contains('collapsed')) icon.className = 'fa-solid fa-chevron-right'; else icon.className = 'fa-solid fa-chevron-left';
-  });
+      // toggle thumbs
+      document.getElementById('toggle-thumbs').addEventListener('click', () => {
+        thumbs.classList.toggle('collapsed');
+        // update tab icon
+        const icon = tab.querySelector('i');
+        if (thumbs.classList.contains('collapsed')) icon.className = 'fa-solid fa-chevron-right'; else icon.className = 'fa-solid fa-chevron-left';
+      });
 
-  // keyboard
-  window.addEventListener('keydown', (e)=>{
-    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
-    if(e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-    if(e.key === 'Home') { idx = 0; update(); }
-    if(e.key === 'End') { idx = slides.length-1; update(); }
-    if(e.key === 'f') { enterFullscreen(); }
-  });
+      // keyboard
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+        if (e.key === 'Home') { idx = 0; update(); }
+        if (e.key === 'End') { idx = slides.length - 1; update(); }
+        if (e.key === 'f') { enterFullscreen(); }
+      });
 
-  // touch swipe
-  let tx=0; let ty=0; let touching=false;
-  scaler.addEventListener('touchstart', e=>{ touching=true; tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
-  scaler.addEventListener('touchend', e=>{ if(!touching) return; touching=false; const dx = (e.changedTouches[0].clientX - tx); if(Math.abs(dx) > 50){ if(dx<0) next(); else prev(); } });
+      // touch swipe
+      let tx = 0; let ty = 0; let touching = false;
+      scaler.addEventListener('touchstart', e => { touching = true; tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
+      scaler.addEventListener('touchend', e => { if (!touching) return; touching = false; const dx = (e.changedTouches[0].clientX - tx); if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); } });
 
-  // fullscreen
-  document.getElementById('enter-present').addEventListener('click', enterFullscreen);
-  function enterFullscreen(){
-    const el = document.documentElement;
-    if(document.fullscreenElement) document.exitFullscreen(); else el.requestFullscreen();
-  }
+      // fullscreen
+      document.getElementById('enter-present').addEventListener('click', enterFullscreen);
+      function enterFullscreen() {
+        const el = document.documentElement;
+        if (document.fullscreenElement) document.exitFullscreen(); else el.requestFullscreen();
+      }
 
-  // scale stage to fit viewport while preserving aspect ratio
-   function rescale(){
-    // no-op: CSS handles responsive sizing using aspect-ratio and min() so no JS scaling is required.
-    // Keep this function in case you want JS-driven scaling later (e.g. presenter mode).
-    scaler.style.transform = 'none';
-   }
-  window.addEventListener('resize', rescale);
-  rescale();
+      // scale stage to fit viewport while preserving aspect ratio
+      function rescale() {
+        // no-op: CSS handles responsive sizing using aspect-ratio and min() so no JS scaling is required.
+        // Keep this function in case you want JS-driven scaling later (e.g. presenter mode).
+        scaler.style.transform = 'none';
+      }
+      window.addEventListener('resize', rescale);
+      rescale();
 
-  // init
-  update();
-})();
-</script>
+      // init
+      update();
+    })();
+  </script>
 </body>
+
 </html>
