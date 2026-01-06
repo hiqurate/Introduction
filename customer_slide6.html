@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>HiQurate Ops - Value Add</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-image:
+                linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+
+<body class="bg-cyber-dark text-white h-screen w-screen overflow-hidden font-body">
+
+    <div class="fixed inset-0 cyber-grid z-0"></div>
+
+    <main class="relative z-10 h-full flex flex-col items-center justify-center p-8">
+
+        <div class="max-w-4xl text-center space-y-8">
+            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-cyber-accent to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/50 mb-8 animate-bounce"
+                style="animation-duration: 3s;">
+                <i class="fa-solid fa-gift text-4xl text-white"></i>
+            </div>
+
+            <h1 class="text-5xl lg:text-7xl font-bold font-sans">
+                More Than Just <br />
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyber-glow">Security</span>
+            </h1>
+
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                By removing the fear of cyber threats, we empower your organization to innovate and scale with absolute
+                confidence.
+            </p>
+        </div>
+
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+            <div
+                class="flex items-start gap-4 p-6 bg-cyber-light/30 rounded-xl border border-white/5 hover:bg-cyber-light/50 transition-colors">
+                <div
+                    class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 shrink-0">
+                    <i class="fa-solid fa-arrow-trend-up text-xl"></i>
+                </div>
+                <div class="text-left">
+                    <h3 class="font-bold text-white text-lg mb-2">Business Acceleration</h3>
+                    <p class="text-gray-400 text-sm">Pass vendor security reviews faster. Close deals without compliance
+                        delays. Make security a sales enabler, not a blocker.</p>
+                </div>
+            </div>
+
+            <div
+                class="flex items-start gap-4 p-6 bg-cyber-light/30 rounded-xl border border-white/5 hover:bg-cyber-light/50 transition-colors">
+                <div
+                    class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 shrink-0">
+                    <i class="fa-solid fa-shield-cat text-xl"></i>
+                </div>
+                <div class="text-left">
+                    <h3 class="font-bold text-white text-lg mb-2">Operational Peace of Mind</h3>
+                    <p class="text-gray-400 text-sm">Sleep better knowing our 24/7 eyes-on-glass monitoring catches 277
+                        days sooner than the industry average.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 w-full px-8 flex justify-between items-end left-0">
+            <div class="flex gap-2">
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-12 bg-cyber-accent rounded-full"></div>
+            </div>
+            
+        </div>
+
+    </main>
+</body>
+
+</html>
