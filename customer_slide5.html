@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>HiQurate Ops - Comparison</title>
+    <title>HiQurate Ops - Differentiators</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="slide-animations.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,101 +40,148 @@
                 linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
             background-size: 40px 40px;
         }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 
 <body class="bg-cyber-dark text-white h-screen w-screen overflow-hidden font-body">
 
-    <div class="fixed inset-0 cyber-grid z-0"></div>
+    <!-- Floating Orbs -->
+    <div class="orb orb-cyan w-80 h-80 top-10 -left-20 anim-float"></div>
+    <div class="orb orb-blue w-96 h-96 -bottom-32 right-1/4 anim-float-reverse"></div>
+    <div class="orb orb-purple w-64 h-64 top-1/4 right-0 anim-float-slow"></div>
 
-    <main class="relative z-10 h-full flex flex-col items-center justify-center p-8">
+    <div class="fixed inset-0 cyber-grid-animated z-0"></div>
+    <div class="scan-lines"></div>
 
-        <h1 class="text-4xl lg:text-5xl font-bold font-sans mb-12 text-center">
-            The <span class="text-cyber-glow">Clear Choice</span>
-        </h1>
+    <!-- Corner Brackets -->
+    <div class="corner-bracket top-left"></div>
+    <div class="corner-bracket top-right"></div>
+    <div class="corner-bracket bottom-left"></div>
+    <div class="corner-bracket bottom-right"></div>
 
-        <div
-            class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-3 gap-0 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+    <main class="relative z-10 h-full flex flex-col p-8">
 
-            <!-- Headers -->
-            <div class="col-span-1 bg-cyber-blue p-6 flex items-center border-b border-r border-white/5">
-                <span class="font-mono text-gray-400 font-bold tracking-wider">FEATURE</span>
+        <div class="flex items-center justify-between mb-8 anim-fade-in-down">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-8 h-8 rounded bg-cyber-accent text-cyber-dark flex items-center justify-center font-bold anim-pulse-glow">
+                    <i class="fa-solid fa-fingerprint"></i>
+                </div>
+                <span class="font-mono text-cyber-accent tracking-wider">DIFFERENTIATORS</span>
             </div>
-            <div
-                class="col-span-1 bg-cyber-light/50 p-6 flex items-center justify-center border-b border-r border-white/5">
-                <span class="font-mono text-gray-400 font-bold uppercase">Average MSP</span>
-            </div>
-            <div
-                class="col-span-1 bg-cyber-accent/10 p-6 flex items-center justify-center border-b border-r border-white/5 relative overflow-hidden">
-                <div class="absolute inset-0 bg-cyber-accent/5 animate-pulse"></div>
-                <span class="font-mono text-cyber-glow font-bold relative z-10 flex items-center gap-2"><i
-                        class="fa-solid fa-check"></i> HIQURATE OPS</span>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-8 items-center">
+
+            <!-- Left: List -->
+            <div class="col-span-12 lg:col-span-7">
+                <h1 class="text-4xl lg:text-5xl font-bold font-sans mb-8 anim-fade-in-up delay-100">
+                    What Makes <br><span class="text-cyber-glow anim-text-glow">HiQurate Ops Different</span>
+                </h1>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-left delay-200">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Built for OMBs</h4>
+                            <p class="text-xs text-gray-400">Specifically for small & mid-sized businesses.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-right delay-200">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Practitioner-Led</h4>
+                            <p class="text-xs text-gray-400">Real SOC and incident response experience.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-left delay-300">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Risk-First Mindset</h4>
+                            <p class="text-xs text-gray-400">Not tool-first. We solve problems, not sell software.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-right delay-300">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Smart Automation</h4>
+                            <p class="text-xs text-gray-400">AI & automation to improve efficiency.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-left delay-400">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Enterprise Thinking</h4>
+                            <p class="text-xs text-gray-400">Enterprise-grade security without the complexity.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex gap-3 items-start p-3 hover-lift hover-shine rounded-lg transition-colors anim-fade-in-right delay-400">
+                        <i class="fa-solid fa-check text-cyber-accent mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Consultative Partnership</h4>
+                            <p class="text-xs text-gray-400">Focused on long-term value, not transaction.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="mt-8 p-4 bg-cyber-light/50 border-l-4 border-cyber-accent rounded-r-lg hover-glow anim-fade-in-up delay-500">
+                    <p class="text-lg font-medium italic">"We focus on solving the right problems in the right order."
+                    </p>
+                </div>
             </div>
 
-            <!-- Row 1 -->
-            <div class="col-span-1 bg-cyber-blue p-6 flex items-center border-b border-r border-white/5">
-                <span class="font-bold text-white">Response Time</span>
-            </div>
-            <div
-                class="col-span-1 bg-cyber-light/50 p-6 flex items-center justify-center border-b border-r border-white/5 text-gray-400 text-sm">
-                Hours (Contract based SLA)
-            </div>
-            <div
-                class="col-span-1 bg-cyber-accent/10 p-6 flex items-center justify-center border-b border-r border-white/5 text-white font-bold text-lg">
-                Minutes (Automated Triage)
-            </div>
-
-            <!-- Row 2 -->
-            <div class="col-span-1 bg-cyber-blue p-6 flex items-center border-b border-r border-white/5">
-                <span class="font-bold text-white">Core Focus</span>
-            </div>
-            <div
-                class="col-span-1 bg-cyber-light/50 p-6 flex items-center justify-center border-b border-r border-white/5 text-gray-400 text-sm">
-                Managing IT Tickets
-            </div>
-            <div
-                class="col-span-1 bg-cyber-accent/10 p-6 flex items-center justify-center border-b border-r border-white/5 text-white font-bold text-lg">
-                Eliminating Security Threats
-            </div>
-
-            <!-- Row 3 -->
-            <div class="col-span-1 bg-cyber-blue p-6 flex items-center border-b border-r border-white/5">
-                <span class="font-bold text-white">Technology</span>
-            </div>
-            <div
-                class="col-span-1 bg-cyber-light/50 p-6 flex items-center justify-center border-b border-r border-white/5 text-gray-400 text-sm">
-                Generic, Siloed Tools
-            </div>
-            <div
-                class="col-span-1 bg-cyber-accent/10 p-6 flex items-center justify-center border-b border-r border-white/5 text-white font-bold text-lg">
-                Integrated AI & ML Stack
-            </div>
-
-            <!-- Row 4 -->
-            <div class="col-span-1 bg-cyber-blue p-6 flex items-center border-r border-white/5">
-                <span class="font-bold text-white">Cost Model</span>
-            </div>
-            <div
-                class="col-span-1 bg-cyber-light/50 p-6 flex items-center justify-center border-r border-white/5 text-gray-400 text-sm">
-                Unpredictable / Hourly Rates
-            </div>
-            <div
-                class="col-span-1 bg-cyber-accent/10 p-6 flex items-center justify-center border-r border-white/5 text-white font-bold text-lg">
-                Transparent & Fixed
+            <!-- Right: Visual -->
+            <div class="col-span-12 lg:col-span-5 flex justify-center anim-scale-in delay-300">
+                <div
+                    class="glass-card-enhanced p-8 rounded-full h-80 w-80 flex items-center justify-center relative border border-cyber-accent/20 hover-lift hover-glow">
+                    <div
+                        class="absolute inset-4 rounded-full border-2 border-dashed border-cyber-accent/30 anim-spin-slow">
+                    </div>
+                    <div
+                        class="absolute inset-8 rounded-full border border-dotted border-blue-500/20 anim-spin-reverse">
+                    </div>
+                    <div class="text-center anim-float">
+                        <i class="fa-solid fa-rocket text-5xl text-cyber-glow mb-4 anim-text-glow"></i>
+                        <h3 class="text-xl font-bold text-white">Outcomes <br>Over<br> Output</h3>
+                    </div>
+                </div>
             </div>
 
         </div>
 
-        <div class="absolute bottom-8 w-full px-8 flex justify-between items-end left-0">
+        <div class="absolute bottom-8 w-full px-8 flex justify-between items-end left-0 anim-fade-in-up delay-700">
             <div class="flex gap-2">
                 <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
                 <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
                 <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
                 <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
-                <div class="h-1 w-12 bg-cyber-accent rounded-full"></div>
+                <div class="h-1 w-12 bg-cyber-accent rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
+                <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
                 <div class="h-1 w-2 bg-gray-700 rounded-full"></div>
             </div>
-            
+            <div class="text-slate-600 font-mono text-[10px]">05 / 11</div>
         </div>
 
     </main>

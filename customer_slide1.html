@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>HiQurate Ops - Efficiency & Ease</title>
+    <title>HiQurate Ops - Introduction</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="slide-animations.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -49,19 +50,31 @@
 <body
     class="bg-cyber-dark text-white h-screen w-screen overflow-hidden font-body selection:bg-cyber-accent selection:text-white">
 
+    <!-- Floating Orbs -->
+    <div class="orb orb-cyan w-96 h-96 -top-20 -right-20 anim-float"></div>
+    <div class="orb orb-blue w-80 h-80 -bottom-20 -left-20 anim-float-reverse"></div>
+    <div class="orb orb-purple w-64 h-64 top-1/2 right-1/4 anim-float-slow"></div>
+
     <!-- Background Elements -->
-    <div class="fixed inset-0 cyber-grid z-0"></div>
+    <div class="fixed inset-0 cyber-grid-animated z-0"></div>
+    <div class="scan-lines"></div>
     <div
         class="fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyber-accent to-transparent opacity-50 z-50">
     </div>
+
+    <!-- Corner Brackets -->
+    <div class="corner-bracket top-left"></div>
+    <div class="corner-bracket top-right"></div>
+    <div class="corner-bracket bottom-left"></div>
+    <div class="corner-bracket bottom-right"></div>
 
     <!-- Main Content -->
     <main class="relative z-10 h-full flex flex-col p-8 justify-center">
 
         <!-- Header -->
-        <div class="flex items-center gap-4 mb-4">
+        <div class="flex items-center gap-4 mb-4 anim-fade-in-down">
             <div
-                class="w-10 h-10 rounded-xl bg-cyber-light/50 border border-cyber-accent/30 flex items-center justify-center shadow-lg shadow-cyber-accent/10">
+                class="w-10 h-10 rounded-xl bg-cyber-light/50 border border-cyber-accent/30 flex items-center justify-center shadow-lg shadow-cyber-accent/10 anim-pulse-glow">
                 <i class="fa-solid fa-bolt text-xl text-cyber-glow"></i>
             </div>
             <div class="flex flex-col">
@@ -73,106 +86,105 @@
         <div class="flex-1 grid grid-cols-12 gap-8 items-center">
 
             <!-- Left Column: Title & visual -->
-            <div class="col-span-12 lg:col-span-5 flex flex-col justify-center h-full space-y-6">
+            <div class="col-span-12 lg:col-span-5 flex flex-col justify-center h-full space-y-4">
+
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-accent/10 border border-cyber-accent/20 text-cyber-glow text-xs font-mono self-start mb-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyber-glow animate-pulse"></span>
-                    EFFICIENCY & EASE
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-accent/10 border border-cyber-accent/20 text-cyber-glow text-xs font-mono self-start mb-1 anim-fade-in-left delay-100">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyber-glow anim-blink"></span>
+                    INTRODUCTION
                 </div>
 
-                <h1 class="text-4xl lg:text-6xl font-bold font-sans tracking-tight leading-tight">
-                    Redefining <br />
+                <h1
+                    class="text-4xl lg:text-5xl font-bold font-sans tracking-tight leading-tight anim-fade-in-up delay-200">
+                    HiQurate <br />
                     <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-glow via-blue-400 to-blue-600 text-glow">Business
-                        Efficiency</span>
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-glow via-blue-400 to-blue-600 anim-text-glow">Ops</span>
                 </h1>
 
-                <p class="text-base text-gray-300 leading-relaxed max-w-lg border-l-4 border-cyber-accent/30 pl-4">
-                    Streamlining security into seamless workflows. From <strong>SOC automation</strong> to
-                    <strong>real-time detection</strong>, we handle the heavy lifting.
+                <h2
+                    class="text-xl text-cyber-accent font-semibold anim-fade-in-up delay-300 glow-underline inline-block">
+                    Practical Cybersecurity for Growing Businesses</h2>
+
+                <p
+                    class="text-base text-gray-300 leading-relaxed max-w-lg border-l-4 border-cyber-accent/30 pl-4 anim-fade-in-up delay-400">
+                    HiQurate Ops helps small and mid-sized businesses understand their real cyber risks and build
+                    practical, effective security without unnecessary complexity or cost.
                 </p>
 
-                <div class="flex flex-col gap-3 pt-2">
-                    <div
-                        class="flex items-center gap-4 p-3 rounded-xl bg-cyber-light/40 border border-white/5 backdrop-blur-md hover:bg-cyber-light/60 transition-all duration-300">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 shadow-inner shadow-blue-500/20">
-                            <i class="fa-regular fa-clock text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-white text-sm">Rapid Deployment</h3>
-                            <p class="text-xs text-gray-400 mt-0.5">Onboarding in days. Instant integration.</p>
-                        </div>
-                    </div>
+                <p class="text-sm text-gray-400 leading-relaxed max-w-lg anim-fade-in-up delay-500">
+                    We work closely with organisations to make cybersecurity simple, relevant, and actionable so they
+                    can operate with confidence in a digital-first world.
+                </p>
 
+                <div
+                    class="flex items-center gap-4 p-3 rounded-xl bg-cyber-light/40 border border-white/5 backdrop-blur-md hover-lift hover-glow anim-fade-in-up delay-600">
                     <div
-                        class="flex items-center gap-4 p-3 rounded-xl bg-cyber-light/40 border border-white/5 backdrop-blur-md hover:bg-cyber-light/60 transition-all duration-300">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-cyber-accent/20 flex items-center justify-center text-cyber-glow shrink-0 shadow-inner shadow-cyan-500/20">
-                            <i class="fa-solid fa-sliders text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-white text-sm">Seamless Integration</h3>
-                            <p class="text-xs text-gray-400 mt-0.5">Compatible with Cloud (AWS/Azure) & On-prem.</p>
-                        </div>
+                        class="w-10 h-10 rounded-lg bg-cyber-accent/20 flex items-center justify-center text-cyber-glow shrink-0 shadow-inner shadow-cyan-500/20">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">Seamless Integration</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Compatible with Cloud (AWS/Azure) & On-prem.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column: Visual/Content -->
-            <div class="col-span-12 lg:col-span-7 relative flex justify-center items-center h-full pl-8">
+            <div class="col-span-12 lg:col-span-7 relative flex justify-center items-center h-full pl-4 lg:pl-12">
                 <!-- Decorative Card -->
                 <div
-                    class="relative w-full max-w-3xl rounded-3xl bg-cyber-blue border border-white/10 p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden group">
+                    class="relative w-full max-w-2xl rounded-3xl bg-cyber-blue border border-white/10 p-6 shadow-2xl backdrop-blur-xl overflow-hidden group anim-scale-in delay-300 hover-lift">
 
                     <!-- Background Glow -->
                     <div
-                        class="absolute -top-24 -right-24 w-64 h-64 bg-cyber-accent/20 blur-[100px] rounded-full group-hover:bg-cyber-accent/30 transition-all duration-1000">
+                        class="absolute -top-24 -right-24 w-64 h-64 bg-cyber-accent/20 blur-[100px] rounded-full group-hover:bg-cyber-accent/30 transition-all duration-1000 anim-float">
                     </div>
                     <div
-                        class="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full group-hover:bg-blue-600/30 transition-all duration-1000">
+                        class="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full group-hover:bg-blue-600/30 transition-all duration-1000 anim-float-reverse">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6 relative z-10">
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
                         <!-- Stat Card 1 -->
                         <div
-                            class="p-8 rounded-2xl bg-cyber-dark/60 border border-white/5 hover:border-cyber-accent/50 transition-all duration-300 hover:-translate-y-1">
-                            <div class="flex items-baseline gap-2 mb-2">
-                                <span class="text-5xl font-bold font-mono text-white">40</span>
-                                <span class="text-2xl font-bold text-cyber-accent">%</span>
+                            class="p-5 rounded-2xl bg-cyber-dark/60 border border-white/5 hover-glow hover-lift transition-all duration-300 anim-fade-in-up delay-400">
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span class="text-4xl font-bold font-mono text-white counter-animate">40</span>
+                                <span class="text-xl font-bold text-cyber-accent">%</span>
                             </div>
-                            <div class="text-sm text-gray-400 font-medium leading-relaxed">Reduction in operational
+                            <div class="text-xs text-gray-400 font-medium leading-relaxed">Reduction in operational
                                 overhead through smart automation</div>
                         </div>
                         <!-- Stat Card 2 -->
                         <div
-                            class="p-8 rounded-2xl bg-cyber-dark/60 border border-white/5 hover:border-cyber-accent/50 transition-all duration-300 hover:-translate-y-1">
-                            <div class="text-5xl font-bold font-mono text-cyber-glow mb-2">24/7</div>
-                            <div class="text-sm text-gray-400 font-medium leading-relaxed">Continuous automated
+                            class="p-5 rounded-2xl bg-cyber-dark/60 border border-white/5 hover-glow hover-lift transition-all duration-300 anim-fade-in-up delay-500">
+                            <div class="text-4xl font-bold font-mono text-cyber-glow mb-1 anim-text-glow">24/7</div>
+                            <div class="text-xs text-gray-400 font-medium leading-relaxed">Continuous automated
                                 monitoring & incident response</div>
                         </div>
                         <!-- Stat Card 3 -->
                         <div
-                            class="p-8 rounded-2xl bg-cyber-dark/60 border border-white/5 col-span-2 hover:border-cyber-accent/50 transition-all duration-300 hover:-translate-y-1 flex items-start gap-4">
+                            class="p-5 rounded-2xl bg-cyber-dark/60 border border-white/5 col-span-2 hover-glow hover-lift transition-all duration-300 flex items-start gap-3 anim-fade-in-up delay-600">
                             <div
-                                class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 shrink-0 mt-1">
-                                <i class="fa-solid fa-check-circle text-2xl"></i>
+                                class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 shrink-0 mt-1 anim-pulse-glow">
+                                <i class="fa-solid fa-check-circle text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-xl mb-2">Simplified Compliance</h4>
-                                <p class="text-base text-gray-400 leading-relaxed">Automated reporting generates
-                                    audit-ready docs for ISO 27001, SOC2, and GDPR without the manual lift.</p>
+                                <h4 class="font-bold text-white text-lg mb-1">Simplified Compliance</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed">Automated reporting generates
+                                    audit-ready docs for ISO 27001, SOC2, and GDPR.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Progress (No Text) -->
-        <div class="absolute bottom-10 left-10 flex gap-2">
-            <div class="h-1.5 w-16 bg-cyber-accent rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+        <div class="absolute bottom-10 left-10 flex gap-2 anim-fade-in-up delay-800">
+            <div class="h-1.5 w-16 bg-cyber-accent rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)] progress-animate">
+            </div>
+            <div class="h-1.5 w-3 bg-gray-700 rounded-full"></div>
+            <div class="h-1.5 w-3 bg-gray-700 rounded-full"></div>
             <div class="h-1.5 w-3 bg-gray-700 rounded-full"></div>
             <div class="h-1.5 w-3 bg-gray-700 rounded-full"></div>
             <div class="h-1.5 w-3 bg-gray-700 rounded-full"></div>
