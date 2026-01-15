@@ -1,224 +1,303 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>HiQurate Ops - Closing &amp; CTA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>HiQurate Ops - Let's Get Started</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #0f172a;
-        }
-
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            display: flex;
-            position: relative;
-            background-color: #0f172a;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-        }
-
-        /* SVG Grid Pattern */
-        .grid-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 0L1 40' stroke='rgba(30, 41, 59, 0.5)' stroke-width='1' fill='none'/%3E%3Cpath d='M0 1L40 1' stroke='rgba(30, 41, 59, 0.5)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+        .cyber-grid {
+            background-image:
+                linear-gradient(to right, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
             background-size: 40px 40px;
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        .glass-panel {
-            background-color: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(12px);
         }
 
         .cta-card {
-            background-color: rgba(15, 23, 42, 0.8);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.7) 100%);
             border: 1px solid rgba(34, 211, 238, 0.3);
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.1);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .cta-card:hover {
             border-color: rgba(34, 211, 238, 0.6);
-            box-shadow: 0 0 60px rgba(6, 182, 212, 0.15);
-        }
-
-        .manifesto-box {
-            border-left: 4px solid #06b6d4;
-            background: rgba(30, 41, 59, 0.4);
-        }
-
-        .step-icon-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            background-color: rgba(6, 182, 212, 0.1);
-            color: #22d3ee;
-            border: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.2);
+            transform: translateY(-4px);
         }
 
         .glow-button {
-            background-color: #06b6d4;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glow-button:hover::before {
+            left: 100%;
         }
 
         .glow-button:hover {
-            background-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #22D3EE 0%, #06B6D4 100%);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .step-icon {
+            transition: all 0.3s ease;
+        }
+
+        .step-icon:hover {
+            transform: scale(1.1);
         }
 
         .contact-link {
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .contact-link:hover {
-            color: #22d3ee;
-            transform: translateX(5px);
+            transform: translateX(8px);
+        }
+
+        .contact-link:hover .contact-icon {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22D3EE 0%, #A855F7 50%, #F59E0B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .manifesto-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border-left: 4px solid;
+            border-image: linear-gradient(to bottom, #06B6D4, #A855F7) 1;
         }
     </style>
 </head>
 
-<body>
-    <div class="slide-container">
-        <!-- Background Elements -->
-        <div class="grid-pattern"></div>
+<body class="bg-gray-900 m-0 p-0 overflow-hidden">
+    <div class="w-[1280px] h-[720px] bg-cyber-dark text-white relative flex overflow-hidden font-body cyber-grid">
+        <!-- Background Orbs -->
         <div
-            class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-900 rounded-full opacity-10 blur-[120px] z-0">
+            class="absolute top-[-150px] left-[-100px] w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[120px] z-0 animate-pulse-slow">
         </div>
         <div
-            class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-900 rounded-full opacity-10 blur-[100px] z-0">
+            class="absolute bottom-[-150px] right-[-100px] w-[500px] h-[500px] bg-cyan-600/15 rounded-full blur-[100px] z-0">
         </div>
+        <div class="absolute top-1/3 right-1/3 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[80px] z-0"></div>
+        <div class="absolute bottom-1/4 left-1/4 w-[200px] h-[200px] bg-amber-600/10 rounded-full blur-[60px] z-0">
+        </div>
+
         <!-- Main Content Wrapper -->
-        <div class="relative z-10 w-full h-full flex p-16 gap-16 items-center">
+        <div class="relative z-10 w-full h-full flex p-12 gap-12 items-center">
             <!-- Left Column: Vision & Philosophy -->
-            <div class="w-7/12 flex flex-col justify-center h-full">
-                <div class="mb-2">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-1 bg-cyan-500 rounded-full"></div>
-                        <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm font-['Poppins']">Next
-                            Steps</span>
-                    </div>
-                    <h1 class="font-['Poppins'] text-5xl font-bold text-white leading-tight mb-6">
-                        Let's Build a <span class="text-cyan-400">Safer Digital Future</span> Together
-                    </h1>
-                    <p class="text-slate-300 text-xl font-light mb-10 leading-relaxed">
-                        Cybersecurity does not have to be complex or intimidating.
-                    </p>
+            <div class="w-[55%] flex flex-col justify-center h-full">
+                <!-- Header Badge -->
+                <div
+                    class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-cyber-surface/60 border border-cyber-accent/30 backdrop-blur-sm w-fit">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-cyber-glow font-mono text-xs tracking-widest uppercase">Let's Get Started</span>
                 </div>
+
+                <h1 class="font-sans text-4xl font-extrabold text-white leading-tight mb-4">
+                    Let's Build a <span class="gradient-text">Safer Digital Future</span> Together
+                </h1>
+
+                <p class="text-slate-300 text-lg font-light mb-8 leading-relaxed">
+                    Cybersecurity doesn't have to be complex or intimidating.
+                </p>
+
                 <!-- Three Key Points -->
-                <div class="space-y-6 mb-10">
-                    <div class="flex items-center gap-6">
-                        <div class="step-icon-container shrink-0">
-                            <i class="fas fa-lightbulb text-xl"></i>
+                <div class="space-y-5 mb-8">
+                    <div class="flex items-center gap-5 group cursor-pointer">
+                        <div
+                            class="step-icon w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center border border-cyan-500/40 group-hover:shadow-lg group-hover:shadow-cyan-500/20">
+                            <i class="fas fa-lightbulb text-cyan-400 text-lg"></i>
                         </div>
-                        <p class="text-white text-lg font-medium font-['Poppins']">It starts with <span
-                                class="text-cyan-400">awareness</span>.</p>
+                        <p class="text-white text-lg font-medium font-sans">It starts with <span
+                                class="text-cyan-400 font-bold">awareness</span>.</p>
                     </div>
-                    <div class="flex items-center gap-6">
-                        <div class="step-icon-container shrink-0">
-                            <i class="fas fa-arrow-up-right-dots text-xl"></i>
+                    <div class="flex items-center gap-5 group cursor-pointer">
+                        <div
+                            class="step-icon w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center border border-purple-500/40 group-hover:shadow-lg group-hover:shadow-purple-500/20">
+                            <i class="fas fa-arrow-up-right-dots text-purple-400 text-lg"></i>
                         </div>
-                        <p class="text-white text-lg font-medium font-['Poppins']">It grows with the <span
-                                class="text-cyan-400">right priorities</span>.</p>
+                        <p class="text-white text-lg font-medium font-sans">It grows with the <span
+                                class="text-purple-400 font-bold">right priorities</span>.</p>
                     </div>
-                    <div class="flex items-center gap-6">
-                        <div class="step-icon-container shrink-0">
-                            <i class="fas fa-handshake-simple text-xl"></i>
+                    <div class="flex items-center gap-5 group cursor-pointer">
+                        <div
+                            class="step-icon w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center border border-amber-500/40 group-hover:shadow-lg group-hover:shadow-amber-500/20">
+                            <i class="fas fa-handshake-simple text-amber-400 text-lg"></i>
                         </div>
-                        <p class="text-white text-lg font-medium font-['Poppins']">It succeeds with the <span
-                                class="text-cyan-400">right partner</span>.</p>
+                        <p class="text-white text-lg font-medium font-sans">It succeeds with the <span
+                                class="text-amber-400 font-bold">right partner</span>.</p>
                     </div>
                 </div>
+
                 <!-- Manifesto Box -->
-                <div class="manifesto-box p-6 rounded-r-xl">
-                    <p class="text-slate-200 text-lg leading-relaxed italic">
-                        "We do not aim to sell tools. We aim to build security that actually <span
-                            class="text-white font-semibold not-italic border-b border-cyan-500/50">works for your
-                            business</span>."
+                <div class="manifesto-box p-5 rounded-r-xl backdrop-blur-sm">
+                    <p class="text-slate-200 text-base leading-relaxed italic">
+                        <i class="fas fa-quote-left text-cyan-500/50 mr-2"></i>
+                        "We don't aim to sell tools. We aim to build security that <span
+                            class="text-white font-bold not-italic">works for your business</span>."
+                        <i class="fas fa-quote-right text-cyan-500/50 ml-2"></i>
                     </p>
                 </div>
             </div>
+
             <!-- Right Column: Call to Action & Contact -->
-            <div class="w-5/12 h-full flex items-center">
-                <div class="cta-card w-full rounded-2xl p-8 relative overflow-hidden backdrop-blur-xl">
-                    <!-- Decorative background accent inside card -->
+            <div class="w-[45%] h-full flex items-center">
+                <div class="cta-card w-full rounded-2xl p-8 relative overflow-hidden">
+                    <!-- Decorative elements -->
                     <div
-                        class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none">
+                        class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-2xl -mr-10 -mt-10">
                     </div>
+                    <div
+                        class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/10 to-transparent rounded-full blur-2xl -ml-8 -mb-8">
+                    </div>
+
                     <div class="relative z-10 flex flex-col h-full">
-                        <h2 class="font-['Poppins'] text-2xl font-bold text-white mb-2">Start the Conversation</h2>
-                        <p class="text-slate-400 text-sm mb-8">Take the first step towards confidence.</p>
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full"></div>
+                            <span class="text-slate-400 font-mono text-xs tracking-widest uppercase">Next Step</span>
+                        </div>
+                        <h2 class="font-sans text-2xl font-bold text-white mb-2">Start the Conversation</h2>
+                        <p class="text-slate-400 text-sm mb-6">Take the first step towards confidence.</p>
+
                         <!-- Primary Action Button -->
-                        <div class="mb-10">
+                        <div class="mb-8">
                             <button
                                 class="glow-button w-full py-5 px-6 rounded-xl flex items-center justify-between group cursor-pointer border-none">
                                 <div class="flex flex-col items-start">
-                                    <span class="text-slate-900 font-bold text-lg font-['Poppins']">Book a Security
-                                        Snapshot</span>
-                                    <span class="text-slate-800 text-xs font-medium opacity-80">30-minute expert
+                                    <span class="text-white font-bold text-lg font-sans">Book a Security Snapshot</span>
+                                    <span class="text-cyan-100 text-xs font-medium opacity-80">30-minute expert
                                         consultation</span>
                                 </div>
                                 <div
-                                    class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                                    <i class="fas fa-arrow-right text-slate-900"></i>
+                                    class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors animate-float">
+                                    <i class="fas fa-arrow-right text-white text-lg"></i>
                                 </div>
                             </button>
                         </div>
+
                         <!-- Contact Details -->
-                        <div class="space-y-6 border-t border-slate-700/50 pt-8 mt-auto">
+                        <div class="space-y-4 border-t border-slate-700/50 pt-6 mt-auto">
                             <div class="contact-link flex items-center gap-4 cursor-pointer">
                                 <div
-                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
-                                    <i class="fas fa-envelope"></i>
+                                    class="contact-icon w-10 h-10 rounded-lg bg-cyber-surface flex items-center justify-center border border-slate-700 transition-all">
+                                    <i class="fas fa-envelope text-cyan-400"></i>
                                 </div>
                                 <div>
                                     <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Email Us
                                     </p>
-                                    <p class="text-white font-medium font-['Poppins']">hello@hiqurateops.com</p>
+                                    <p class="text-white font-medium font-sans">hello@hiqurateops.com</p>
                                 </div>
                             </div>
                             <div class="contact-link flex items-center gap-4 cursor-pointer">
                                 <div
-                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
-                                    <i class="fas fa-globe"></i>
+                                    class="contact-icon w-10 h-10 rounded-lg bg-cyber-surface flex items-center justify-center border border-slate-700 transition-all">
+                                    <i class="fas fa-globe text-purple-400"></i>
                                 </div>
                                 <div>
                                     <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Visit
                                         Website</p>
-                                    <p class="text-white font-medium font-['Poppins']">www.hiqurateops.com</p>
+                                    <p class="text-white font-medium font-sans">www.hiqurateops.com</p>
                                 </div>
                             </div>
                             <div class="contact-link flex items-center gap-4 cursor-pointer">
                                 <div
-                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
-                                    <i class="fas fa-phone"></i>
+                                    class="contact-icon w-10 h-10 rounded-lg bg-cyber-surface flex items-center justify-center border border-slate-700 transition-all">
+                                    <i class="fas fa-phone text-amber-400"></i>
                                 </div>
                                 <div>
                                     <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Call Us</p>
-                                    <p class="text-white font-medium font-['Poppins']">+1 (000) 000-0000</p>
+                                    <p class="text-white font-medium font-sans">+1 (000) 000-0000</p>
                                 </div>
                             </div>
                         </div>
@@ -226,8 +305,15 @@
                 </div>
             </div>
         </div>
+
         <!-- Footer Strip -->
-        <div class="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-700">
+        <div
+            class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 via-blue-500 via-purple-500 to-amber-500">
+        </div>
+
+        <!-- Corner accents -->
+        <div class="absolute top-0 right-0 w-32 h-32 border-r-4 border-t-4 border-cyan-500/20 rounded-tr-[40px]"></div>
+        <div class="absolute bottom-2 left-0 w-32 h-32 border-l-4 border-b-4 border-purple-500/20 rounded-bl-[40px]">
         </div>
     </div>
 </body>

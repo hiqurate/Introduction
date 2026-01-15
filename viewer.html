@@ -84,7 +84,72 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: transparent
+      background: transparent;
+      opacity: 1;
+      transition: opacity 0.15s ease-out;
+    }
+
+    /* Slide transition animations */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .stage.animate-next {
+      animation: slideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .stage.animate-prev {
+      animation: slideInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .stage.animate-fade {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+
+    .stage.animate-scale {
+      animation: scaleIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
     .nav {
@@ -417,13 +482,35 @@
       const scaler = document.getElementById('scaler');
       const stage = document.getElementById('stage');
 
+      let lastIdx = 0; // Track previous index for animation direction
+
       function clamp(v) { return Math.max(0, Math.min(v, slides.length - 1)); }
-      function update() {
+
+      function update(direction = 'fade') {
+        // Remove any existing animation classes
+        stage.classList.remove('animate-next', 'animate-prev', 'animate-fade', 'animate-scale');
+
+        // Force reflow to restart animation
+        void stage.offsetWidth;
+
+        // Determine animation based on direction
+        if (direction === 'next') {
+          stage.classList.add('animate-next');
+        } else if (direction === 'prev') {
+          stage.classList.add('animate-prev');
+        } else if (direction === 'jump') {
+          stage.classList.add('animate-scale');
+        } else {
+          stage.classList.add('animate-fade');
+        }
+
         frame.src = slides[idx];
         counter.textContent = (idx + 1) + ' / ' + slides.length;
         [...thumbs.children].forEach((b, i) => b.style.outline = i === idx ? '2px solid rgba(99,102,241,0.9)' : 'none');
         // update window title to reflect current slide
         try { document.title = 'Presentation — ' + (titles[idx] || slides[idx]); } catch (e) { }
+
+        lastIdx = idx;
       }
 
       // populate thumbnails using the friendly titles (no numeric prefix)
@@ -433,7 +520,7 @@
         b.textContent = label;
         b.setAttribute('title', label);
         b.setAttribute('aria-label', label);
-        b.addEventListener('click', () => { idx = i; update(); });
+        b.addEventListener('click', () => { idx = i; update('jump'); });
         thumbs.appendChild(b);
       });
 
@@ -453,15 +540,15 @@
       document.querySelector('.stage-wrap').appendChild(tab);
 
       // navigation
-      function next() { idx = clamp(idx + 1); update(); }
-      function prev() { idx = clamp(idx - 1); update(); }
+      function next() { idx = clamp(idx + 1); update('next'); }
+      function prev() { idx = clamp(idx - 1); update('prev'); }
       document.getElementById('next').addEventListener('click', next);
       document.getElementById('prev').addEventListener('click', prev);
       document.getElementById('next2').addEventListener('click', next);
       document.getElementById('prev2').addEventListener('click', prev);
 
       // loop navigation (back to slide 1)
-      document.getElementById('loop-nav').addEventListener('click', () => { idx = 0; update(); });
+      document.getElementById('loop-nav').addEventListener('click', () => { idx = 0; update('jump'); });
 
       // toggle thumbs
       document.getElementById('toggle-thumbs').addEventListener('click', () => {
@@ -475,8 +562,8 @@
       window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
         if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-        if (e.key === 'Home') { idx = 0; update(); }
-        if (e.key === 'End') { idx = slides.length - 1; update(); }
+        if (e.key === 'Home') { idx = 0; update('jump'); }
+        if (e.key === 'End') { idx = slides.length - 1; update('jump'); }
         if (e.key === 'f') { enterFullscreen(); }
       });
 
