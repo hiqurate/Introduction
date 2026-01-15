@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - Market Gap</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235',
+                            danger: '#EF4444',
+                            warning: '#F59E0B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-image:
+                linear-gradient(to right, rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .solution-card {
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
+        }
+
+        .solution-card.red:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .solution-card.orange:hover {
+            border-color: rgba(249, 115, 22, 0.5);
+        }
+
+        .solution-card.amber:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        .solution-card.yellow:hover {
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+
+        .solution-card.rose:hover {
+            border-color: rgba(244, 63, 94, 0.5);
+        }
+
+        .solution-card.pink:hover {
+            border-color: rgba(236, 72, 153, 0.5);
+        }
+
+        .limitation-tag {
+            transition: all 0.2s ease;
+        }
+
+        .limitation-tag:hover {
+            transform: translateX(3px);
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
+        }
+
+        .icon-warning:hover {
+            animation: shake 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 m-0 p-0 overflow-hidden">
+    <div
+        class="w-[1280px] h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
+        <!-- Background Orbs -->
+        <div
+            class="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[100px] z-0">
+        </div>
+        <div
+            class="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-orange-600/10 rounded-full blur-[80px] z-0">
+        </div>
+        <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-amber-600/5 rounded-full blur-[60px] z-0"></div>
+
+        <!-- Header -->
+        <div
+            class="relative z-10 h-14 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-5 w-auto">
+                <span class="font-sans font-bold text-base tracking-wider">HiQurate <span
+                        class="text-cyber-accent">Ops</span></span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-500">05 / 11</span>
+            </div>
+        </div>
+
+        <!-- Title Section -->
+        <div class="relative z-10 px-12 pt-5 pb-2">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"></div>
+                <span class="text-red-400 font-mono text-xs tracking-widest uppercase">Market Gap</span>
+            </div>
+            <h1 class="font-sans text-2xl font-extrabold text-white">
+                The Gap in <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Current
+                    Solutions</span>
+            </h1>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="relative z-10 px-12 py-3 flex-1">
+            <div class="grid grid-cols-3 gap-3 h-full">
+                <!-- Card 1: Red -->
+                <div class="solution-card red rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500/20 to-red-500/5 flex items-center justify-center border border-red-500/30 group-hover:border-red-400 transition-colors icon-warning">
+                            <i class="fas fa-building text-red-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Big Consulting Firms</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Enterprise frameworks, enterprise prices.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-red-500/10 border border-red-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-red-400 text-[9px]"></i>
+                            <span class="text-red-300 text-[11px]">High costs & long timelines</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-red-500/10 border border-red-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-red-400 text-[9px]"></i>
+                            <span class="text-red-300 text-[11px]">Generic, templated reports</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-red-500/10 border border-red-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-red-400 text-[9px]"></i>
+                            <span class="text-red-300 text-[11px]">Limited post-engagement support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Orange -->
+                <div class="solution-card orange rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center border border-orange-500/30 group-hover:border-orange-400 transition-colors icon-warning">
+                            <i class="fas fa-toolbox text-orange-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Tool Vendors</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Software promising automated protection.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-orange-500/10 border border-orange-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-orange-400 text-[9px]"></i>
+                            <span class="text-orange-300 text-[11px]">Product-first, not risk-first</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-orange-500/10 border border-orange-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-orange-400 text-[9px]"></i>
+                            <span class="text-orange-300 text-[11px]">Complex to configure</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-orange-500/10 border border-orange-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-orange-400 text-[9px]"></i>
+                            <span class="text-orange-300 text-[11px]">Bloated features you don't need</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Amber -->
+                <div class="solution-card amber rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center border border-amber-500/30 group-hover:border-amber-400 transition-colors icon-warning">
+                            <i class="fas fa-server text-amber-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Managed Security (MSSPs)</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Outsourced SOC monitoring 24/7.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-amber-500/10 border border-amber-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-amber-400 text-[9px]"></i>
+                            <span class="text-amber-300 text-[11px]">Alert noise without context</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-amber-500/10 border border-amber-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-amber-400 text-[9px]"></i>
+                            <span class="text-amber-300 text-[11px]">One-size-fits-all playbooks</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-amber-500/10 border border-amber-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-amber-400 text-[9px]"></i>
+                            <span class="text-amber-300 text-[11px]">No strategic guidance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Yellow -->
+                <div class="solution-card yellow rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 flex items-center justify-center border border-yellow-500/30 group-hover:border-yellow-400 transition-colors icon-warning">
+                            <i class="fas fa-clipboard-list text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Compliance Auditors</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Certification and regulatory focus.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-yellow-500/10 border border-yellow-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-yellow-400 text-[9px]"></i>
+                            <span class="text-yellow-300 text-[11px]">Checkbox mentality</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-yellow-500/10 border border-yellow-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-yellow-400 text-[9px]"></i>
+                            <span class="text-yellow-300 text-[11px]">Compliance ≠ actual security</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-yellow-500/10 border border-yellow-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-yellow-400 text-[9px]"></i>
+                            <span class="text-yellow-300 text-[11px]">No implementation help</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Rose -->
+                <div class="solution-card rose rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-500/20 to-rose-500/5 flex items-center justify-center border border-rose-500/30 group-hover:border-rose-400 transition-colors icon-warning">
+                            <i class="fas fa-user-tie text-rose-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Freelance Consultants</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Independent experts, flexible engagement.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-rose-500/10 border border-rose-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-rose-400 text-[9px]"></i>
+                            <span class="text-rose-300 text-[11px]">Limited capacity & bandwidth</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-rose-500/10 border border-rose-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-rose-400 text-[9px]"></i>
+                            <span class="text-rose-300 text-[11px]">Narrow expertise areas</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-rose-500/10 border border-rose-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-rose-400 text-[9px]"></i>
+                            <span class="text-rose-300 text-[11px]">No long-term continuity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Pink -->
+                <div class="solution-card pink rounded-xl p-4 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500/20 to-pink-500/5 flex items-center justify-center border border-pink-500/30 group-hover:border-pink-400 transition-colors icon-warning">
+                            <i class="fas fa-users text-pink-400"></i>
+                        </div>
+                        <h3 class="font-sans font-bold text-white text-sm">Building In-House</h3>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">Hiring dedicated security staff.</p>
+                    <div class="space-y-1.5 mt-auto">
+                        <div
+                            class="limitation-tag bg-pink-500/10 border border-pink-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-pink-400 text-[9px]"></i>
+                            <span class="text-pink-300 text-[11px]">Expensive talent market</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-pink-500/10 border border-pink-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-pink-400 text-[9px]"></i>
+                            <span class="text-pink-300 text-[11px]">Retention challenges</span>
+                        </div>
+                        <div
+                            class="limitation-tag bg-pink-500/10 border border-pink-500/20 px-2 py-1.5 rounded flex items-center gap-2">
+                            <i class="fas fa-times text-pink-400 text-[9px]"></i>
+                            <span class="text-pink-300 text-[11px]">Slow ramp-up time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Insight Bar -->
+        <div class="relative z-10 mx-12 mb-5">
+            <div
+                class="bg-gradient-to-r from-cyber-surface/60 to-cyber-dark/60 border border-cyber-accent/30 rounded-xl p-4 flex items-center gap-4 backdrop-blur-sm">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 rounded-full flex items-center justify-center border border-cyan-500/30 shrink-0">
+                    <i class="fas fa-lightbulb text-cyan-400"></i>
+                </div>
+                <p class="text-slate-300 text-sm">
+                    <span class="text-white font-bold">The common thread?</span> Every solution solves one piece but
+                    leaves you juggling vendors, tools, and gaps.
+                    <span class="text-cyan-400 font-bold">You need a unified partner.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer Strip -->
+        <div
+            class="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 via-amber-500 via-yellow-500 to-cyan-500">
+        </div>
+
+        <!-- Corner accent -->
+        <div class="absolute top-14 right-0 w-24 h-24 border-r-4 border-t-4 border-red-500/20 rounded-tr-[30px]"></div>
+    </div>
+</body>
+
+</html>

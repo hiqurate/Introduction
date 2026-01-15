@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - The Reality</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #0f172a;
+            /* Slate 900 */
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Minimal subtle grid using solid colors with transparency */
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+            z-index: 0;
+        }
+
+        .content-card {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Custom scrollbar hide */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="grid-pattern"></div>
+        <!-- Decorative subtle glow blobs -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-900 rounded-full opacity-10 blur-[100px] z-0">
+        </div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-900 rounded-full opacity-10 blur-[100px] z-0">
+        </div>
+        <!-- Header Section -->
+        <div class="relative z-10 px-16 pt-12 pb-6 w-full">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-1 bg-cyan-500 rounded-full"></div>
+                <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm font-['Poppins']">Current
+                    Landscape</span>
+            </div>
+            <h1 class="font-['Poppins'] text-4xl font-bold text-white mb-2">The Reality for Growing Businesses</h1>
+        </div>
+        <!-- Main Content Grid -->
+        <div class="relative z-10 flex-1 px-16 pb-12 flex gap-10">
+            <!-- Left Column: Challenges -->
+            <div
+                class="flex-1 content-card rounded-2xl p-8 flex flex-col relative overflow-hidden group hover:border-blue-500/30 transition-colors duration-300">
+                <!-- Top Accent -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-blue-500/50"></div>
+                <div class="flex items-center gap-4 mb-8">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                        <i class="fas fa-cloud-bolt text-blue-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-['Poppins'] font-semibold text-white">Common Challenges</h2>
+                        <p class="text-slate-400 text-sm">Internal hurdles affecting security</p>
+                    </div>
+                </div>
+                <div class="space-y-5">
+                    <!-- Item 1 -->
+                    <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                        <div class="mt-1">
+                            <i class="fas fa-eye-slash text-slate-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">Limited awareness</p>
+                            <p class="text-slate-400 text-sm leading-snug">Lack of visibility into real cyber risks and
+                                attack surfaces.</p>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                        <div class="mt-1">
+                            <i class="fas fa-screwdriver-wrench text-slate-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">Seen as "Too Technical"</p>
+                            <p class="text-slate-400 text-sm leading-snug">Cybersecurity viewed as optional or strictly
+                                an IT problem.</p>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                        <div class="mt-1">
+                            <i class="fas fa-file-invoice-dollar text-slate-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">Fear of Cost &amp; Complexity</p>
+                            <p class="text-slate-400 text-sm leading-snug">Belief that effective security is expensive
+                                and disruptive.</p>
+                        </div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                        <div class="mt-1">
+                            <i class="fas fa-map-signs text-slate-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">Lack of Clarity</p>
+                            <p class="text-slate-400 text-sm leading-snug">No clear understanding of current standing or
+                                priorities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Visual Divider / Connector -->
+            <div class="flex flex-col justify-center items-center">
+                <div class="h-full w-px bg-slate-800"></div>
+                <div
+                    class="absolute w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center z-20 shadow-xl shadow-black/50">
+                    <i class="fas fa-arrow-right text-slate-500"></i>
+                </div>
+            </div>
+            <!-- Right Column: Consequences -->
+            <div
+                class="flex-1 content-card rounded-2xl p-8 flex flex-col relative overflow-hidden group hover:border-red-500/30 transition-colors duration-300">
+                <!-- Top Accent -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-red-500/50"></div>
+                <div class="flex items-center gap-4 mb-8">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center border border-red-500/20">
+                        <i class="fas fa-triangle-exclamation text-red-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-['Poppins'] font-semibold text-white">Real Consequences</h2>
+                        <p class="text-slate-400 text-sm">Impact of neglecting security</p>
+                    </div>
+                </div>
+                <!-- Intro Quote Box -->
+                <div class="bg-red-900/10 border-l-4 border-red-500/50 p-4 mb-6 rounded-r-lg">
+                    <p class="text-slate-300 italic text-sm leading-relaxed">
+                        "Attackers do not discriminate based on company size. Cyber incidents today can lead to serious
+                        outcomes."
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                    <!-- Item 1 -->
+                    <div class="flex items-center gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+                        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-ban text-red-400 text-sm"></i>
+                        </div>
+                        <p class="text-slate-200 font-medium">Business Disruption</p>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="flex items-center gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+                        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-coins text-red-400 text-sm"></i>
+                        </div>
+                        <p class="text-slate-200 font-medium">Financial Losses</p>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="flex items-center gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+                        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-gavel text-red-400 text-sm"></i>
+                        </div>
+                        <p class="text-slate-200 font-medium">Regulatory Impact</p>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="flex items-center gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+                        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-handshake-slash text-red-400 text-sm"></i>
+                        </div>
+                        <p class="text-slate-200 font-medium">Loss of Customer Trust</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Strip -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-cyan-600"></div>
+    </div>
+</body>
+
+</html>

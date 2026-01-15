@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - Closing &amp; CTA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            display: flex;
+            position: relative;
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* SVG Grid Pattern */
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 0L1 40' stroke='rgba(30, 41, 59, 0.5)' stroke-width='1' fill='none'/%3E%3Cpath d='M0 1L40 1' stroke='rgba(30, 41, 59, 0.5)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+            background-size: 40px 40px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .glass-panel {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(12px);
+        }
+
+        .cta-card {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cta-card:hover {
+            border-color: rgba(34, 211, 238, 0.6);
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.15);
+        }
+
+        .manifesto-box {
+            border-left: 4px solid #06b6d4;
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        .step-icon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: rgba(6, 182, 212, 0.1);
+            color: #22d3ee;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .glow-button {
+            background-color: #06b6d4;
+            transition: all 0.3s ease;
+        }
+
+        .glow-button:hover {
+            background-color: #22d3ee;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .contact-link {
+            transition: all 0.2s ease;
+        }
+
+        .contact-link:hover {
+            color: #22d3ee;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="grid-pattern"></div>
+        <div
+            class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-900 rounded-full opacity-10 blur-[120px] z-0">
+        </div>
+        <div
+            class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-900 rounded-full opacity-10 blur-[100px] z-0">
+        </div>
+        <!-- Main Content Wrapper -->
+        <div class="relative z-10 w-full h-full flex p-16 gap-16 items-center">
+            <!-- Left Column: Vision & Philosophy -->
+            <div class="w-7/12 flex flex-col justify-center h-full">
+                <div class="mb-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-1 bg-cyan-500 rounded-full"></div>
+                        <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm font-['Poppins']">Next
+                            Steps</span>
+                    </div>
+                    <h1 class="font-['Poppins'] text-5xl font-bold text-white leading-tight mb-6">
+                        Let's Build a <span class="text-cyan-400">Safer Digital Future</span> Together
+                    </h1>
+                    <p class="text-slate-300 text-xl font-light mb-10 leading-relaxed">
+                        Cybersecurity does not have to be complex or intimidating.
+                    </p>
+                </div>
+                <!-- Three Key Points -->
+                <div class="space-y-6 mb-10">
+                    <div class="flex items-center gap-6">
+                        <div class="step-icon-container shrink-0">
+                            <i class="fas fa-lightbulb text-xl"></i>
+                        </div>
+                        <p class="text-white text-lg font-medium font-['Poppins']">It starts with <span
+                                class="text-cyan-400">awareness</span>.</p>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="step-icon-container shrink-0">
+                            <i class="fas fa-arrow-up-right-dots text-xl"></i>
+                        </div>
+                        <p class="text-white text-lg font-medium font-['Poppins']">It grows with the <span
+                                class="text-cyan-400">right priorities</span>.</p>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="step-icon-container shrink-0">
+                            <i class="fas fa-handshake-simple text-xl"></i>
+                        </div>
+                        <p class="text-white text-lg font-medium font-['Poppins']">It succeeds with the <span
+                                class="text-cyan-400">right partner</span>.</p>
+                    </div>
+                </div>
+                <!-- Manifesto Box -->
+                <div class="manifesto-box p-6 rounded-r-xl">
+                    <p class="text-slate-200 text-lg leading-relaxed italic">
+                        "We do not aim to sell tools. We aim to build security that actually <span
+                            class="text-white font-semibold not-italic border-b border-cyan-500/50">works for your
+                            business</span>."
+                    </p>
+                </div>
+            </div>
+            <!-- Right Column: Call to Action & Contact -->
+            <div class="w-5/12 h-full flex items-center">
+                <div class="cta-card w-full rounded-2xl p-8 relative overflow-hidden backdrop-blur-xl">
+                    <!-- Decorative background accent inside card -->
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none">
+                    </div>
+                    <div class="relative z-10 flex flex-col h-full">
+                        <h2 class="font-['Poppins'] text-2xl font-bold text-white mb-2">Start the Conversation</h2>
+                        <p class="text-slate-400 text-sm mb-8">Take the first step towards confidence.</p>
+                        <!-- Primary Action Button -->
+                        <div class="mb-10">
+                            <button
+                                class="glow-button w-full py-5 px-6 rounded-xl flex items-center justify-between group cursor-pointer border-none">
+                                <div class="flex flex-col items-start">
+                                    <span class="text-slate-900 font-bold text-lg font-['Poppins']">Book a Security
+                                        Snapshot</span>
+                                    <span class="text-slate-800 text-xs font-medium opacity-80">30-minute expert
+                                        consultation</span>
+                                </div>
+                                <div
+                                    class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                    <i class="fas fa-arrow-right text-slate-900"></i>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- Contact Details -->
+                        <div class="space-y-6 border-t border-slate-700/50 pt-8 mt-auto">
+                            <div class="contact-link flex items-center gap-4 cursor-pointer">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Email Us
+                                    </p>
+                                    <p class="text-white font-medium font-['Poppins']">hello@hiqurateops.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-link flex items-center gap-4 cursor-pointer">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Visit
+                                        Website</p>
+                                    <p class="text-white font-medium font-['Poppins']">www.hiqurateops.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-link flex items-center gap-4 cursor-pointer">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700 text-cyan-400">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Call Us</p>
+                                    <p class="text-white font-medium font-['Poppins']">+1 (000) 000-0000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Strip -->
+        <div class="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-700">
+        </div>
+    </div>
+</body>
+
+</html>

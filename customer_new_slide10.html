@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - What You Gain</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-image:
+                linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .benefit-card {
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .benefit-card.cyan:hover {
+            border-color: rgba(34, 211, 238, 0.5);
+        }
+
+        .benefit-card.blue:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .benefit-card.indigo:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .benefit-card.teal:hover {
+            border-color: rgba(20, 184, 166, 0.5);
+        }
+
+        .benefit-card.purple:hover {
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        .benefit-card.emerald:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .check-item {
+            transition: all 0.3s ease;
+        }
+
+        .check-item:hover {
+            background-color: rgba(30, 41, 59, 0.6);
+            transform: translateX(5px);
+        }
+
+        .outcome-circle {
+            transition: all 0.3s ease;
+        }
+
+        .outcome-circle:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 m-0 p-0 overflow-hidden">
+    <div
+        class="w-[1280px] h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
+        <!-- Background Orbs -->
+        <div
+            class="absolute bottom-[-150px] left-[-100px] w-[600px] h-[600px] bg-teal-600/10 rounded-full blur-[100px] z-0">
+        </div>
+        <div
+            class="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[80px] z-0">
+        </div>
+        <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-purple-600/5 rounded-full blur-[60px] z-0"></div>
+
+        <!-- Header -->
+        <div
+            class="relative z-10 h-16 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-6 w-auto">
+                <span class="font-sans font-bold text-lg tracking-wider">HiQurate <span
+                        class="text-cyber-accent">Ops</span></span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-500">10 / 11</span>
+            </div>
+        </div>
+
+        <!-- Title Section -->
+        <div class="relative z-10 px-12 pt-6 pb-3">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-1 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full"></div>
+                <span class="text-cyber-glow font-mono text-xs tracking-widest uppercase">Value & Outcomes</span>
+            </div>
+            <h1 class="font-sans text-3xl font-extrabold text-white">
+                What You <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Gain</span>
+            </h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="relative z-10 flex px-12 py-4 gap-8 flex-1">
+            <!-- Left Column: Benefits Grid -->
+            <div class="w-1/2 flex flex-col">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fas fa-gift text-cyan-500"></i> Tangible Benefits
+                </h3>
+                <div class="grid grid-cols-2 gap-3 flex-1">
+                    <!-- Card 1: Cyan -->
+                    <div class="benefit-card cyan rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center mb-3 border border-cyan-500/30 group-hover:border-cyan-400 transition-colors">
+                            <i class="fas fa-eye text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Better Visibility</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Clear insight into your true security posture.
+                        </p>
+                    </div>
+                    <!-- Card 2: Blue -->
+                    <div class="benefit-card blue rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center mb-3 border border-blue-500/30 group-hover:border-blue-400 transition-colors">
+                            <i class="fas fa-shield-virus text-blue-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Reduced Incidents</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Proactive defense against cyber threats.</p>
+                    </div>
+                    <!-- Card 3: Indigo -->
+                    <div class="benefit-card indigo rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-indigo-500/5 flex items-center justify-center mb-3 border border-indigo-500/30 group-hover:border-indigo-400 transition-colors">
+                            <i class="fas fa-bolt text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Faster Outcomes</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Efficient processes that deliver quickly.</p>
+                    </div>
+                    <!-- Card 4: Teal -->
+                    <div class="benefit-card teal rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500/20 to-teal-500/5 flex items-center justify-center mb-3 border border-teal-500/30 group-hover:border-teal-400 transition-colors">
+                            <i class="fas fa-coins text-teal-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Cost Effective</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Lower cost than large consulting firms.</p>
+                    </div>
+                    <!-- Card 5: Purple -->
+                    <div class="benefit-card purple rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-3 border border-purple-500/30 group-hover:border-purple-400 transition-colors">
+                            <i
+                                class="fas fa-fire-extinguisher text-purple-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Better Prepared</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Faster response when it matters most.</p>
+                    </div>
+                    <!-- Card 6: Emerald -->
+                    <div class="benefit-card emerald rounded-xl p-4 flex flex-col group">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-3 border border-emerald-500/30 group-hover:border-emerald-400 transition-colors">
+                            <i class="fas fa-handshake text-emerald-400 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-sm font-sans mb-1">Increased Trust</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Build confidence with stakeholders.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Why Us + Outcomes -->
+            <div class="w-1/2 flex flex-col">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fas fa-star text-amber-500"></i> Why Choose Us
+                </h3>
+                <div class="space-y-2 mb-4">
+                    <div
+                        class="check-item flex items-center gap-3 p-3 rounded-lg bg-cyber-surface/40 border border-transparent hover:border-cyan-500/30 cursor-pointer">
+                        <div
+                            class="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500/30 to-cyan-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-check text-cyan-400 text-[10px]"></i>
+                        </div>
+                        <p class="text-white text-sm">Practical recommendations, not generic reports</p>
+                    </div>
+                    <div
+                        class="check-item flex items-center gap-3 p-3 rounded-lg bg-cyber-surface/40 border border-transparent hover:border-cyan-500/30 cursor-pointer">
+                        <div
+                            class="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500/30 to-cyan-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-check text-cyan-400 text-[10px]"></i>
+                        </div>
+                        <p class="text-white text-sm">One trusted partner across the security lifecycle</p>
+                    </div>
+                    <div
+                        class="check-item flex items-center gap-3 p-3 rounded-lg bg-cyber-surface/40 border border-transparent hover:border-cyan-500/30 cursor-pointer">
+                        <div
+                            class="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500/30 to-cyan-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-check text-cyan-400 text-[10px]"></i>
+                        </div>
+                        <p class="text-white text-sm">Security aligned with your business goals</p>
+                    </div>
+                </div>
+
+                <!-- Key Outcomes Visual -->
+                <div
+                    class="bg-gradient-to-br from-cyber-surface/60 to-cyber-dark/60 border border-cyber-accent/20 rounded-xl p-5 flex-1 flex flex-col justify-center backdrop-blur-sm">
+                    <h4 class="text-cyber-glow font-bold text-sm font-sans mb-5 flex items-center gap-2">
+                        <i class="fas fa-trophy text-amber-400"></i> Key Outcomes
+                    </h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center outcome-circle cursor-pointer">
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center mx-auto mb-3 border border-cyan-500/40 shadow-lg shadow-cyan-500/10 animate-float">
+                                <i class="fas fa-shield-heart text-cyan-400 text-xl"></i>
+                            </div>
+                            <p class="text-white font-bold text-xs">Resilience</p>
+                            <p class="text-slate-500 text-[10px]">Business continuity</p>
+                        </div>
+                        <div class="text-center outcome-circle cursor-pointer">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center mx-auto mb-3 border border-blue-500/40 shadow-lg shadow-blue-500/10 animate-float"
+                                style="animation-delay: 0.5s;">
+                                <i class="fas fa-infinity text-blue-400 text-xl"></i>
+                            </div>
+                            <p class="text-white font-bold text-xs">Partnership</p>
+                            <p class="text-slate-500 text-[10px]">Long-term support</p>
+                        </div>
+                        <div class="text-center outcome-circle cursor-pointer">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mx-auto mb-3 border border-emerald-500/40 shadow-lg shadow-emerald-500/10 animate-float"
+                                style="animation-delay: 1s;">
+                                <i class="fas fa-brain text-emerald-400 text-xl"></i>
+                            </div>
+                            <p class="text-white font-bold text-xs">Confidence</p>
+                            <p class="text-slate-500 text-[10px]">Peace of mind</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Quote -->
+        <div class="relative z-10 mx-12 mb-5">
+            <div
+                class="bg-cyber-surface/40 border-l-4 border-gradient border-cyber-glow rounded-r-lg p-4 flex items-center gap-4 backdrop-blur-sm">
+                <div class="w-8 h-8 rounded-full bg-cyber-accent/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-quote-left text-cyber-accent text-sm"></i>
+                </div>
+                <p class="text-slate-300 text-sm italic">
+                    "We simplify cybersecurity so teams can focus on <span
+                        class="text-cyan-400 font-bold not-italic">running the business</span> — not worrying about it."
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer Strip -->
+        <div class="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-500">
+        </div>
+
+        <!-- Corner accent -->
+        <div class="absolute top-16 right-0 w-24 h-24 border-r-4 border-t-4 border-cyber-light/30 rounded-tr-[30px]">
+        </div>
+    </div>
+</body>
+
+</html>
