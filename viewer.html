@@ -81,12 +81,26 @@
     }
 
     .stage iframe {
-      width: 100%;
-      height: 100%;
+      width: 1280px;
+      height: 720px;
       border: 0;
       background: transparent;
       opacity: 1;
       transition: opacity 0.15s ease-out;
+      transform-origin: top left;
+      /* Scale iframe to fit the responsive container */
+    }
+
+    /* Scale iframe content to fit container */
+    .stage {
+      position: relative;
+    }
+
+    .stage iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: scale(var(--iframe-scale, 1));
     }
 
     /* Slide transition animations */
@@ -581,11 +595,29 @@
 
       // scale stage to fit viewport while preserving aspect ratio
       function rescale() {
-        // no-op: CSS handles responsive sizing using aspect-ratio and min() so no JS scaling is required.
-        // Keep this function in case you want JS-driven scaling later (e.g. presenter mode).
+        // Get the stage container dimensions
+        const stageRect = stage.getBoundingClientRect();
+        const containerWidth = stageRect.width;
+        const containerHeight = stageRect.height;
+
+        // Original slide dimensions
+        const slideWidth = 1280;
+        const slideHeight = 720;
+
+        // Calculate scale factor to fit container
+        const scaleX = containerWidth / slideWidth;
+        const scaleY = containerHeight / slideHeight;
+        const scale = Math.min(scaleX, scaleY);
+
+        // Apply scale to iframe via CSS variable
+        stage.style.setProperty('--iframe-scale', scale);
+
+        // Ensure scaler has no transform
         scaler.style.transform = 'none';
       }
       window.addEventListener('resize', rescale);
+      // Also rescale when iframe loads
+      frame.addEventListener('load', rescale);
       rescale();
 
       // init

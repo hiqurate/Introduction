@@ -1,0 +1,626 @@
+/* ============================================
+   HiQurate Ops - Responsive Slide Styles
+   ============================================
+   This stylesheet makes all slides responsive for:
+   - Desktop (1280px+)
+   - Tablet/iPad (768px - 1024px)
+   - Mobile (< 768px)
+   
+   Note: Slides work in two modes:
+   1. In iframe viewer: Fixed 1280x720, scaled by viewer
+   2. Standalone: Fully responsive
+   ============================================ */
+
+/* -------------------------
+   Base Responsive Slide Container
+   ------------------------- */
+
+/* Default: Full viewport when viewed standalone */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #0B1120;
+}
+
+/* Main slide container - responsive by default */
+/* Note: Use body > to ensure we only target the main container, not nested elements */
+.slide-container,
+body>div:first-child {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Prevent the height:100vh from being inherited by nested bg-cyber-dark elements */
+.bg-cyber-dark {
+    height: auto;
+}
+
+/* Only the root slide container should have full height */
+body>.bg-cyber-dark:first-child {
+    height: 100vh !important;
+    max-height: 720px;
+}
+
+/* When max-w and max-h classes are used, center the slide */
+.max-w-\[1280px\].max-h-\[720px\] {
+    margin: 0 auto;
+}
+
+/* -------------------------
+   Tablet Breakpoint (iPad)
+   ------------------------- */
+@media (max-width: 1024px) {
+
+    /* Typography scaling */
+    .text-6xl {
+        font-size: 2.5rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .text-5xl {
+        font-size: 2rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .text-4xl {
+        font-size: 1.75rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .text-3xl {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .text-2xl {
+        font-size: 1.25rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .text-xl {
+        font-size: 1.1rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .text-lg {
+        font-size: 1rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .text-base {
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .text-sm {
+        font-size: 0.75rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .text-xs {
+        font-size: 0.65rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Padding and margins */
+    .pl-20,
+    .pr-20 {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    .pl-16,
+    .pr-16 {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+    .pl-12,
+    .pr-12 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .px-12,
+    .px-16,
+    .px-20 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .p-8 {
+        padding: 1rem !important;
+    }
+
+    .p-6 {
+        padding: 0.75rem !important;
+    }
+
+    .p-4 {
+        padding: 0.5rem !important;
+    }
+
+    .gap-8 {
+        gap: 1rem !important;
+    }
+
+    .gap-6 {
+        gap: 0.75rem !important;
+    }
+
+    .gap-4 {
+        gap: 0.5rem !important;
+    }
+
+    .mb-8 {
+        margin-bottom: 1rem !important;
+    }
+
+    .mb-6 {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .mb-4 {
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Column layouts - stack on tablet */
+    .w-\[55\%\],
+    .w-\[45\%\] {
+        width: 100% !important;
+    }
+
+    .w-\[58\%\],
+    .w-\[42\%\] {
+        width: 100% !important;
+    }
+
+    .w-\[38\%\],
+    .w-\[62\%\] {
+        width: 100% !important;
+    }
+
+    .w-\[50\%\] {
+        width: 100% !important;
+    }
+
+    .w-\[40\%\],
+    .w-\[60\%\] {
+        width: 100% !important;
+    }
+
+    .w-\[35\%\],
+    .w-\[65\%\] {
+        width: 100% !important;
+    }
+
+    /* Convert horizontal flex to vertical on tablet for main content */
+    .flex-tablet-col {
+        flex-direction: column !important;
+    }
+
+    /* Hide decorative elements that waste space on tablet */
+    .hide-on-tablet {
+        display: none !important;
+    }
+
+    /* Adjust icon sizes */
+    .text-8xl {
+        font-size: 4rem !important;
+    }
+
+    .text-7xl {
+        font-size: 3.5rem !important;
+    }
+
+    /* Logo adjustments */
+    .h-14 {
+        height: 2.5rem !important;
+    }
+
+    .h-12 {
+        height: 2rem !important;
+    }
+
+    .h-10 {
+        height: 1.75rem !important;
+    }
+
+    /* Grid adjustments */
+    .grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid-cols-5 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    /* Orbiting icons - make smaller */
+    .w-\[350px\] {
+        width: 200px !important;
+    }
+
+    .h-\[350px\] {
+        height: 200px !important;
+    }
+
+    .w-\[300px\] {
+        width: 180px !important;
+    }
+
+    .h-\[300px\] {
+        height: 180px !important;
+    }
+
+    /* Background orbs - reduce size and blur */
+    .w-\[500px\] {
+        width: 250px !important;
+    }
+
+    .h-\[500px\] {
+        height: 250px !important;
+    }
+
+    .w-\[400px\] {
+        width: 200px !important;
+    }
+
+    .h-\[400px\] {
+        height: 200px !important;
+    }
+
+    .blur-\[100px\] {
+        filter: blur(50px) !important;
+    }
+
+    .blur-\[80px\] {
+        filter: blur(40px) !important;
+    }
+
+    /* Header adjustments */
+    .h-16 {
+        height: 3rem !important;
+    }
+
+    .h-14 {
+        height: 2.5rem !important;
+    }
+}
+
+/* -------------------------
+   Mobile Breakpoint (Phone)
+   ------------------------- */
+@media (max-width: 768px) {
+
+    /* Even smaller typography for mobile */
+    .text-6xl {
+        font-size: 1.75rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .text-5xl {
+        font-size: 1.5rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .text-4xl {
+        font-size: 1.25rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .text-3xl {
+        font-size: 1.125rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .text-2xl {
+        font-size: 1rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .text-xl {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .text-lg {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .text-base {
+        font-size: 0.75rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .text-sm {
+        font-size: 0.65rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .text-xs {
+        font-size: 0.55rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Even more compact spacing */
+    .pl-20,
+    .pr-20,
+    .pl-16,
+    .pr-16,
+    .pl-12,
+    .pr-12 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    .px-12,
+    .px-16,
+    .px-20,
+    .px-8 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    .p-8 {
+        padding: 0.75rem !important;
+    }
+
+    .p-6 {
+        padding: 0.5rem !important;
+    }
+
+    .p-4 {
+        padding: 0.375rem !important;
+    }
+
+    .gap-8 {
+        gap: 0.5rem !important;
+    }
+
+    .gap-6 {
+        gap: 0.375rem !important;
+    }
+
+    .gap-4 {
+        gap: 0.25rem !important;
+    }
+
+    .mb-8 {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .mb-6 {
+        margin-bottom: 0.375rem !important;
+    }
+
+    .mb-4 {
+        margin-bottom: 0.25rem !important;
+    }
+
+    /* Force vertical layout */
+    .flex:not(.flex-col):not(.items-center):not(.justify-center) {
+        flex-wrap: wrap;
+    }
+
+    /* Stack grid items */
+    .grid-cols-3,
+    .grid-cols-4,
+    .grid-cols-5 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Icons smaller on mobile */
+    .text-8xl {
+        font-size: 2.5rem !important;
+    }
+
+    .text-7xl {
+        font-size: 2rem !important;
+    }
+
+    /* Logo smaller */
+    .h-14,
+    .h-12,
+    .h-10 {
+        height: 1.5rem !important;
+    }
+
+    /* Hide more elements on mobile */
+    .hide-on-mobile {
+        display: none !important;
+    }
+
+    /* Orbiting graphics - hide or minimize */
+    .w-\[350px\],
+    .w-\[300px\] {
+        width: 120px !important;
+    }
+
+    .h-\[350px\],
+    .h-\[300px\] {
+        height: 120px !important;
+    }
+
+    /* Background orbs - even smaller */
+    .w-\[500px\],
+    .w-\[400px\] {
+        width: 120px !important;
+    }
+
+    .h-\[500px\],
+    .h-\[400px\] {
+        height: 120px !important;
+    }
+
+    /* Header even smaller */
+    .h-16,
+    .h-14 {
+        height: 2.5rem !important;
+    }
+
+    /* Reduce decorative orbs */
+    .absolute.rounded-full.blur-3xl,
+    .absolute.rounded-full.blur-\[100px\],
+    .absolute.rounded-full.blur-\[80px\],
+    .absolute.rounded-full.blur-\[60px\] {
+        opacity: 0.3 !important;
+    }
+}
+
+/* -------------------------
+   Small Mobile (< 480px)
+   ------------------------- */
+@media (max-width: 480px) {
+    .text-6xl {
+        font-size: 1.5rem !important;
+    }
+
+    .text-5xl {
+        font-size: 1.25rem !important;
+    }
+
+    .text-4xl {
+        font-size: 1.125rem !important;
+    }
+
+    .text-3xl {
+        font-size: 1rem !important;
+    }
+
+    .text-2xl {
+        font-size: 0.875rem !important;
+    }
+
+    /* Minimal padding */
+    .pl-20,
+    .pr-20,
+    .pl-16,
+    .pr-16,
+    .pl-12,
+    .pr-12,
+    .px-12,
+    .px-16,
+    .px-20,
+    .px-8 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    /* Hide non-essential decorative elements */
+    .border-dashed,
+    .animate-orbit,
+    .animate-orbit-reverse {
+        display: none !important;
+    }
+}
+
+/* -------------------------
+   Landscape Mode Fix
+   ------------------------- */
+@media (max-height: 500px) and (orientation: landscape) {
+
+    /* On landscape phones, prioritize horizontal layout */
+    .slide-container {
+        overflow-y: auto;
+    }
+
+    .text-6xl {
+        font-size: 1.5rem !important;
+    }
+
+    .text-5xl {
+        font-size: 1.25rem !important;
+    }
+
+    .text-4xl {
+        font-size: 1.125rem !important;
+    }
+
+    .mb-8,
+    .mb-6 {
+        margin-bottom: 0.375rem !important;
+    }
+
+    .p-8 {
+        padding: 0.5rem !important;
+    }
+
+    .gap-8 {
+        gap: 0.5rem !important;
+    }
+
+    /* Keep some horizontal layout on landscape */
+    .w-\[55\%\] {
+        width: 55% !important;
+    }
+
+    .w-\[45\%\] {
+        width: 45% !important;
+    }
+}
+
+/* -------------------------
+   Chart/Echart Responsiveness
+   ------------------------- */
+/* Make ECharts containers resize */
+[id$="Chart"],
+.echarts-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+@media (max-width: 768px) {
+    .min-h-\[200px\] {
+        min-height: 120px !important;
+    }
+
+    .min-h-\[180px\] {
+        min-height: 100px !important;
+    }
+
+    .min-h-\[150px\] {
+        min-height: 80px !important;
+    }
+}
+
+/* -------------------------
+   Fix for iframe scaling
+   ------------------------- */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Transform-based scaling for the entire slide when viewed in iframe */
+body.in-iframe {
+    width: 1280px;
+    height: 720px;
+    transform-origin: top left;
+}
+
+/* Alternative: Use CSS zoom (works in Webkit/Chrome) */
+@supports (zoom: 1) {
+    @media (max-width: 1280px) {
+        body.scale-to-fit {
+            zoom: calc(100vw / 1280);
+        }
+    }
+}
