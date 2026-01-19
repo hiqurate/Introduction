@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops - 4-Slide Pitch Deck</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: #0B1120;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 40px auto;
+            background: #0B1120;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            page-break-after: always;
+        }
+
+        .cyber-grid {
+            background-image: linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .grid-30 {
+            background-image: linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22D3EE 0%, #06B6D4 50%, #0891B2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .offer-card {
+            background: rgba(24, 34, 53, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .diff-tag {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #06B6D4;
+        }
+
+        .contact-card {
+            background: rgba(24, 34, 53, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .slide-container {
+                margin: 0;
+                box-shadow: none;
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: #06B6D4;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            background: #22D3EE;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="window.print()" class="download-btn no-print">
+        <i class="fas fa-file-pdf mr-2"></i> Download Pitch Deck PDF
+    </button>
+
+    <!-- Slide 1: Cover -->
+    <div class="slide-container cyber-grid flex flex-col items-center justify-center">
+        <div class="absolute top-[-100px] right-[-100px] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]">
+        </div>
+        <div
+            class="absolute bottom-[-100px] left-[-100px] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px]">
+        </div>
+        <div class="relative z-10 text-center">
+            <img src="assets/images/logo.png" alt="Logo"
+                class="h-32 mx-auto mb-12 drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]" />
+            <h1 class="font-sans text-8xl font-black mb-4 tracking-tighter text-white">HiQurate <span
+                    class="gradient-text uppercase text-white">Ops</span></h1>
+            <div class="flex items-center justify-center gap-6 mb-12">
+                <div class="h-px w-24 bg-gradient-to-r from-transparent to-cyber-accent"></div>
+                <p class="font-mono text-xl tracking-[0.5em] text-cyber-glow uppercase">Established 2025</p>
+                <div class="h-px w-24 bg-gradient-to-l from-transparent to-cyber-accent"></div>
+            </div>
+            <p class="text-2xl text-slate-400 font-light max-w-2xl mx-auto leading-relaxed italic">"Practical
+                Cybersecurity for Ambitious Enterprises"</p>
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyber-accent to-transparent opacity-50">
+        </div>
+    </div>
+
+    <!-- Slide 2: Identity & Reach -->
+    <div class="slide-container grid-30 p-16 flex flex-col">
+        <div class="flex justify-between items-start mb-12">
+            <div>
+                <p class="text-cyber-accent font-mono text-sm tracking-widest uppercase mb-2">02 // Corporate Identity
+                </p>
+                <h2 class="text-5xl font-black text-white font-sans uppercase">Our Identity & <span
+                        class="text-cyber-glow">Reach</span></h2>
+            </div>
+            <img src="assets/images/logo.png" alt="Logo" class="h-10 opacity-50" />
+        </div>
+        <div class="flex-1 flex flex-col justify-center gap-12">
+            <div class="glass-card p-10 rounded-3xl border-l-4 border-cyber-accent relative overflow-hidden">
+                <div
+                    class="absolute -right-10 -top-10 text-9xl text-white opacity-[0.03] font-black italic select-none">
+                    EXPERIENCE</div>
+                <h4 class="text-cyber-glow font-mono text-xs uppercase tracking-widest mb-4">The Insight</h4>
+                <p class="text-2xl text-white leading-relaxed font-medium max-w-4xl">
+                    "With <span class="text-cyber-accent font-bold">~10 years of energetic expertise in global security
+                        and trending AI</span>,
+                    we deliver the high-impact rigor of Fortune 500 companies to ambitious enterprises worldwide."
+                </p>
+                <div class="mt-8 flex gap-4">
+                    <span
+                        class="px-4 py-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded-full text-xs font-bold text-cyber-accent">USA</span>
+                    <span
+                        class="px-4 py-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded-full text-xs font-bold text-cyber-accent">APAC</span>
+                    <span
+                        class="px-4 py-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded-full text-xs font-bold text-cyber-accent">OCEANIA</span>
+                    <span
+                        class="px-4 py-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded-full text-xs font-bold text-cyber-accent">MIDDLE
+                        EAST</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-8">
+                <div
+                    class="glass-card p-6 rounded-2xl border-t-2 border-cyber-accent/50 flex flex-col items-center text-center">
+                    <i class="fas fa-shield-halved text-cyber-accent mb-4 text-2xl"></i>
+                    <h5 class="text-sm font-bold text-white uppercase mb-2">Strategic Defense</h5>
+                    <p class="text-xs text-slate-500">Protecting assets with risk-aligned security architecture.</p>
+                </div>
+                <div
+                    class="glass-card p-6 rounded-2xl border-t-2 border-blue-500/50 flex flex-col items-center text-center">
+                    <i class="fas fa-wand-magic-sparkles text-blue-400 mb-4 text-2xl"></i>
+                    <h5 class="text-sm font-bold text-white uppercase mb-2">Radical Simplicity</h5>
+                    <p class="text-xs text-slate-500">Cutting through noise with clear, actionable insights.</p>
+                </div>
+                <div
+                    class="glass-card p-6 rounded-2xl border-t-2 border-purple-500/50 flex flex-col items-center text-center">
+                    <i class="fas fa-rocket text-purple-400 mb-4 text-2xl"></i>
+                    <h5 class="text-sm font-bold text-white uppercase mb-2">Empowering Scale</h5>
+                    <p class="text-xs text-slate-500">Security designed to grow with your ambitions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 flex justify-between items-center text-[10px] font-mono text-slate-500 opacity-60">
+            <span class="text-white">HiQurate Ops</span>
+            <span class="flex items-center gap-2 text-white">Established 2025</span>
+        </div>
+    </div>
+
+    <!-- Slide 3: Services & Edge -->
+    <div class="slide-container grid-30 p-16 flex flex-col">
+        <div class="flex justify-between items-start mb-10 shrink-0">
+            <div>
+                <p class="text-cyber-glow font-mono text-xs tracking-widest uppercase mb-1">STRATEGIC VALUE</p>
+                <h2 class="text-5xl font-black text-white font-sans uppercase">Offerings & <span
+                        class="text-cyber-accent">The Edge</span></h2>
+            </div>
+            <img src="assets/images/logo.png" alt="Logo" class="h-10 opacity-50" />
+        </div>
+        <div class="grid grid-cols-12 gap-10 flex-1 content-center">
+            <div class="col-span-8 space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-eye text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-2">AI-Enhanced SOC</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">Continuous monitoring &
+                            AI-driven threat detection.</p>
+                    </div>
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-clipboard-check text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-2">AI Assessments</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">AI-driven Gap analysis & control
+                            maturity reviews.</p>
+                    </div>
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-fire-extinguisher text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-2">Incident Response</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">Fast investigation & root cause
+                            analysis.</p>
+                    </div>
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-file-contract text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-2">Advisory/GRC</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">Governance & policy compliance
+                            strategy.</p>
+                    </div>
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-layer-group text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-2">Implementation</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">Tool optimization & business
+                            alignment.</p>
+                    </div>
+                    <div class="offer-card p-5 rounded-2xl flex flex-col">
+                        <i class="fa-solid fa-users-gear text-cyber-glow mb-4 text-2xl"></i>
+                        <h5 class="text-sm font-bold text-white mb-1">Security Awareness</h5>
+                        <p class="text-[11px] text-slate-500 font-medium leading-tight">Phishing simulations & culture
+                            training.</p>
+                    </div>
+                </div>
+                <!-- Agentic AI -->
+                <div
+                    class="p-5 rounded-2xl border border-cyber-accent/40 bg-cyber-accent/5 flex items-center gap-6 relative overflow-hidden">
+                    <div class="shrink-0 bg-cyber-dark p-4 rounded-xl border border-cyber-accent/20">
+                        <i class="fa-solid fa-robot text-cyber-accent text-3xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <h5 class="text-2xl font-black text-white">Agentic AI Power</h5>
+                            <span
+                                class="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] font-mono rounded border border-green-500/30 uppercase font-bold">90%
+                                Faster</span>
+                        </div>
+                        <p class="text-[13px] text-slate-300 leading-tight">AI-driven NIST/ISO assessments with expert
+                            human oversight.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Differentiators -->
+            <div class="col-span-4 flex flex-col space-y-4">
+                <div class="diff-tag p-5 rounded-r-2xl">
+                    <h6 class="text-sm font-bold text-white mb-1">Tailored & Flexible</h6>
+                    <p class="text-[10px] text-slate-500 leading-tight">Strategies designed for your unique risk
+                        profile.</p>
+                </div>
+                <div class="diff-tag p-5 rounded-r-2xl border-purple-500 bg-purple-500/5">
+                    <h6 class="text-sm font-bold text-white mb-1">Agility & Speed</h6>
+                    <p class="text-[10px] text-slate-500 leading-tight">Rapid response without bureaucratic delays.</p>
+                </div>
+                <div class="diff-tag p-5 rounded-r-2xl border-amber-500 bg-amber-500/5">
+                    <h6 class="text-sm font-bold text-white mb-1">Cost Efficiency</h6>
+                    <p class="text-[10px] text-slate-500 leading-tight">30-50% lower cost than large consulting firms.
+                    </p>
+                </div>
+                <div class="diff-tag p-5 rounded-r-2xl border-emerald-500 bg-emerald-500/5">
+                    <h6 class="text-sm font-bold text-white mb-1">Partnership Driven</h6>
+                    <p class="text-[10px] text-slate-500 leading-tight">As an extension of your team, not just a vendor.
+                    </p>
+                </div>
+                <div class="mt-4 p-6 rounded-2xl bg-cyber-blue border border-white/5 text-center">
+                    <div class="text-4xl font-black text-cyber-glow">~10</div>
+                    <div class="text-[10px] uppercase font-mono text-slate-400 font-bold">Years of Practitioner
+                        Expertise</div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="mt-auto pt-8 flex justify-between items-center text-[11px] font-mono text-slate-600 tracking-widest border-t border-white/5">
+            <span class="text-white">HiQurate Ops</span>
+            <div class="flex items-center gap-4 text-cyber-accent/80">
+                <span class="text-white">ESTABLISHED 2025</span>
+                <span class="w-1 h-1 bg-slate-800 rounded-full"></span>
+                <span class="text-white">STRATEGIC PROFILE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Contact -->
+    <div class="slide-container cyber-grid p-16 flex flex-col items-center justify-center">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyber-accent/5 rounded-full blur-[150px]">
+        </div>
+        <div class="relative z-10 text-center mb-16">
+            <p class="text-cyber-glow font-mono text-sm tracking-[0.4em] uppercase mb-4">Let's Secure Your Future</p>
+            <h2 class="text-6xl font-black font-sans uppercase text-white">Contact <span
+                    class="text-cyber-accent">Us</span></h2>
+        </div>
+        <div class="grid grid-cols-3 gap-8 w-full max-w-6xl relative z-10 text-white">
+            <div class="contact-card p-10 rounded-3xl text-center">
+                <div
+                    class="w-16 h-16 bg-cyber-accent/10 rounded-2xl flex items-center justify-center text-cyber-glow mx-auto mb-6 text-2xl">
+                    <i class="fas fa-globe"></i></div>
+                <h4 class="font-bold text-xl mb-2">Website</h4>
+                <p class="text-slate-400 font-mono text-lg">www.hiqurateops.com</p>
+            </div>
+            <div
+                class="contact-card p-10 rounded-3xl text-center border-cyber-accent shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                <div
+                    class="w-16 h-16 bg-cyber-accent rounded-2xl flex items-center justify-center text-cyber-dark mx-auto mb-6 text-2xl">
+                    <i class="fas fa-envelope"></i></div>
+                <h4 class="font-bold text-xl mb-2">Email</h4>
+                <p class="text-white font-mono text-lg font-bold">sayHi@hiqurateops.com</p>
+            </div>
+            <div class="contact-card p-10 rounded-3xl text-center">
+                <div
+                    class="w-16 h-16 bg-cyber-accent/10 rounded-2xl flex items-center justify-center text-cyber-glow mx-auto mb-6 text-2xl">
+                    <i class="fas fa-phone"></i></div>
+                <h4 class="font-bold text-xl mb-2">Contact</h4>
+                <p class="text-slate-400 font-mono text-lg font-bold">+91 9779916669</p>
+            </div>
+        </div>
+        <div class="mt-20 relative z-10 text-center">
+            <img src="assets/images/logo.png" alt="Logo" class="h-16 mx-auto opacity-80" />
+            <p class="mt-6 text-slate-500 font-mono text-sm tracking-widest uppercase">Propelling Trust in the Digital
+                Era</p>
+        </div>
+    </div>
+</body>
+
+</html>

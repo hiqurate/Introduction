@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>HiQurate Ops | Practical Cybersecurity for Growing Businesses</title>
+    <meta name="description"
+        content="HiQurate Ops provides practical, effective cybersecurity solutions for growing businesses. We focus on real risks, awareness, and execution without unnecessary complexity.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0B1120',
+                            blue: '#0F172A',
+                            light: '#1E293B',
+                            accent: '#06B6D4',
+                            glow: '#22D3EE',
+                            surface: '#182235',
+                            dim: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .cyber-grid {
+            background-image:
+                linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .glass {
+            background: rgba(24, 34, 53, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22D3EE 0%, #06B6D4 50%, #0891B2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #06B6D4;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0B1120;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4;
+        }
+    </style>
+</head>
+
+<body class="bg-cyber-dark text-white font-body selection:bg-cyber-accent selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-10 w-auto">
+                <span class="font-sans font-extrabold text-xl tracking-wider uppercase">HiQurate <span
+                        class="text-cyber-accent">Ops</span></span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#problem"
+                    class="nav-link text-sm font-semibold uppercase tracking-widest text-slate-300 hover:text-white">The
+                    Gap</a>
+                <a href="#approach"
+                    class="nav-link text-sm font-semibold uppercase tracking-widest text-slate-300 hover:text-white">Our
+                    Approach</a>
+                <a href="#services"
+                    class="nav-link text-sm font-semibold uppercase tracking-widest text-slate-300 hover:text-white">Services</a>
+                <a href="#expertise"
+                    class="nav-link text-sm font-semibold uppercase tracking-widest text-slate-300 hover:text-white">Expertise</a>
+            </nav>
+
+            <button
+                class="px-6 py-2.5 bg-cyber-accent hover:bg-cyber-glow text-cyber-dark font-bold rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                Secure Your Future
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="assets/images/profile_hero.png" alt="Cybersecurity Background"
+                class="w-full h-full object-cover opacity-40 hero-mask">
+            <div class="absolute inset-0 bg-gradient-to-r from-cyber-dark via-cyber-dark/80 to-transparent"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right">
+                <div
+                    class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full glass border border-cyber-accent/30">
+                    <span class="w-2 h-2 bg-cyber-accent rounded-full animate-pulse"></span>
+                    <span class="text-cyber-glow font-mono text-xs tracking-widest uppercase">Trusted Cybersecurity
+                        Partner</span>
+                </div>
+
+                <h1 class="font-sans text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+                    Practical Security for <br /><span class="gradient-text">Growing Businesses</span>
+                </h1>
+
+                <p class="text-xl text-slate-400 leading-relaxed mb-8 max-w-xl">
+                    We bridge the gap between complex enterprise security and the practical needs of growing
+                    organizations. No fluff, no unnecessary costs—just effective defense.
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <button
+                        class="px-8 py-4 bg-cyber-accent text-cyber-dark font-bold rounded-xl transition-all hover:scale-105 shadow-[0_0_30px_rgba(6,182,212,0.4)]">
+                        Explore Our Approach
+                    </button>
+                    <button
+                        class="px-8 py-4 border border-cyber-accent/50 text-cyber-glow font-bold rounded-xl hover:bg-cyber-accent/10 transition-all">
+                        View Success Stories
+                    </button>
+                </div>
+            </div>
+
+            <div class="hidden md:block relative h-[500px]" data-aos="fade-left">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-80 h-80 bg-cyber-accent/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+                </div>
+                <div class="relative z-10 animate-float">
+                    <div class="glass p-8 rounded-3xl border-2 border-cyber-accent/30 shadow-2xl">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div
+                                class="w-12 h-12 bg-cyber-accent/20 rounded-xl flex items-center justify-center text-cyber-glow">
+                                <i class="fas fa-shield-halved text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Real-Time Defense</h3>
+                                <p class="text-sm text-slate-400">Continuous Monitoring Active</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-2 w-full bg-cyber-light rounded-full overflow-hidden">
+                                <div class="h-full bg-cyber-accent w-4/5"></div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-500 uppercase">
+                                <span>Threat Detection</span>
+                                <span class="text-cyber-accent text-bold">99.9% Effective</span>
+                            </div>
+                            <div class="h-2 w-full bg-cyber-light rounded-full overflow-hidden">
+                                <div class="h-full bg-cyber-accent w-2/3"></div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-500 uppercase">
+                                <span>Risk Mitigation</span>
+                                <span class="text-cyber-accent text-bold">High Priority</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating Decorative Icons -->
+                <div class="absolute top-10 right-10 p-4 rounded-2xl glass border border-cyber-accent/20 animate-float"
+                    style="animation-delay: 1s;">
+                    <i class="fas fa-lock text-cyber-glow text-xl"></i>
+                </div>
+                <div class="absolute bottom-10 left-10 p-4 rounded-2xl glass border border-cyber-accent/20 animate-float"
+                    style="animation-delay: 2s;">
+                    <i class="fas fa-microchip text-cyber-glow text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-slate-600"></i>
+        </div>
+    </section>
+
+    <!-- Vision, Mission & Values -->
+    <section class="py-20 bg-cyber-dark relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+            <div class="glass p-10 rounded-3xl relative group overflow-hidden" data-aos="fade-up">
+                <div
+                    class="absolute top-0 left-0 w-2 h-full bg-cyber-accent group-hover:w-full transition-all duration-500 opacity-20">
+                </div>
+                <div class="relative z-10">
+                    <i class="fas fa-eye text-3xl text-cyber-glow mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4 font-sans tracking-tight">Our Vision</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        To simplify cybersecurity so completely that businesses can focus entirely on <span
+                            class="text-white font-bold">running and growing</span>—without the shadow of digital worry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass p-10 rounded-3xl relative group overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div
+                    class="absolute top-0 left-0 w-2 h-full bg-purple-500 group-hover:w-full transition-all duration-500 opacity-20">
+                </div>
+                <div class="relative z-10">
+                    <i class="fas fa-bullseye text-3xl text-purple-400 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4 font-sans tracking-tight">Our Mission</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        To provide <span class="text-white font-bold">practical, effective, and curated</span> security
+                        resilience for growing organizations, bridging the gap between complexity and execution.
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass p-10 rounded-3xl relative group overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <div
+                    class="absolute top-0 left-0 w-2 h-full bg-amber-500 group-hover:w-full transition-all duration-500 opacity-20">
+                </div>
+                <div class="relative z-10">
+                    <i class="fas fa-gem text-3xl text-amber-400 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4 font-sans tracking-tight">Core Values</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-300 font-medium"><i
+                                class="fas fa-check-circle text-amber-500"></i> Resilience First</li>
+                        <li class="flex items-center gap-3 text-slate-300 font-medium"><i
+                                class="fas fa-check-circle text-amber-500"></i> Unyielding Trust</li>
+                        <li class="flex items-center gap-3 text-slate-300 font-medium"><i
+                                class="fas fa-check-circle text-amber-500"></i> Radical Simplicity</li>
+                        <li class="flex items-center gap-3 text-slate-300 font-medium"><i
+                                class="fas fa-check-circle text-amber-500"></i> Empowering Growth</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Problem Section -->
+    <section id="problem" class="py-24 bg-cyber-blue relative cyber-grid">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-4">The Reality Check</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold font-sans">Even Giants Have <br /><span
+                        class="text-red-500">Critical Blind Spots</span></h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-2xl text-center hover:border-red-500/50 transition-all duration-300"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <p class="text-5xl font-black text-red-500 mb-4">68%</p>
+                    <h4 class="font-bold text-lg mb-2 uppercase tracking-wide">Breached via Known Vulns</h4>
+                    <p class="text-slate-400 text-sm">Attackers exploit old, unpatched vulnerabilities that teams missed
+                        or ignored.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl text-center hover:border-red-500/50 transition-all duration-300"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-5xl font-black text-red-500 mb-4">277</p>
+                    <h4 class="font-bold text-lg mb-2 uppercase tracking-wide">Days to Detect</h4>
+                    <p class="text-slate-400 text-sm">Average time for an organization to identify a data breach in
+                        their internal network.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl text-center hover:border-red-500/50 transition-all duration-300"
+                    data-aos="fade-up" data-aos-delay="300">
+                    <p class="text-5xl font-black text-red-500 mb-4">$4.5M</p>
+                    <h4 class="font-bold text-lg mb-2 uppercase tracking-wide">Average Breach Cost</h4>
+                    <p class="text-slate-400 text-sm">The average financial impact of a single data breach on a global
+                        enterprise.</p>
+                </div>
+            </div>
+
+            <div class="mt-16 bg-red-900/10 border-l-4 border-red-500 p-8 rounded-r-2xl" data-aos="fade-up">
+                <div class="flex items-start gap-6">
+                    <div class="shrink-0 text-red-500">
+                        <i class="fas fa-triangle-exclamation text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">What I Witnessed Firsthand</h3>
+                        <p class="text-slate-300 text-lg leading-relaxed italic">
+                            "Working with Fortune 500 clients, I saw enterprises with ₹100+ Cr security budgets still
+                            suffer breaches due to simple misconfigurations and basic phishing. It wasn't about the
+                            tools—it was about <span
+                                class="bg-cyber-accent text-cyber-dark px-2 font-bold not-italic">awareness and
+                                execution</span>."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Approach Section -->
+    <section id="approach" class="py-24 bg-cyber-dark">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-right">
+                <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-4">The Solution</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold font-sans mb-8">Solving the Right Problems, <br /><span
+                        class="gradient-text">In the Right Order.</span></h2>
+
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div
+                            class="mt-1 w-6 h-6 shrink-0 bg-cyber-accent rounded-full flex items-center justify-center text-cyber-dark text-xs">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1 text-white">Pragmatic Over Complex</h4>
+                            <p class="text-slate-400">We don't sell tools; we build capability. We focus on the
+                                high-impact actions that actually move the needle.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div
+                            class="mt-1 w-6 h-6 shrink-0 bg-cyber-accent rounded-full flex items-center justify-center text-cyber-dark text-xs">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1 text-white">Full-Spectrum Visibility</h4>
+                            <p class="text-slate-400">Eliminating "Shadow IT" and hidden assets that provide attackers
+                                their easiest entry points.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div
+                            class="mt-1 w-6 h-6 shrink-0 bg-cyber-accent rounded-full flex items-center justify-center text-cyber-dark text-xs">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1 text-white">Human-Centric Defense</h4>
+                            <p class="text-slate-400">Training employees to be your strongest defense line, not your
+                                greatest vulnerability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative" data-aos="fade-left">
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center transform translate-y-8">
+                        <i class="fas fa-eye text-3xl text-cyber-glow mb-4"></i>
+                        <span class="font-mono text-xs uppercase text-slate-500 mb-2">Phase 01</span>
+                        <h5 class="font-bold">Total Visibility</h5>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <i class="fas fa-shield-virus text-3xl text-cyber-accent mb-4"></i>
+                        <span class="font-mono text-xs uppercase text-slate-500 mb-2">Phase 02</span>
+                        <h5 class="font-bold">Hardening</h5>
+                    </div>
+                    <div
+                        class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center transform translate-y-8">
+                        <i class="fas fa-tower-broadcast text-3xl text-purple-500 mb-4"></i>
+                        <span class="font-mono text-xs uppercase text-slate-500 mb-2">Phase 03</span>
+                        <h5 class="font-bold">Continuous Monitoring</h5>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center">
+                        <i class="fas fa-bolt text-3xl text-amber-500 mb-4"></i>
+                        <span class="font-mono text-xs uppercase text-slate-500 mb-2">Phase 04</span>
+                        <h5 class="font-bold">Rapid Response</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Infrastructure & Compliance -->
+    <section class="py-24 bg-cyber-dark relative">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-right">
+                <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-4">Enterprise Grade</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold font-sans mb-8">Capabilities & <br /><span
+                        class="gradient-text">Compliance</span></h2>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="flex gap-6 items-center p-6 glass rounded-2xl hover:border-cyber-accent transition-all">
+                        <div
+                            class="w-16 h-16 bg-cyber-blue rounded-xl flex items-center justify-center text-cyber-accent shrink-0 shadow-lg">
+                            <i class="fas fa-server text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1">State-of-the-Art SOC</h4>
+                            <p class="text-slate-400 text-sm italic">24/7 Monitoring Infrastructure with AI-driven
+                                threat ingestion.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 items-center p-6 glass rounded-2xl hover:border-cyber-accent transition-all">
+                        <div
+                            class="w-16 h-16 bg-cyber-blue rounded-xl flex items-center justify-center text-cyber-accent shrink-0 shadow-lg">
+                            <i class="fas fa-file-shield text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1">ISO 27002:2022 Certified</h4>
+                            <p class="text-slate-400 text-sm italic">Lead Auditor expertise ensuring global compliance
+                                standards.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 items-center p-6 glass rounded-2xl hover:border-cyber-accent transition-all">
+                        <div
+                            class="w-16 h-16 bg-cyber-blue rounded-xl flex items-center justify-center text-cyber-accent shrink-0 shadow-lg">
+                            <i class="fas fa-network-wired text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-1">Globally Distributed</h4>
+                            <p class="text-slate-400 text-sm italic">Hybrid delivery model for seamless partnership
+                                across time zones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative grid grid-cols-2 gap-8" data-aos="fade-left">
+                <!-- Milestones / Achievements -->
+                <div class="col-span-2">
+                    <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-6">Our Journey</p>
+                    <div class="space-y-8 border-l border-cyber-accent/30 pl-8 relative">
+                        <div class="relative">
+                            <div
+                                class="absolute -left-10 top-1 w-4 h-4 rounded-full bg-cyber-accent shadow-[0_0_10px_#06B6D4]">
+                            </div>
+                            <h5 class="font-bold text-white mb-1">Foundation</h5>
+                            <p class="text-slate-400 text-sm">Founded by veterans from Deloitte & Tech Mahindra.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 w-4 h-4 rounded-full bg-cyber-accent"></div>
+                            <h5 class="font-bold text-white mb-1">50+ Global Audits</h5>
+                            <p class="text-slate-400 text-sm">Completed complex security assessments for BFSI giants.
+                            </p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 w-4 h-4 rounded-full bg-cyber-accent"></div>
+                            <h5 class="font-bold text-white mb-1">AI Launch</h5>
+                            <p class="text-slate-400 text-sm">Launched Secure Enterprise AI Framework using SLMs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-cyber-blue relative cyber-grid">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-4">Our Core Pillars</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold font-sans">Strategic Security <span
+                        class="gradient-text">Offerings</span></h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="glass p-8 rounded-2xl hover:bg-cyber-accent/5 transition-all duration-300 group"
+                    data-aos="fade-up">
+                    <div
+                        class="w-14 h-14 bg-cyber-dark border border-cyber-accent/30 rounded-xl flex items-center justify-center text-cyber-accent mb-6 group-hover:bg-cyber-accent group-hover:text-cyber-dark transition-all">
+                        <i class="fas fa-tower-broadcast text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">SOC Ops & Monitoring</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            24/7 Continuous Monitoring</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Daily Threat Detection</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Hygiene Management</li>
+                    </ul>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="glass p-8 rounded-2xl hover:bg-cyber-accent/5 transition-all duration-300 group"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        class="w-14 h-14 bg-cyber-dark border border-cyber-accent/30 rounded-xl flex items-center justify-center text-cyber-accent mb-6 group-hover:bg-cyber-accent group-hover:text-cyber-dark transition-all">
+                        <i class="fas fa-magnifying-glass-chart text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Security Assessments</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Readiness & Gap Audits</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Control Maturity Reviews</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Attack Surface Mapping</li>
+                    </ul>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="glass p-8 rounded-2xl hover:bg-cyber-accent/5 transition-all duration-300 group"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        class="w-14 h-14 bg-cyber-dark border border-cyber-accent/30 rounded-xl flex items-center justify-center text-cyber-accent mb-6 group-hover:bg-cyber-accent group-hover:text-cyber-dark transition-all">
+                        <i class="fas fa-fire-extinguisher text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Incident Response</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Rapid Containment</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Root Cause Analysis</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            High-Impact Support</li>
+                    </ul>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="glass p-8 rounded-2xl hover:bg-cyber-accent/5 transition-all duration-300 group"
+                    data-aos="fade-up">
+                    <div
+                        class="w-14 h-14 bg-cyber-dark border border-cyber-accent/30 rounded-xl flex items-center justify-center text-cyber-accent mb-6 group-hover:bg-cyber-accent group-hover:text-cyber-dark transition-all">
+                        <i class="fas fa-file-contract text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Advisory & GRC</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Risk Advisory & Governance</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Policy & Compliance</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Executive Risk Visibility</li>
+                    </ul>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="glass p-8 rounded-2xl hover:bg-cyber-accent/5 transition-all duration-300 group"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        class="w-14 h-14 bg-cyber-dark border border-cyber-accent/30 rounded-xl flex items-center justify-center text-cyber-accent mb-6 group-hover:bg-cyber-accent group-hover:text-cyber-dark transition-all">
+                        <i class="fas fa-users-gear text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Security Awareness</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Employee Training</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Phishing Simulations</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent/50"></i>
+                            Security Culture Growth</li>
+                    </ul>
+                </div>
+
+                <!-- AI Service (New/Unique) -->
+                <div class="bg-gradient-to-br from-cyber-blue to-cyber-dark border border-cyber-accent/40 p-8 rounded-2xl hover:border-cyber-accent transition-all duration-300 group"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        class="w-14 h-14 bg-cyber-accent rounded-xl flex items-center justify-center text-cyber-dark mb-6 animate-pulse shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                        <i class="fas fa-robot text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Secure AI Solutions</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent"></i> Custom
+                            Enterprise SLMs</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent"></i>
+                            Org-Specific Data Workflows</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cyber-accent"></i>
+                            Privacy-First Implementation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise & Founder Section -->
+    <section id="expertise" class="py-24 bg-cyber-dark overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative" data-aos="fade-right">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-cyber-accent/20 rounded-full blur-[80px]"></div>
+                    <img src="assets/images/founder.png" alt="Founder of HiQurate Ops"
+                        class="relative z-10 rounded-3xl shadow-2xl border border-cyber-light grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl z-20" data-aos="zoom-in"
+                        data-aos-delay="400">
+                        <p class="text-cyber-glow font-bold text-lg">10+ Years Experience</p>
+                        <p class="text-sm text-slate-400 uppercase tracking-widest font-mono">Expert Consulting</p>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left">
+                    <p class="text-cyber-glow font-mono text-sm tracking-[0.3em] uppercase mb-4">The Human Behind The
+                        Tech</p>
+                    <h2 class="text-4xl md:text-5xl font-extrabold font-sans mb-8">Decade of <span
+                            class="gradient-text">Global Expertise</span></h2>
+                    <p class="text-lg text-slate-300 leading-relaxed mb-6">
+                        Before founding HiQurate Ops, our leadership team cut their teeth at global consulting giants
+                        like <span class="text-white font-bold">Deloitte</span>, <span
+                            class="text-white font-bold">Wipro</span>, and <span class="text-white font-bold">Tech
+                            Mahindra</span>.
+                    </p>
+                    <p class="text-lg text-slate-300 leading-relaxed mb-8">
+                        We've protected critical assets across diverse sectors, understanding that every industry has
+                        unique threat landscapes:
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div
+                            class="flex items-center gap-3 bg-cyber-blue font-bold px-4 py-3 rounded-lg border border-cyber-light">
+                            <i class="fas fa-building-columns text-cyber-accent"></i> BFSI
+                        </div>
+                        <div
+                            class="flex items-center gap-3 bg-cyber-blue font-bold px-4 py-3 rounded-lg border border-cyber-light">
+                            <i class="fas fa-plane text-cyber-accent"></i> Aviation
+                        </div>
+                        <div
+                            class="flex items-center gap-3 bg-cyber-blue font-bold px-4 py-3 rounded-lg border border-cyber-light">
+                            <i class="fas fa-shopping-cart text-cyber-accent"></i> Retail
+                        </div>
+                        <div
+                            class="flex items-center gap-3 bg-cyber-blue font-bold px-4 py-3 rounded-lg border border-cyber-light">
+                            <i class="fas fa-car text-cyber-accent"></i> Automotive
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-24 bg-cyber-blue relative overflow-hidden">
+        <div class="absolute inset-0 bg-cyber-accent/5 cyber-grid opacity-30"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10" data-aos="zoom-in">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-8">Ready to <span class="gradient-text">Transform</span>
+                Your Security?</h2>
+            <p class="text-xl text-slate-400 mb-12">
+                Let's stop talking about abstract "threats" and start building a practical, resilient defense that
+                empowers your business growth.
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <button
+                    class="px-10 py-5 bg-cyber-accent text-cyber-dark font-black text-xl rounded-2xl hover:scale-105 transition-all shadow-[0_0_40px_rgba(6,182,212,0.5)]">
+                    Schedule Free Assessment
+                </button>
+                <button
+                    class="px-10 py-5 glass text-white font-bold text-xl rounded-2xl hover:bg-cyber-accent/10 transition-all">
+                    Download Services Deck
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-cyber-dark border-t border-cyber-light/30">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+            <div class="grid md:grid-cols-4 gap-12 w-full mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-8 w-auto">
+                        <span class="font-sans font-bold text-lg tracking-wider uppercase">HiQurate <span
+                                class="text-cyber-accent">Ops</span></span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Curated Intelligence, Assured Security. Empowering growing businesses with enterprise-grade
+                        protection.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Company</h5>
+                    <ul class="space-y-4 text-slate-500 text-sm">
+                        <li><a href="#approach" class="hover:text-cyber-accent transition-colors">Our Story</a></li>
+                        <li><a href="#services" class="hover:text-cyber-accent transition-colors">Services</a></li>
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Press Kit</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Legal</h5>
+                    <ul class="space-y-4 text-slate-500 text-sm">
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Compliance Hub</a></li>
+                        <li><a href="#" class="hover:text-cyber-accent transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Contact</h5>
+                    <ul class="space-y-4 text-slate-500 text-sm">
+                        <li class="flex items-center gap-3"><i class="fas fa-envelope text-cyber-accent"></i>
+                            ops@hiqurate.com</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-location-dot text-cyber-accent"></i> Global
+                            Delivery Hub, Bengaluru</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-headset text-cyber-accent"></i> 24/7
+                            Security Hotline</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="w-full h-px bg-cyber-light/30 mb-8"></div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center w-full gap-8">
+                <div class="text-slate-500 text-xs font-mono">
+                    &copy; 2026 HiQurate Ops | Registered as HiQurate Cybersecurity Solutions Pvt. Ltd.
+                </div>
+
+                <div class="flex gap-6">
+                    <a href="#" class="text-slate-500 hover:text-cyber-accent transition-colors"><i
+                            class="fab fa-linkedin text-2xl"></i></a>
+                    <a href="#" class="text-slate-500 hover:text-cyber-accent transition-colors"><i
+                            class="fab fa-twitter text-2xl"></i></a>
+                    <a href="#" class="text-slate-500 hover:text-cyber-accent transition-colors"><i
+                            class="fab fa-github text-2xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 200,
+        });
+    </script>
+</body>
+
+</html>

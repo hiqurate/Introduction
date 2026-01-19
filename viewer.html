@@ -446,6 +446,9 @@
       const customerSlides = [
         'customer_new_slide1.html', 'customer_new_slide2.html', 'customer_new_slide3.html', 'customer_new_slide4.html', 'customer_new_slide5.html', 'customer_new_slide6.html', 'customer_new_slide7.html', 'customer_new_slide8.html', 'customer_new_slide9.html', 'customer_new_slide10.html', 'customer_new_slide11.html'
       ];
+      const profileSlides = [
+        'profile_slide1.html', 'profile_slide2.html', 'profile_slide3.html', 'profile_slide4.html'
+      ];
 
       // human-friendly slide titles (user-provided)
       const investorTitles = [
@@ -476,6 +479,13 @@
         `Let's Get Started`
       ];
 
+      const profileTitles = [
+        'HiQurate Ops Cover',
+        'Witnessing the Gap',
+        'Our Core Pillars',
+        'Contact & Connect'
+      ];
+
       // Determine which deck to show
       const urlParams = new URLSearchParams(window.location.search);
       const deckType = urlParams.get('deck') || 'investor';
@@ -484,6 +494,9 @@
       if (deckType === 'customer') {
         slides = customerSlides;
         titles = customerTitles;
+      } else if (deckType === 'profile') {
+        slides = profileSlides;
+        titles = profileTitles;
       } else {
         slides = investorSlides;
         titles = investorTitles;
