@@ -51,7 +51,8 @@
 </head>
 
 <body class="bg-gray-900 m-0 p-0 overflow-hidden">
-    <div class="w-full h-screen max-w-[1280px] max-h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-bg">
+    <div
+        class="w-full h-screen max-w-[1280px] max-h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-bg">
         <!-- Top Navigation / Header -->
         <div class="h-16 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20">
             <div class="flex items-center gap-2">
@@ -222,7 +223,16 @@
                 center: ['50%', '50%'],
                 avoidLabelOverlap: false,
                 itemStyle: { borderRadius: 4, borderColor: '#0B1120', borderWidth: 2 },
-                label: { show: false },
+                label: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{d}%',
+                    textStyle: {
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: 10
+                    }
+                },
                 data: [
                     { value: 40, name: 'Tools & Licenses', itemStyle: { color: '#F59E0B' } },
                     { value: 25, name: 'Compliance', itemStyle: { color: '#8B5CF6' } },

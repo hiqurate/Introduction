@@ -4,12 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>HiQurate Ops - The Problem Today</title>
+    <title>HiQurate Ops - The Cybersecurity Paradox</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -21,7 +22,9 @@
                             light: '#1E293B',
                             accent: '#06B6D4',
                             glow: '#22D3EE',
-                            surface: '#182235'
+                            surface: '#182235',
+                            danger: '#EF4444',
+                            warning: '#F59E0B'
                         }
                     },
                     fontFamily: {
@@ -34,88 +37,19 @@
         }
     </script>
     <style>
-        .cyber-grid {
+        .grid-bg {
+            background-color: #0B1120;
             background-image:
-                linear-gradient(to right, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+                linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
-        .challenge-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .challenge-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
-        }
-
-        .challenge-item {
-            transition: all 0.3s ease;
-        }
-
-        .challenge-item:hover {
-            background: rgba(59, 130, 246, 0.1);
-            transform: translateX(5px);
-        }
-
-        .consequence-item {
-            transition: all 0.3s ease;
-        }
-
-        .consequence-item:hover {
-            background: rgba(239, 68, 68, 0.15);
-            transform: scale(1.02);
-            border-color: rgba(239, 68, 68, 0.4);
-        }
-
-        @keyframes pulse-slow {
-
-            0%,
-            100% {
-                opacity: 0.6;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        .animate-pulse-slow {
-            animation: pulse-slow 3s ease-in-out infinite;
-        }
-
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #60A5FA 0%, #22D3EE 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .gradient-text-red {
-            background: linear-gradient(135deg, #F87171 0%, #FB923C 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .chart-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
         }
     </style>
     <link rel="stylesheet" href="responsive.css">
@@ -123,234 +57,206 @@
 
 <body class="bg-gray-900 m-0 p-0 overflow-hidden">
     <div
-        class="w-full h-screen max-w-[1280px] max-h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body cyber-grid">
-        <!-- Background Orbs -->
-        <div
-            class="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-[120px] z-0 animate-pulse-slow">
-        </div>
-        <div
-            class="absolute bottom-[-100px] left-[-100px] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[100px] z-0">
-        </div>
-        <div class="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-red-600/10 rounded-full blur-[80px] z-0"></div>
-
+        class="w-full h-screen max-w-[1280px] max-h-[720px] bg-cyber-dark text-white relative flex flex-col overflow-hidden font-body grid-bg">
         <!-- Header -->
-        <div
-            class="relative z-10 h-14 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm">
+        <div class="h-14 flex items-center px-12 border-b border-cyber-light/50 bg-cyber-dark/90 backdrop-blur-sm z-20">
             <div class="flex items-center gap-2">
                 <img src="assets/images/logo.png" alt="HiQurate Ops Logo" class="h-5 w-auto">
                 <span class="font-sans font-bold text-base tracking-wider">HiQurate <span
                         class="text-cyber-accent">Ops</span></span>
             </div>
             <div class="ml-auto flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-500 uppercase tracking-widest">Industry Reality</span>
                 <span class="text-xs font-mono text-slate-500">03 / 11</span>
             </div>
         </div>
 
-        <!-- Title Section -->
-        <div class="relative z-10 px-12 pt-6 pb-4">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-10 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-                <span class="text-cyan-400 font-mono text-xs tracking-widest uppercase">The Problem Today</span>
-            </div>
-            <h1 class="font-sans text-3xl font-extrabold text-white">
-                Reality for <span class="gradient-text">Growing Businesses</span>
-            </h1>
-        </div>
-
-        <!-- Main Content Grid -->
-        <div class="relative z-10 flex-1 px-12 pb-8 flex gap-6">
-            <!-- Left Column: Challenges -->
-            <div
-                class="flex-1 challenge-card rounded-2xl p-6 flex flex-col relative overflow-hidden group hover:border-blue-500/40">
-                <!-- Gradient Accent Bar -->
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500">
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col p-8 pt-6 gap-6 z-10">
+            <!-- Title Section -->
+            <div class="flex justify-between items-end">
+                <div>
+                    <div class="inline-flex items-center gap-2 mb-2">
+                        <span class="w-2 h-2 bg-cyber-danger rounded-full animate-pulse"></span>
+                        <p class="text-[10px] font-mono text-cyber-danger tracking-widest uppercase">The Systemic
+                            Failure</p>
+                    </div>
+                    <h2 class="text-3xl font-extrabold font-sans leading-tight">
+                        The Cybersecurity <span class="text-cyber-accent">Paradox</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1">Why more investment often leads to <span
+                            class="text-white">fragmented security</span>.</p>
                 </div>
-
-                <!-- Watermark Icon -->
-                <div class="absolute bottom-4 right-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <i class="fas fa-cloud-bolt text-8xl text-blue-400"></i>
-                </div>
-
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-blue-500/20 rounded-xl blur-lg"></div>
-                        <div
-                            class="relative w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center border border-blue-500/40">
-                            <i class="fas fa-cloud-bolt text-blue-400 text-xl"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-sans font-bold text-white">Common Challenges</h2>
-                        <p class="text-slate-400 text-sm">Internal hurdles affecting security</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3 flex-1">
-                    <!-- Item 1 -->
-                    <div
-                        class="challenge-item flex items-start gap-4 p-4 rounded-xl border border-transparent cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center border border-blue-500/30 shrink-0">
-                            <i class="fas fa-eye-slash text-blue-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Limited Awareness</p>
-                            <p class="text-slate-400 text-xs leading-relaxed">No visibility into real cyber risks and
-                                attack surfaces.</p>
-                        </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div
-                        class="challenge-item flex items-start gap-4 p-4 rounded-xl border border-transparent cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center border border-cyan-500/30 shrink-0">
-                            <i class="fas fa-screwdriver-wrench text-cyan-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">"Too Technical" Mindset</p>
-                            <p class="text-slate-400 text-xs leading-relaxed">Security viewed as optional or strictly an
-                                IT problem.</p>
-                        </div>
-                    </div>
-                    <!-- Item 3 -->
-                    <div
-                        class="challenge-item flex items-start gap-4 p-4 rounded-xl border border-transparent cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500/20 to-teal-500/5 flex items-center justify-center border border-teal-500/30 shrink-0">
-                            <i class="fas fa-file-invoice-dollar text-teal-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Fear of Cost & Complexity</p>
-                            <p class="text-slate-400 text-xs leading-relaxed">Belief that effective security is
-                                expensive and disruptive.</p>
-                        </div>
-                    </div>
-                    <!-- Item 4 -->
-                    <div
-                        class="challenge-item flex items-start gap-4 p-4 rounded-xl border border-transparent cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-indigo-500/5 flex items-center justify-center border border-indigo-500/30 shrink-0">
-                            <i class="fas fa-map-signs text-indigo-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Lack of Clarity</p>
-                            <p class="text-slate-400 text-xs leading-relaxed">No clear understanding of current standing
-                                or priorities.</p>
-                        </div>
-                    </div>
+                <div class="bg-cyber-surface/40 border border-cyber-light/30 px-4 py-2 rounded-lg text-right">
+                    <p class="text-[10px] font-mono text-cyber-glow uppercase">Key Witnessed Insight</p>
+                    <p class="text-sm font-bold text-white italic">"Tools are bought, but outcomes are missed."</p>
                 </div>
             </div>
 
-            <!-- Visual Connector -->
-            <div class="flex flex-col justify-center items-center w-12 relative">
-                <div
-                    class="absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-600 to-transparent">
+            <!-- Charts Row -->
+            <div class="grid grid-cols-2 gap-6 flex-1 max-h-[280px]">
+                <div class="chart-container p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs font-mono text-cyber-glow uppercase tracking-wider">A) Budget Allocation</p>
+                        <span class="text-[9px] text-slate-500 font-mono italic">Efficiency Gap</span>
+                    </div>
+                    <div id="budgetChart" class="flex-1 w-full"></div>
+                    <p class="text-[10px] text-slate-500 text-center mt-2">Only <span
+                            class="text-cyber-accent font-bold">15%</span> focus on actual risk reduction.</p>
                 </div>
-                <div
-                    class="relative w-12 h-12 rounded-full bg-gradient-to-br from-cyber-surface to-cyber-dark border-2 border-slate-600 flex items-center justify-center z-20 shadow-xl shadow-black/50 animate-float">
-                    <i class="fas fa-arrow-right text-slate-400"></i>
+                <div class="chart-container p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs font-mono text-cyber-glow uppercase tracking-wider">B) Maturity vs Reality</p>
+                        <span class="text-[9px] text-slate-500 font-mono italic">Safety Illusion</span>
+                    </div>
+                    <div id="maturityChart" class="flex-1 w-full"></div>
+                    <p class="text-[10px] text-slate-500 text-center mt-2">Companies <span
+                            class="text-cyber-danger font-bold">overestimate</span> their readiness by 2.4x.</p>
                 </div>
             </div>
 
-            <!-- Right Column: Consequences -->
-            <div
-                class="flex-1 challenge-card rounded-2xl p-6 flex flex-col relative overflow-hidden group hover:border-red-500/40">
-                <!-- Gradient Accent Bar -->
-                <div
-                    class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500">
-                </div>
-
-                <!-- Watermark Icon -->
-                <div class="absolute bottom-4 right-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <i class="fas fa-triangle-exclamation text-8xl text-red-400"></i>
-                </div>
-
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-red-500/20 rounded-xl blur-lg"></div>
-                        <div
-                            class="relative w-12 h-12 rounded-xl bg-gradient-to-br from-red-500/20 to-red-500/5 flex items-center justify-center border border-red-500/40">
-                            <i class="fas fa-triangle-exclamation text-red-400 text-xl"></i>
+            <!-- Summary Table / Features -->
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Challenges -->
+                <div class="space-y-3">
+                    <p
+                        class="text-xs font-mono text-cyber-accent uppercase tracking-widest border-l-2 border-cyber-accent pl-2">
+                        Common Challenges</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 text-xs bg-cyber-surface/30 p-2 rounded">
+                            <i class="fas fa-eye-slash text-cyber-accent w-4 text-center"></i>
+                            <span class="text-slate-300">Limited Asset Visibility</span>
                         </div>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-sans font-bold text-white">Real Consequences</h2>
-                        <p class="text-slate-400 text-sm">Impact of neglecting security</p>
+                        <div class="flex items-center gap-3 text-xs bg-cyber-surface/30 p-2 rounded">
+                            <i class="fas fa-screwdriver-wrench text-cyber-accent w-4 text-center"></i>
+                            <span class="text-slate-300">Tool Bloat & Complexity</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs bg-cyber-surface/30 p-2 rounded">
+                            <i class="fas fa-users-slash text-cyber-accent w-4 text-center"></i>
+                            <span class="text-slate-300">Talent Retention Gaps</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Warning Quote -->
-                <div
-                    class="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-4 mb-5 rounded-r-lg">
-                    <p class="text-slate-300 italic text-sm leading-relaxed">
-                        <i class="fas fa-quote-left text-red-500/50 mr-2"></i>
-                        "Attackers don't discriminate based on company size. Incidents today lead to <span
-                            class="text-red-400 font-semibold not-italic">serious outcomes.</span>"
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 flex-1">
-                    <!-- Consequence 1 -->
-                    <div
-                        class="consequence-item flex items-center gap-3 bg-gradient-to-br from-slate-900/60 to-slate-900/30 p-4 rounded-xl border border-slate-700/50 cursor-pointer">
+                <!-- Consequences -->
+                <div class="col-span-2 space-y-3">
+                    <p
+                        class="text-xs font-mono text-cyber-danger uppercase tracking-widest border-l-2 border-cyber-danger pl-2">
+                        The Real Consequences</p>
+                    <div class="grid grid-cols-2 gap-3">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/20 to-red-500/5 flex items-center justify-center border border-red-500/30 shrink-0">
-                            <i class="fas fa-ban text-red-400"></i>
+                            class="flex gap-3 bg-red-900/10 border border-red-500/20 p-3 rounded-xl hover:border-red-500/40 transition-colors">
+                            <div class="w-10 h-10 shrink-0 bg-red-500/20 rounded flex items-center justify-center">
+                                <i class="fas fa-ban text-red-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-xs mb-1">Business Disruption</p>
+                                <p class="text-[10px] text-slate-400 leading-tight">Operations halt, causing cascading
+                                    financial losses.</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Disruption</p>
-                            <p class="text-slate-500 text-xs">Operations halt</p>
-                        </div>
-                    </div>
-                    <!-- Consequence 2 -->
-                    <div
-                        class="consequence-item flex items-center gap-3 bg-gradient-to-br from-slate-900/60 to-slate-900/30 p-4 rounded-xl border border-slate-700/50 cursor-pointer">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center border border-orange-500/30 shrink-0">
-                            <i class="fas fa-coins text-orange-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Financial Loss</p>
-                            <p class="text-slate-500 text-xs">Direct costs</p>
-                        </div>
-                    </div>
-                    <!-- Consequence 3 -->
-                    <div
-                        class="consequence-item flex items-center gap-3 bg-gradient-to-br from-slate-900/60 to-slate-900/30 p-4 rounded-xl border border-slate-700/50 cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center border border-amber-500/30 shrink-0">
-                            <i class="fas fa-gavel text-amber-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Regulatory</p>
-                            <p class="text-slate-500 text-xs">Fines & penalties</p>
-                        </div>
-                    </div>
-                    <!-- Consequence 4 -->
-                    <div
-                        class="consequence-item flex items-center gap-3 bg-gradient-to-br from-slate-900/60 to-slate-900/30 p-4 rounded-xl border border-slate-700/50 cursor-pointer">
-                        <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500/20 to-rose-500/5 flex items-center justify-center border border-rose-500/30 shrink-0">
-                            <i class="fas fa-handshake-slash text-rose-400"></i>
-                        </div>
-                        <div>
-                            <p class="text-white font-semibold text-sm">Trust Lost</p>
-                            <p class="text-slate-500 text-xs">Customer churn</p>
+                            class="flex gap-3 bg-orange-900/10 border border-orange-500/20 p-3 rounded-xl hover:border-orange-500/40 transition-colors">
+                            <div class="w-10 h-10 shrink-0 bg-orange-500/20 rounded flex items-center justify-center">
+                                <i class="fas fa-handshake-slash text-orange-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-xs mb-1">Erosion of Trust</p>
+                                <p class="text-[10px] text-slate-400 leading-tight">Customer churn and reputational
+                                    damage that takes years to fix.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Footer Strip -->
-        <div
-            class="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 via-red-500 to-amber-500">
         </div>
 
         <!-- Corner accents -->
-        <div class="absolute top-14 right-0 w-24 h-24 border-r-4 border-t-4 border-blue-500/20 rounded-tr-[30px]"></div>
-        <div class="absolute bottom-0 left-0 w-24 h-24 border-l-4 border-b-4 border-red-500/20 rounded-bl-[30px]"></div>
+        <div
+            class="absolute top-14 right-0 w-24 h-24 border-r-4 border-t-4 border-cyber-light rounded-tr-[30px] opacity-20">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-24 h-24 border-l-4 border-b-4 border-cyber-danger rounded-bl-[30px] opacity-20">
+        </div>
     </div>
+
+    <script>
+        // Budget Pie Chart
+        var budgetChart = echarts.init(document.getElementById('budgetChart'));
+        budgetChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+            legend: {
+                orient: 'vertical',
+                right: '5%',
+                top: 'middle',
+                textStyle: { color: '#94A3B8', fontSize: 10 },
+                itemWidth: 8,
+                itemHeight: 8
+            },
+            series: [{
+                type: 'pie',
+                radius: ['45%', '85%'],
+                center: ['35%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 4, borderColor: '#0B1120', borderWidth: 2 },
+                label: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{d}%',
+                    textStyle: {
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: 10
+                    }
+                },
+                data: [
+                    { value: 45, name: 'Tools & Licenses', itemStyle: { color: '#F59E0B' } },
+                    { value: 25, name: 'Compliance Checks', itemStyle: { color: '#825cf6' } },
+                    { value: 15, name: 'Risk Mitigation', itemStyle: { color: '#06B6D4' } },
+                    { value: 15, name: 'Maintenance', itemStyle: { color: '#334155' } }
+                ]
+            }]
+        });
+
+        // Maturity Radar Chart
+        var maturityChart = echarts.init(document.getElementById('maturityChart'));
+        maturityChart.setOption({
+            radar: {
+                indicator: [
+                    { name: 'Detection', max: 100 },
+                    { name: 'Response', max: 100 },
+                    { name: 'Prevention', max: 100 },
+                    { name: 'Strategy', max: 100 },
+                    { name: 'Recovery', max: 100 }
+                ],
+                shape: 'polygon',
+                splitNumber: 3,
+                axisName: { color: '#94A3B8', fontSize: 9 },
+                splitLine: { lineStyle: { color: '#334155' } },
+                splitArea: { show: false },
+                axisLine: { lineStyle: { color: '#334155' } }
+            },
+            series: [{
+                type: 'radar',
+                data: [
+                    {
+                        value: [85, 75, 90, 70, 75],
+                        name: 'Perceived',
+                        lineStyle: { color: '#22D3EE', width: 2 },
+                        areaStyle: { color: 'rgba(34, 211, 238, 0.2)' },
+                        symbol: 'none'
+                    },
+                    {
+                        value: [30, 20, 40, 25, 20],
+                        name: 'Actual',
+                        lineStyle: { color: '#EF4444', width: 2, type: 'dashed' },
+                        areaStyle: { color: 'rgba(239, 68, 68, 0.1)' },
+                        symbol: 'none'
+                    }
+                ]
+            }]
+        });
+    </script>
 </body>
 
 </html>
