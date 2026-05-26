@@ -1,0 +1,129 @@
+HIPAA Compliance Assessment
+A comprehensive HIPAA assessment must ensure compliance with the Security Rule’s requirements for protecting ePHI. Organizations must document risk analysis and management processes, and implement “reasonable and appropriate” administrative, physical, and technical safeguards to ensure the confidentiality, integrity and availability of all ePHI. Key areas to review include:
+
+Risk Analysis & Management: Verify that the organization has conducted a thorough risk analysis of ePHI (as required by 45 C.F.R.§164.308(a)(1)(ii)(A)). This means identifying all sources of ePHI (internal and external), enumerating human, natural and environmental threats, assessing existing safeguards, and estimating the likelihood and impact of potential breaches. The risk assessment should be documented and updated regularly (at least annually or whenever major changes occur).
+
+Administrative Safeguards: Confirm that policies and procedures exist for security management (including risk management, sanction policy and regular evaluations), assigned security responsibility (Security Officer), workforce training and security awareness, information access management (granting/reviewing workforce access based on “need to know”), contingency planning (data backup, disaster recovery, and emergency operations), and periodic security reviews. For example, the Security Rule explicitly requires implementation of policies to “prevent, detect, contain, and correct security violations” and to protect against anticipated threats.
+
+Physical Safeguards: Check controls on physical access to facilities and hardware. This includes perimeter security (locks, badges, visitor logs), workstation and device security (proper positioning, login protections), media controls (secure disposal and reuse of paper/electronic media), and environmental safeguards (e.g. fire suppression, climate control). The goal is to prevent unauthorized physical access to locations where ePHI is stored or processed.
+
+Technical Safeguards: Evaluate technical controls that protect ePHI. This includes unique user identification and robust authentication for system access, session timeout and device locks, encryption or equivalent data protection for ePHI at rest and in transit (per Transmission Security spec), audit controls (system logs and monitoring to record activity), integrity controls (e.g. checksums or digital signatures), and automatic logoff or remote wipe features on portable devices.
+
+Organizational Requirements: Verify that all Business Associate Agreements (BAAs) are in place and up to date, ensuring vendors and partners handling ePHI are contractually obligated to HIPAA standards. Review documented privacy and security policies, procedures, and accountability measures (including a sanctions policy) and evidence of staff training and acknowledgments.
+
+Breach Notification and Incident Response: Ensure there is an incident response or breach management procedure. Under HIPAA, breaches affecting unsecured PHI must be reported to authorities and affected individuals within specified timelines. Confirm that personnel know how to recognize and report suspected breaches and that breach documentation is maintained.
+
+Each of these controls should be assessed for completeness and effectiveness. For example, OCR guidance notes that a HIPAA risk analysis “is the first step” in identifying appropriate safeguards, and it provides sample questions to identify where e-PHI resides, what threats exist, and how current measures fare. A deficiency in any area (e.g. missing encryption, outdated devices, or incomplete policies) represents a compliance gap that must be remediated.
+
+ISO 27001 Information Security Assessment
+An ISO 27001 assessment verifies that an organization has implemented an Information Security Management System (ISMS) and controls meeting the standard’s requirements. Core elements to evaluate include the ISMS scope and policy, leadership commitment, and a documented risk assessment/treatment process. Controls are often reviewed by Annex A domain. Key assessment areas include:
+
+Governance & Policy: Confirm existence of an ISMS with defined scope and management-approved information security policy. Verify that responsibilities are assigned (security roles), compliance requirements are identified, and regular management reviews are planned. There should be a formal risk management process (risk assessment and risk treatment plans) and internal audit of the ISMS. Policies should cover acceptable use, asset management, access control, cryptography, incident management, and business continuity.
+
+Asset & Access Management: Ensure all information assets (hardware, software, data) are inventoried and classified. Controls should exist for asset labeling, handling, and return (for example, Annex A.8). Access control must enforce least privilege – user accounts should be unique and authorized per role, with regular reviews of user rights. Administrative login (root/Domain Admin) should be highly restricted.
+
+Human Resource Security: Check that staff and contractors are screened, trained, and managed. ISO 27001’s Annex A.7 requires background checks, confidentiality agreements, ongoing security training, and secure exit procedures for employees. Verify evidence of security training, signed non-disclosure agreements, and exit checklists (e.g. revoking access on termination).
+
+Physical & Environmental Security: Evaluate site and facility controls. Annex A.11 mandates physical entry controls (locks, badges, reception logs) and environmental protections. For example, controls should include secure entry systems (keycards/biometrics), surveillance cameras, and visitor logging, as well as fire suppression, climate controls and uninterruptible power to protect against environmental hazards. Server rooms and wiring closets should be locked and access-logged.
+
+Operational Security: Review technical safeguards in daily operations. This covers network protection (firewalls, intrusion detection, network segmentation), endpoint security (anti-malware, patch management), and backup procedures. ISO 27001 Annex A.12 emphasizes monitoring and response: controls for vulnerability assessments, malware protection, and continuous monitoring, as well as an incident response plan to detect and address security events. Ensure logs are collected and reviewed (system, network, application logs) and that procedures exist to handle and learn from incidents.
+
+Cryptography: Check that encryption and key management are used appropriately. Annex A.10 focuses on encryption for sensitive data at rest and in transit (e.g. disk encryption, TLS for emails/web). The organization should have a cryptographic policy and process for protecting keys. If encryption isn’t feasible, alternative integrity or access controls should compensate.
+
+System Development & Maintenance: Confirm secure development practices. New or updated applications and systems should incorporate security requirements (Annex A.14). This includes code reviews or static analysis, change control, and timely patching of OS/software. Verify that development, test, and production environments are separated, and that only approved changes are deployed.
+
+Supplier Relationships: Ensure third-party service providers are assessed and managed. Contracts with vendors (including cloud providers) should include security requirements. Review supplier security policies and any audits or certifications they provide. ISO requires that organizations monitor and review outsourced services to ensure compliance with the ISMS.
+
+Information Security Incident & Business Continuity: Verify plans for business continuity (backup, disaster recovery) and incident management. The organization should test its recovery procedures. Annex A.17 (BCM) and Annex A.16 (Incident Management) require established procedures and drills so the organization can maintain/resume critical functions during disruptions.
+
+Compliance: Check that applicable legal, statutory, regulatory, and contractual requirements (including privacy laws, industry regulations, etc.) are identified and addressed. Privacy and data protection controls (Annex A.18) should be in place if handling personal data.
+
+By mapping controls to ISO 27001’s Annex A and internal policies, one can identify gaps (for example, missing access reviews or incomplete asset lists). Drata’s guide on ISO 27001 notes that Annex A covers areas like Human Resources (“background checks, confidentiality agreements, training, offboarding”), Physical security (entry controls, fire suppression), Cryptography (encryption of data) and Operational security (incident response, vulnerability assessment). An ISO assessment typically results in a checklist or matrix showing whether each required control is in place and effective.
+
+PCI-DSS Assessment
+A PCI-DSS assessment checks compliance with the Payment Card Industry Data Security Standard’s 12 requirements for protecting cardholder data. The core goal is to secure the payment card environment through technical and operational controls. The 12 requirements can be summarized as:
+
+Build and Maintain a Secure Network: Install and maintain firewalls to protect cardholder data. Document firewall and router configurations, with rules reviewed regularly.
+
+Change Default Settings: Do not use vendor-supplied defaults for system passwords or other security parameters. Maintain an inventory of systems and enforce secure hardening procedures for new devices.
+
+Protect Stored Cardholder Data: Identify and classify all stored card data. Use strong cryptography to protect stored primary account numbers (PAN) and sensitive authentication data, or tokenize/truncate where applicable. Implement key management for encryption keys (generate, store, rotate keys securely).
+
+Encrypt Transmission of Cardholder Data: Encrypt cardholder data across open/public networks (e.g. TLS for payment pages). Do not send unencrypted PAN in email, chat, etc.
+
+Use and Update Anti-Malware: Deploy anti-virus or anti-malware software on all systems commonly affected, and ensure signatures/definitions are kept current. Confirm that all systems are regularly scanned and infected files are remediated.
+
+Develop and Maintain Secure Systems: Establish a process to identify security vulnerabilities and apply critical updates/patches in a timely manner. This includes secure coding practices for in-house applications.
+
+Restrict Access on a Need-to-Know Basis: Limit access to cardholder data to only those employees (or systems) with a legitimate business need. Use role-based permissions and regularly review user access.
+
+Identify and Authenticate Access: Assign a unique ID to each person with system access. Implement multi-factor authentication for remote or privileged access where applicable.
+
+Physical Access Controls: Restrict physical access to systems and media storing cardholder data. For example, secure data center doors, use badge access, CCTV surveillance, and control visitor entry.
+
+Tracking and Monitoring: Track and monitor all access to network resources and cardholder data. This requires system audit logs (e.g. login records, database activity) and near-real-time monitoring of anomalies. Logs must be retained according to PCI guidelines.
+
+Regularly Test Security: Perform frequent vulnerability scans (network & application) and penetration tests to identify security weaknesses. Verify security controls are functioning (e.g. IDS/IPS, change detection).
+
+Information Security Policy: Maintain a formal security policy that addresses information security for all personnel. The policy should cover security roles, responsibilities, and procedures, and be reviewed (at least annually).
+
+These requirements come directly from the PCI SSC standard. An effective PCI assessment will verify each requirement, often mapping to specific controls (e.g. firewalls, encryption settings, log reviews). For example, the ControlCase summary explicitly lists all 12 requirements as bullet points, such as “install and maintain a firewall” and “protect stored cardholder data”. Identified gaps (e.g. missing encryption or default accounts) should be addressed with remediation plans.
+
+SOC 2 Trust Criteria Assessment
+SOC 2 compliance is evaluated against the AICPA’s Trust Services Criteria. Every SOC 2 report must include the “Security” criterion, and can optionally include Availability, Confidentiality, Processing Integrity, and Privacy, based on the organization’s service commitments. Key focus areas are:
+
+Security (Common Criteria): This mandatory criterion covers the protection of information and systems from unauthorized access and other security risks. Assessment points include: a documented control environment (policies and governance), risk assessment processes, defined control activities (e.g. access controls, encryption), system operation controls (monitoring and backups), change management procedures, and incident response. (The CSA notes that the Security TSC includes control objectives like Access Controls, Change Management, Monitoring, etc..) For example, the organization should have controls that meet AICPA Common Criteria CC1–CC9, ensuring that “control activities” support the objectives of the Security criteria.
+
+Availability: If in scope, verify that systems are resilient and available. This involves business continuity and disaster recovery plans, redundant systems, backups, and performance monitoring to minimize downtime. The criterion’s goal is to ensure users and clients can access services as committed.
+
+Confidentiality: If selected, assess how confidential information (beyond security) is protected. This includes data classification, encryption, and policies to limit who can access confidential data. Ensure mechanisms prevent unauthorized disclosure of information designated as confidential.
+
+Processing Integrity: If included, confirm that system processing is complete, valid, accurate, timely, and authorized. Controls here may involve input validation, processing checks, and reconciliation procedures to ensure transactions are correct and consistent.
+
+Privacy: If included, evaluate personal data handling. Ensure consent is obtained as required, rights of data subjects (access, deletion, etc.) are honored, and privacy policies are followed. This criterion often overlaps with compliance to privacy regulations.
+
+In summary, a SOC 2 assessment focuses on the system and control environment. Per Secureframe, the five Trust Services Criteria are “Security; Availability; Processing integrity; Confidentiality; Privacy,” with security being required for every SOC 2 audit. The auditor will test controls in each applicable category; for example, if Security and Availability are in scope, the report will cover both sets of controls. Gaps (such as missing monitoring or undefined policies) are noted for remediation.
+
+GDPR Data Protection Assessment
+A GDPR assessment ensures compliance with the EU General Data Protection Regulation. Key areas include lawful processing, data subject rights, security measures, and governance:
+
+Data Inventory & Lawful Basis: Conduct a thorough data mapping of all personal data processed by the organization, including data sources, categories of data subjects, and any transfers to third parties. For each processing activity, identify and document the legal basis (consent, contract, legal obligation, legitimate interest, etc.). If relying on consent, ensure records of consents exist and allow for withdrawal.
+
+Transparency & Privacy Notice: Review privacy policies and notices. Ensure data subjects are informed about how and why their data is used, in clear and accessible language (per Articles 12 and 13 of GDPR). The privacy policy should explain the purposes of processing, retention periods, who data is shared with, and data subject rights.
+
+Data Subject Rights: Verify processes for honoring GDPR rights: access, rectification, erasure, restriction of processing, data portability, and objection. The organization should have procedures and forms in place for individuals to submit and exercise these requests, with staff trained to handle them.
+
+Security Measures (Technical & Organizational): GDPR mandates “data protection by design and by default”(Art. 25). Confirm that appropriate technical safeguards (encryption, pseudonymization) are used wherever possible, and organizational controls (access controls, security policies) are in place. For example, encrypt personal data in databases and in transit, use strong authentication, and maintain an internal security policy. GDPR recommends anonymization or pseudonymization to reduce risk. Ensure all employees receive data protection awareness training and that a clear information security policy exists.
+
+Data Protection Impact Assessments (DPIAs): Identify any high-risk processing activities (e.g. large-scale profiling, special category data) and conduct DPIAs as needed. A DPIA documents potential privacy risks and mitigation measures. The EU and supervisory authorities require DPIAs for processing likely to result in high risk to individuals’ rights.
+
+Breach Notification: Confirm that an incident response plan is in place for personal data breaches. Under GDPR, notify the supervisory authority within 72 hours of a breach, and communicate to affected data subjects if the breach risks their rights. The organization should maintain breach logs and review them to improve security.
+
+Processor and Third-Party Compliance: Review contracts with data processors to ensure they meet GDPR requirements (Article 28). Controllers must use only processors that provide sufficient guarantees of data protection. Check that processor agreements include GDPR-required clauses (data processing details, security measures, breach obligations).
+
+Records and Governance: Ensure records of processing activities are maintained. Appoint a Data Protection Officer (DPO) if required (for public authorities or organizations processing large-scale sensitive data). Document internal data protection policies and keep evidence of compliance (training records, assessments) for audit.
+
+GDPR guidance stresses that organizations must integrate data protection into all projects (“privacy by design”). For example, gdpr.eu notes that encrypting or pseudonymizing data wherever possible is expected under the law, and that an internal security policy and employee awareness are critical. Gaps (such as missing DPIAs or unclear lawful basis) should be remediated to avoid fines.
+
+General IT Environment Security Review
+A generic environment or baseline security assessment evaluates the organization’s overall IT and physical environment for security gaps. Key components include:
+
+Asset & Network Inventory: Maintain an up-to-date inventory of all hardware, software, and cloud resources. This includes physical and virtual servers, workstations, laptops, mobile devices, network hardware (routers, switches, firewalls), and all cloud services/SaaS applications. Identify which business unit owns each asset and any interdependencies. Also document physical site locations (data centers, offices) and their key equipment.
+
+Configuration & Patch Management: Review system configurations for security. Verify that firewalls and routers have restrictive rules, and that all default passwords and settings have been changed. Ensure operating systems and applications are patched regularly. Automate vulnerability scans and compare device firmware against recent security bulletins to find outdated or vulnerable versions.
+
+Access Control and Authentication: Check that access to systems (network, servers, applications) is limited to authorized personnel. Confirm use of strong, unique credentials for each user, and multi-factor authentication for remote/privileged access. Audit user accounts for stale or excessive privileges. Similarly, assess physical access controls: badge or key access for sensitive areas, visitor sign-ins, and surveillance.
+
+Monitoring and Logging: Ensure that critical systems generate logs (login attempts, administrative actions, network traffic). Centralize log collection and set up monitoring/alerting for anomalies. For example, unusual network traffic or repeated failed logins should trigger alerts. Regularly review logs for suspicious activity. According to best practice, look for “unusual network traffic, spiking CPU usage, or odd login events” as signs of compromise.
+
+Software and Endpoint Security: Identify and remove unauthorized or rogue software. Install anti-malware on all endpoints and servers, and update definitions frequently. Confirm that personal devices (BYOD) are either blocked or meet corporate security standards (e.g. Mobile Device Management). Keep all software (especially remote-access tools and email clients) up to date to prevent vulnerabilities.
+
+Network Architecture: Examine network segmentation. Critical systems should be isolated (e.g. separate VLANs or subnets for sensitive data, guest Wi-Fi on its own network). Ensure wireless networks are secure (WPA3, hidden SSIDs). Check that any VPN or remote access solution is securely configured.
+
+Backup & Recovery: Verify that backups exist for critical data and systems, and that restore procedures are tested. Backups should be stored securely (encrypted, offsite) and logs kept of backup operations. Check for business continuity measures: for example, redundant power (UPS/generators) and failover for critical network links.
+
+Physical Environment: In addition to IT, assess general facilities security. This includes perimeter security (fences, gates, alarms), building access controls, CCTV coverage, and environmental controls (fire suppression, cooling). Uninterruptible power supplies and surge protection help prevent data loss. Drata’s summary of ISO physical controls highlights measures such as secure entry (keycards/biometrics), surveillance cameras, visitor logs, and fire suppression systems as important for protecting assets.
+
+Policies and Awareness: Ensure security policies (acceptable use, incident response, remote access, etc.) are documented and communicated. Staff should receive regular security awareness training. Check that there is a process for employees to report security issues.
+
+As noted by Automox, key things to watch for include outdated software, unauthorized devices or applications on the network, and other anomalies. Performing this environmental review regularly (and updating documentation continuously) helps the organization maintain a secure baseline. Gaps found (e.g. missing patches, lack of inventory, or open ports) should be prioritized based on risk and remediated.
