@@ -21,7 +21,3 @@ build/
 .env
 .env.local
 .env.*.local
-
-# Hiqurates AI credentials
-Assessments2/js/ai-config.js
-**/ai-config.js

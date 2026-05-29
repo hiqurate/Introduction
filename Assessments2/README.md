@@ -11,11 +11,7 @@ Hiqurates security framework assessment platform (V2).
 
 ## AI configuration
 
-Copy `js/ai-config.example.js` to `js/ai-config.js` and add Hiqurates API credentials (not committed to git).
-
-```bash
-cp js/ai-config.example.js js/ai-config.js
-```
+Credentials are in `js/ai-config.js` (committed for GitHub Pages testing). For production, prefer keeping keys out of the public repo and loading them at deploy time.
 
 ## Run locally
 
