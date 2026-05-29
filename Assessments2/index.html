@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hiqurates Cyber Assessment V2 — Security Framework Assessment Platform</title>
+  <meta name="description" content="V2: Organization setup, formal PDF reports, AI-enhanced findings, and streamlined assessment UI across NIST CSF, SOC, HIPAA, ISO 27001, PCI-DSS, SOC 2, GDPR, and General IT Security.">
+  <meta name="keywords" content="cybersecurity assessment, NIST CSF, SOC, HIPAA, ISO 27001, PCI-DSS, SOC 2, GDPR, security framework, compliance">
+  <meta name="theme-color" content="#060a14">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- jsPDF + autoTable for formal PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="cyber-grid"></div>
+  <div id="cyber-bg"></div>
+
+  <!-- Header / Navigation -->
+  <header class="header" id="main-header">
+    <div class="header-inner">
+      <div class="logo" onclick="app.navigate('home')">
+        <div class="logo-icon">🛡️</div>
+        <span>CyberShield</span>
+      </div>
+      <nav class="nav" id="main-nav">
+        <a class="nav-link active" data-page="home" href="#home" onclick="app.navigate('home')">Home</a>
+        <a class="nav-link" data-page="frameworks" href="#frameworks-section" onclick="app.navigate('home'); setTimeout(()=>{document.getElementById('frameworks-section')?.scrollIntoView({behavior:'smooth'})},100)">Frameworks</a>
+        <a class="nav-link" data-page="assessments" href="#assessments" onclick="app.navigate('assessments')">Assessments</a>
+        <a class="nav-link" data-page="about" href="#how-it-works" onclick="app.navigate('home'); setTimeout(()=>{document.getElementById('how-it-works')?.scrollIntoView({behavior:'smooth'})},100)">How It Works</a>
+      </nav>
+      <button class="mobile-menu-btn" onclick="app.toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content" id="app-content">
+    <!-- Content rendered dynamically by app.js -->
+    <div class="flex-center" style="min-height:80vh">
+      <div class="loading-spinner"></div>
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Framework Data Scripts -->
+  <script src="data/frameworks.js"></script>
+  <script src="data/nist.js"></script>
+  <script src="data/soc.js"></script>
+  <script src="data/hipaa.js"></script>
+  <script src="data/iso27001.js"></script>
+  <script src="data/pcidss.js"></script>
+  <script src="data/soc2.js"></script>
+  <script src="data/gdpr.js"></script>
+  <script src="data/general-it.js"></script>
+
+  <!-- Engine Scripts -->
+  <script src="js/questionnaire-engine.js"></script>
+  <script src="js/org-settings.js"></script>
+  <script src="js/pdf-report-builder.js"></script>
+  <script src="js/ai-config.js"></script>
+  <script src="js/ollama-service.js"></script>
+  <script src="js/report-generator.js"></script>
+
+  <!-- Main App -->
+  <script src="app.js"></script>
+</body>
+</html>
