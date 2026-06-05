@@ -67,6 +67,11 @@ class CyberShieldApp {
     this.updateNav('home');
     const content = document.getElementById('app-content');
 
+    let totalQuestions = 0;
+    Object.values(FRAMEWORKS).forEach(fw => {
+      totalQuestions += fw.totalQuestions || 0;
+    });
+
     content.innerHTML = `
       <!-- Hero Section -->
       <section class="hero">
@@ -94,15 +99,15 @@ class CyberShieldApp {
         <div class="container">
           <div class="stats-grid">
             <div class="stat-card animate-in">
-              <div class="stat-number" data-count="4">0</div>
+              <div class="stat-number" data-count="${FRAMEWORK_LIST.length}">0</div>
               <div class="stat-label">Security Frameworks</div>
             </div>
             <div class="stat-card animate-in animate-delay-1">
-              <div class="stat-number" data-count="4">0</div>
-              <div class="stat-label">Compliance Standards</div>
+              <div class="stat-number" data-count="${COMPLIANCE_LIST.length}">0</div>
+              <div class="stat-label">Industry Modules</div>
             </div>
             <div class="stat-card animate-in animate-delay-2">
-              <div class="stat-number" data-count="585">0</div>
+              <div class="stat-number" data-count="${totalQuestions}">0</div>
               <div class="stat-label">Assessment Questions</div>
             </div>
             <div class="stat-card animate-in animate-delay-3">
@@ -142,9 +147,9 @@ class CyberShieldApp {
           </div>
 
           <div class="section-header" style="margin-top:64px">
-            <span class="section-tag">📜 Compliance & Regulations</span>
-            <h2>Regulatory <span class="gradient-text">Compliance</span></h2>
-            <p>Mandatory or contractually required standards and regulations. Assess your organization's adherence to legal and industry-specific data protection requirements.</p>
+            <span class="section-tag">🏢 Industry Modules</span>
+            <h2>Industry-Specific <span class="gradient-text">Assessments</span></h2>
+            <p>AI-powered risk assessments tailored to your specific sector, focusing on key threats, required controls, and realistic business impact.</p>
           </div>
           <div class="framework-grid">
             ${COMPLIANCE_LIST.map((id, idx) => {
@@ -161,7 +166,7 @@ class CyberShieldApp {
                   <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   ${progress > 0 ? `<span style="color:var(--color-success)"><i>✓</i> In progress</span>` : ''}
                 </div>
-                <div class="framework-card-type"><span class="type-badge type-compliance">Compliance</span></div>
+                <div class="framework-card-type"><span class="type-badge type-compliance">Industry Module</span></div>
               </div>`;
             }).join('')}
           </div>
@@ -204,7 +209,7 @@ class CyberShieldApp {
       <!-- Footer -->
       <footer class="footer">
         <div class="container">
-          <p>CyberShield Assessments • Built for comprehensive cybersecurity readiness evaluation</p>
+          <p>HawkSight Assessments • Built for comprehensive cybersecurity readiness evaluation</p>
           <p style="margin-top:8px;font-size:0.8rem">All assessments run locally in your browser. AI-powered remediation is provided by Hiqurates.</p>
         </div>
       </footer>`;
@@ -240,7 +245,7 @@ class CyberShieldApp {
                 <p>${fw.longDescription}</p>
                 <div class="framework-tags">
                   ${fw.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                  <span class="type-badge ${fw.type === 'framework' ? 'type-framework' : 'type-compliance'}">${fw.type === 'framework' ? '🏗️ Framework' : '📜 Compliance'}</span>
+                  <span class="type-badge ${fw.type === 'framework' ? 'type-framework' : 'type-compliance'}">${fw.type === 'framework' ? '🏗️ Framework' : '🏢 Industry Module'}</span>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
                   <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">📝 ${totalQ} Questions</span>
@@ -455,9 +460,9 @@ class CyberShieldApp {
           </div>
 
           <div class="section-header" style="margin-top:64px">
-            <span class="section-tag">📜 Compliance & Regulations</span>
-            <h2>Compliance <span class="gradient-text">Assessments</span></h2>
-            <p>Assess your organization's adherence to mandatory regulations and industry compliance standards.</p>
+            <span class="section-tag">🏢 Industry Modules</span>
+            <h2>Industry <span class="gradient-text">Assessments</span></h2>
+            <p>Assess your organization's adherence to industry-specific risk mitigation standards.</p>
           </div>
 
           <div class="framework-grid">
@@ -474,7 +479,7 @@ class CyberShieldApp {
                     <span><i>📝</i> ${fw.totalQuestions} questions</span>
                     <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   </div>
-                  <div class="framework-card-type"><span class="type-badge type-compliance">Compliance</span></div>
+                  <div class="framework-card-type"><span class="type-badge type-compliance">Industry Module</span></div>
                   <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
                     <button class="btn btn-primary" onclick="app.startAssessment('${id}')">${progress > 0 ? 'Continue' : 'Start'} Assessment</button>
                     <button class="btn btn-secondary" onclick="app.showFramework('${id}')">Details</button>
@@ -490,7 +495,19 @@ class CyberShieldApp {
 
   // ── Helpers ──
   getFrameworkData(id) {
-    const map = { nist: NIST_DATA, soc: SOC_DATA, hipaa: HIPAA_DATA, iso27001: ISO27001_DATA, pcidss: PCIDSS_DATA, soc2: SOC2_DATA, gdpr: GDPR_DATA, generalit: GENERALIT_DATA };
+    const map = {
+      nist: typeof NIST_DATA !== 'undefined' ? NIST_DATA : null,
+      soc: typeof SOC_DATA !== 'undefined' ? SOC_DATA : null,
+      retail: typeof RETAIL_DATA !== 'undefined' ? RETAIL_DATA : null,
+      healthcare: typeof HEALTHCARE_DATA !== 'undefined' ? HEALTHCARE_DATA : null,
+      fintech: typeof FINTECH_DATA !== 'undefined' ? FINTECH_DATA : null,
+      manufacturing: typeof MANUFACTURING_DATA !== 'undefined' ? MANUFACTURING_DATA : null,
+      education: typeof EDUCATION_DATA !== 'undefined' ? EDUCATION_DATA : null,
+      itservices: typeof ITSERVICES_DATA !== 'undefined' ? ITSERVICES_DATA : null,
+      hospitality: typeof HOSPITALITY_DATA !== 'undefined' ? HOSPITALITY_DATA : null,
+      logistics: typeof LOGISTICS_DATA !== 'undefined' ? LOGISTICS_DATA : null,
+      professional: typeof PROFESSIONAL_DATA !== 'undefined' ? PROFESSIONAL_DATA : null
+    };
     return map[id];
   }
 

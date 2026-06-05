@@ -17,7 +17,19 @@ class QuestionnaireEngine {
   }
 
   getFrameworkData(id) {
-    const map = { nist: NIST_DATA, soc: SOC_DATA, hipaa: HIPAA_DATA, iso27001: ISO27001_DATA, pcidss: PCIDSS_DATA, soc2: SOC2_DATA, gdpr: GDPR_DATA, generalit: GENERALIT_DATA };
+    const map = {
+      nist: typeof NIST_DATA !== 'undefined' ? NIST_DATA : null,
+      soc: typeof SOC_DATA !== 'undefined' ? SOC_DATA : null,
+      retail: typeof RETAIL_DATA !== 'undefined' ? RETAIL_DATA : null,
+      healthcare: typeof HEALTHCARE_DATA !== 'undefined' ? HEALTHCARE_DATA : null,
+      fintech: typeof FINTECH_DATA !== 'undefined' ? FINTECH_DATA : null,
+      manufacturing: typeof MANUFACTURING_DATA !== 'undefined' ? MANUFACTURING_DATA : null,
+      education: typeof EDUCATION_DATA !== 'undefined' ? EDUCATION_DATA : null,
+      itservices: typeof ITSERVICES_DATA !== 'undefined' ? ITSERVICES_DATA : null,
+      hospitality: typeof HOSPITALITY_DATA !== 'undefined' ? HOSPITALITY_DATA : null,
+      logistics: typeof LOGISTICS_DATA !== 'undefined' ? LOGISTICS_DATA : null,
+      professional: typeof PROFESSIONAL_DATA !== 'undefined' ? PROFESSIONAL_DATA : null
+    };
     return map[id];
   }
 
@@ -445,7 +457,7 @@ class QuestionnaireEngine {
             <input type="radio" name="answer-${q.id}" value="${opt.value}" ${selected ? 'checked' : ''}>
             <div class="answer-radio"></div>
             <span class="answer-label">${opt.label}${opt.detail ? ` — ${opt.detail}` : ''}</span>
-            <span class="answer-score">${opt.value}/${q.options.length > 3 ? q.options[q.options.length-1].value : q.options.length}</span>
+            <span class="answer-score">${opt.value}/${Math.max(...q.options.map(o => o.value))}</span>
           </label>`;
     });
 

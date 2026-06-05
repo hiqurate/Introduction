@@ -16,12 +16,16 @@ class AIService {
     this.groqApiKey = c.groqApiKey || '';
     this.groqModel = c.groqModel || 'llama-3.1-8b-instant';
 
+    // Server-side proxy endpoints (key stays on server)
+    this.proxyCompleteUrl = c.proxyCompleteUrl || '/api/ai/complete';
+    this.proxyStreamUrl = c.proxyStreamUrl || '/api/ai/stream';
+
     this.isConfigured = this.checkConfigured();
   }
 
   checkConfigured() {
     if (this.provider === 'ollama') return !!this.ollamaUrl;
-    if (this.provider === 'groq') return !!this.groqApiKey;
+    if (this.provider === 'groq') return true; // key is on the server
     return !!this.apiKey;
   }
 
@@ -189,11 +193,10 @@ ${JSON.stringify(items, null, 2)}`;
 
   async completePrompt(prompt) {
     if (this.provider === 'groq') {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const res = await fetch(this.proxyCompleteUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.groqApiKey}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           model: this.groqModel,
@@ -204,7 +207,7 @@ ${JSON.stringify(items, null, 2)}`;
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err?.error?.message || `Groq API error ${res.status}`);
+        throw new Error(err?.error?.message || `AI proxy error ${res.status}`);
       }
       const data = await res.json();
       return data?.choices?.[0]?.message?.content || '';
@@ -374,17 +377,15 @@ ${JSON.stringify(items, null, 2)}`;
 
     try {
       if (this.provider === 'groq') {
-        // --- GROQ STREAMING LOGIC ---
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        // --- GROQ STREAMING via SERVER PROXY ---
+        const res = await fetch(this.proxyStreamUrl, {
           method: 'POST',
           headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.groqApiKey}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             model: this.groqModel,
             messages: [{ role: 'user', content: prompt }],
-            stream: true,
             temperature: 0.7,
             max_tokens: 2048,
             top_p: 0.9
@@ -393,7 +394,7 @@ ${JSON.stringify(items, null, 2)}`;
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err?.error?.message || `Groq API returned status ${res.status}`);
+          throw new Error(err?.error?.message || `AI proxy returned status ${res.status}`);
         }
 
         const reader = res.body.getReader();
