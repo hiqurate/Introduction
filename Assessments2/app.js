@@ -9,22 +9,75 @@ class CyberShieldApp {
     this.currentFramework = null;
     this.questionnaire = null;
     this.reportGen = null;
+    this.currentUser = null;
     this.init();
   }
 
-  init() {
+  async init() {
     window.addEventListener('hashchange', () => this.handleRoute());
     window.addEventListener('scroll', () => this.handleScroll());
-    this.handleRoute();
+    await this.checkAuth();
     this.initCyberGrid();
     this.animateStats();
+  }
+
+  async checkAuth() {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        this.currentUser = await res.json();
+        document.getElementById('nav-logout-btn').style.display = 'inline-block';
+        if (this.currentUser.user.role === 'admin') {
+          document.getElementById('nav-admin-link').style.display = 'inline-block';
+        }
+        this.handleRoute();
+      } else {
+        this.showLogin();
+      }
+    } catch (e) {
+      this.showLogin();
+    }
+  }
+
+  async login(email, password) {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (res.ok) {
+        window.location.hash = 'home';
+        window.location.reload();
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Login failed');
+      }
+    } catch(e) {
+      alert('Login error');
+    }
+  }
+
+  async logout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.hash = 'login';
+    window.location.reload();
   }
 
   handleRoute() {
     const hash = window.location.hash.slice(1) || 'home';
     const parts = hash.split('/');
 
-    if (parts[0] === 'framework' && parts[1]) {
+    if (!this.currentUser && hash !== 'login') {
+      window.location.hash = 'login';
+      return;
+    }
+
+    if (hash === 'login') {
+      this.showLogin();
+    } else if (hash === 'admin' && this.currentUser && this.currentUser.user.role === 'admin') {
+      this.showAdminDashboard();
+    } else if (parts[0] === 'framework' && parts[1]) {
       this.showFramework(parts[1]);
     } else if (parts[0] === 'setup' && parts[1]) {
       this.showAssessmentSetup(parts[1]);
@@ -68,8 +121,12 @@ class CyberShieldApp {
     const content = document.getElementById('app-content');
 
     let totalQuestions = 0;
-    Object.values(FRAMEWORKS).forEach(fw => {
-      totalQuestions += fw.totalQuestions || 0;
+    
+    const assignedFrameworks = this.currentUser.user.role === 'admin' ? FRAMEWORK_LIST : FRAMEWORK_LIST.filter(id => this.currentUser.assignments.includes(id));
+    const assignedCompliances = this.currentUser.user.role === 'admin' ? COMPLIANCE_LIST : COMPLIANCE_LIST.filter(id => this.currentUser.assignments.includes(id));
+
+    [...assignedFrameworks, ...assignedCompliances].forEach(fwId => {
+      totalQuestions += FRAMEWORKS[fwId].totalQuestions || 0;
     });
 
     content.innerHTML = `
@@ -127,7 +184,8 @@ class CyberShieldApp {
             <p>Voluntary, industry-standard frameworks that provide structured methodologies for managing cybersecurity risk and improving your security posture.</p>
           </div>
           <div class="framework-grid">
-            ${FRAMEWORK_LIST.map((id, idx) => {
+            ${assignedFrameworks.length === 0 ? '<p>No frameworks assigned to you yet.</p>' : ''}
+            ${assignedFrameworks.map((id, idx) => {
               const fw = FRAMEWORKS[id];
               const saved = localStorage.getItem(`cybershield_answers_${id}`);
               const progress = saved ? Object.keys(JSON.parse(saved)).length : 0;
@@ -152,7 +210,8 @@ class CyberShieldApp {
             <p>AI-powered risk assessments tailored to your specific sector, focusing on key threats, required controls, and realistic business impact.</p>
           </div>
           <div class="framework-grid">
-            ${COMPLIANCE_LIST.map((id, idx) => {
+            ${assignedCompliances.length === 0 ? '<p>No industry modules assigned to you yet.</p>' : ''}
+            ${assignedCompliances.map((id, idx) => {
               const fw = FRAMEWORKS[id];
               const saved = localStorage.getItem(`cybershield_answers_${id}`);
               const progress = saved ? Object.keys(JSON.parse(saved)).length : 0;
@@ -215,6 +274,42 @@ class CyberShieldApp {
       </footer>`;
 
     this.animateStats();
+  }
+
+  showLogin() {
+    this.currentPage = 'login';
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('nav-logout-btn').style.display = 'none';
+    document.getElementById('nav-admin-link').style.display = 'none';
+    
+    const content = document.getElementById('app-content');
+    content.innerHTML = `
+      <section class="section flex-center" style="min-height: 80vh">
+        <div class="card" style="width: 100%; max-width: 400px; padding: 32px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; position: relative; z-index: 10;">
+          <h2 style="text-align:center;margin-bottom:8px">Welcome to <span class="gradient-text">HawkSight</span></h2>
+          <p style="text-align:center;color:var(--text-secondary);margin-bottom:24px">Sign in to access your assessments</p>
+          
+          <form onsubmit="event.preventDefault(); app.login(document.getElementById('login-email').value, document.getElementById('login-password').value)">
+            <div class="form-group" style="margin-bottom: 16px">
+              <label>Email Address</label>
+              <input type="email" id="login-email" required class="form-control" style="width:100%;padding:12px;margin-top:8px;background:var(--bg-dark);border:1px solid var(--border-color);color:white;border-radius:8px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 24px">
+              <label>Password</label>
+              <input type="password" id="login-password" required class="form-control" style="width:100%;padding:12px;margin-top:8px;background:var(--bg-dark);border:1px solid var(--border-color);color:white;border-radius:8px;">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%">Sign In</button>
+          </form>
+        </div>
+      </section>
+    `;
+  }
+
+  async showAdminDashboard() {
+    this.currentPage = 'admin';
+    this.updateNav('admin');
+    const content = document.getElementById('app-content');
+    content.innerHTML = await adminDashboard.render();
   }
 
   // ── Framework Detail Page ──
@@ -427,6 +522,9 @@ class CyberShieldApp {
     this.updateNav('assessments');
     const content = document.getElementById('app-content');
 
+    const assignedFrameworks = this.currentUser.user.role === 'admin' ? FRAMEWORK_LIST : FRAMEWORK_LIST.filter(id => this.currentUser.assignments.includes(id));
+    const assignedCompliances = this.currentUser.user.role === 'admin' ? COMPLIANCE_LIST : COMPLIANCE_LIST.filter(id => this.currentUser.assignments.includes(id));
+
     content.innerHTML = `
       <section class="section">
         <div class="container">
@@ -437,7 +535,8 @@ class CyberShieldApp {
           </div>
 
           <div class="framework-grid">
-            ${FRAMEWORK_LIST.map((id, idx) => {
+            ${assignedFrameworks.length === 0 ? '<p>No frameworks assigned.</p>' : ''}
+            ${assignedFrameworks.map((id, idx) => {
               const fw = FRAMEWORKS[id];
               const saved = localStorage.getItem(`cybershield_answers_${id}`);
               const progress = saved ? Object.keys(JSON.parse(saved)).length : 0;
@@ -466,7 +565,8 @@ class CyberShieldApp {
           </div>
 
           <div class="framework-grid">
-            ${COMPLIANCE_LIST.map((id, idx) => {
+            ${assignedCompliances.length === 0 ? '<p>No industry modules assigned.</p>' : ''}
+            ${assignedCompliances.map((id, idx) => {
               const fw = FRAMEWORKS[id];
               const saved = localStorage.getItem(`cybershield_answers_${id}`);
               const progress = saved ? Object.keys(JSON.parse(saved)).length : 0;

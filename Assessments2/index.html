@@ -32,10 +32,12 @@
         <span>HawkSight</span>
       </div>
       <nav class="nav" id="main-nav">
-        <a class="nav-link active" data-page="home" href="#home" onclick="app.navigate('home')">Home</a>
+        <a class="nav-link" data-page="home" href="#home" onclick="app.navigate('home')">Home</a>
         <a class="nav-link" data-page="frameworks" href="#frameworks-section" onclick="app.navigate('home'); setTimeout(()=>{document.getElementById('frameworks-section')?.scrollIntoView({behavior:'smooth'})},100)">Frameworks</a>
         <a class="nav-link" data-page="assessments" href="#assessments" onclick="app.navigate('assessments')">Assessments</a>
         <a class="nav-link" data-page="about" href="#how-it-works" onclick="app.navigate('home'); setTimeout(()=>{document.getElementById('how-it-works')?.scrollIntoView({behavior:'smooth'})},100)">How It Works</a>
+        <a class="nav-link" data-page="admin" href="#admin" id="nav-admin-link" style="display:none; color: var(--accent-pink)" onclick="app.navigate('admin')">Admin</a>
+        <button class="btn btn-secondary btn-sm" id="nav-logout-btn" style="display:none; margin-left: 12px" onclick="app.logout()">Logout</button>
       </nav>
       <button class="mobile-menu-btn" onclick="app.toggleMobileMenu()" aria-label="Toggle menu">☰</button>
     </div>
@@ -73,6 +75,7 @@
   <script src="js/ai-config.js"></script>
   <script src="js/ollama-service.js"></script>
   <script src="js/report-generator.js"></script>
+  <script src="js/admin-dashboard.js"></script>
 
   <!-- Main App -->
   <script src="app.js"></script>

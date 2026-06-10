@@ -6,15 +6,161 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt');
+const session = require('express-session');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
 app.use(express.json({ limit: '1mb' }));
+app.use(session({
+  secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 1 day
+}));
 
 // Serve all static frontend files from the project root
 app.use(express.static(path.join(__dirname)));
+
+// --- Database Setup ---
+const db = new sqlite3.Database('./database.sqlite', (err) => {
+  if (err) console.error('DB connection error:', err.message);
+  else console.log('Connected to SQLite database.');
+});
+
+db.serialize(async () => {
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS assignments (
+    user_id INTEGER NOT NULL,
+    framework_id TEXT NOT NULL,
+    PRIMARY KEY (user_id, framework_id),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`);
+
+  // Create default admin
+  const defaultAdminEmail = 'admin@admin.com';
+  const defaultAdminPass = 'admin';
+  const hashedPass = await bcrypt.hash(defaultAdminPass, 10);
+  
+  db.get("SELECT id FROM users WHERE email = ?", [defaultAdminEmail], (err, row) => {
+    if (!row) {
+      db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", [defaultAdminEmail, hashedPass, 'admin']);
+      console.log('Created default admin: admin@admin.com / admin');
+    }
+  });
+});
+
+// --- Auth Routes ---
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: 'Invalid credentials' });
+
+    req.session.userId = user.id;
+    req.session.role = user.role;
+    res.json({ message: 'Logged in successfully', role: user.role });
+  });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  req.session.destroy();
+  res.json({ message: 'Logged out successfully' });
+});
+
+app.get('/api/auth/me', (req, res) => {
+  if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
+
+  db.get("SELECT id, email, role FROM users WHERE id = ?", [req.session.userId], (err, user) => {
+    if (err || !user) return res.status(401).json({ error: 'User not found' });
+    
+    if (user.role === 'admin') {
+      return res.json({ user, assignments: [] }); // Admin has access to all implicitly
+    }
+
+    db.all("SELECT framework_id FROM assignments WHERE user_id = ?", [user.id], (err, rows) => {
+      const assignments = rows ? rows.map(r => r.framework_id) : [];
+      res.json({ user, assignments });
+    });
+  });
+});
+
+// --- Admin Routes ---
+const requireAdmin = (req, res, next) => {
+  if (!req.session.userId || req.session.role !== 'admin') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+};
+
+app.get('/api/admin/users', requireAdmin, (req, res) => {
+  db.all("SELECT id, email, role FROM users", (err, users) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    
+    db.all("SELECT * FROM assignments", (err, assignments) => {
+      if (err) return res.status(500).json({ error: 'Database error' });
+      
+      const usersWithAssigments = users.map(u => {
+        u.assignments = assignments.filter(a => a.user_id === u.id).map(a => a.framework_id);
+        return u;
+      });
+      res.json(usersWithAssigments);
+    });
+  });
+});
+
+app.post('/api/admin/users', requireAdmin, async (req, res) => {
+  const { email, password, role } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+  
+  const userRole = role === 'admin' ? 'admin' : 'user';
+  const hashedPass = await bcrypt.hash(password, 10);
+
+  db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", [email, hashedPass, userRole], function(err) {
+    if (err) {
+      if (err.message.includes('UNIQUE constraint failed')) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json({ id: this.lastID, email, role: userRole });
+  });
+});
+
+app.post('/api/admin/assignments', requireAdmin, (req, res) => {
+  const { userId, frameworkId } = req.body;
+  if (!userId || !frameworkId) return res.status(400).json({ error: 'Missing parameters' });
+
+  db.run("INSERT OR IGNORE INTO assignments (user_id, framework_id) VALUES (?, ?)", [userId, frameworkId], function(err) {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    res.json({ message: 'Assignment added' });
+  });
+});
+
+app.delete('/api/admin/assignments', requireAdmin, (req, res) => {
+  const { userId, frameworkId } = req.body;
+  if (!userId || !frameworkId) return res.status(400).json({ error: 'Missing parameters' });
+
+  db.run("DELETE FROM assignments WHERE user_id = ? AND framework_id = ?", [userId, frameworkId], function(err) {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    res.json({ message: 'Assignment removed' });
+  });
+});
 
 // --- AI Proxy: Non-streaming completion ---
 app.post('/api/ai/complete', async (req, res) => {

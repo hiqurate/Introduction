@@ -46,8 +46,8 @@ const FRAMEWORKS = {
     description: 'Tailored for retail and e-commerce, focusing on payment systems (POS), customer PII, and supply chain threats.',
     longDescription: 'Retailers face growing online threats including account takeovers, POS breaches, and ransomware. This assessment prioritizes payment security (PCI essentials), web/app security, identity & access (MFA), and offline backups to protect critical customer and sales data.',
     tags: ['Retail', 'E-Commerce', 'Payment Security', 'POS', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '35-50 min',
+    totalQuestions: 53,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'retail'
   },
@@ -62,8 +62,8 @@ const FRAMEWORKS = {
     description: 'Focused on protecting Protected Health Information (PHI), medical devices (IoT), and ransomware readiness.',
     longDescription: 'Healthcare is India\'s most-attacked sector. This assessment stresses medical device/IoT segmentation, strong authentication for EMRs, PHI encryption, and offsite backups to ensure rapid recovery from ransomware threats.',
     tags: ['Healthcare', 'Pharma', 'PHI', 'Medical IoT', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '30-45 min',
+    totalQuestions: 46,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'healthcare'
   },
@@ -78,8 +78,8 @@ const FRAMEWORKS = {
     description: 'For financial services, addressing transaction security, APIs, broken access controls, and compliance essentials.',
     longDescription: 'FinTech relies heavily on APIs and integrations. This module focuses on robust encryption (TLS 1.2+), tokenization of account numbers, real-time fraud monitoring, and secure development practices (SAST/DAST) for in-house applications.',
     tags: ['FinTech', 'Financial', 'Transactions', 'Fraud', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '30-45 min',
+    totalQuestions: 42,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'fintech'
   },
@@ -94,8 +94,8 @@ const FRAMEWORKS = {
     description: 'Targeted at IT/OT convergence, securing industrial control systems, and preventing intellectual property theft.',
     longDescription: 'Manufacturers face risks to production lines and supply chains. This module emphasizes IT/OT network segmentation, IoT/SCADA device inventory and patching, vendor risk assessment, and backups for critical operational data (CAD files).',
     tags: ['Manufacturing', 'Industrial', 'ICS', 'OT', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '30-45 min',
+    totalQuestions: 43,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'manufacturing'
   },
@@ -110,8 +110,8 @@ const FRAMEWORKS = {
     description: 'Designed for schools and colleges, handling student data privacy, open networks, and BYOD challenges.',
     longDescription: 'Educational institutions see a surge in ransomware. Key domains include segmenting student Wi-Fi from administrative networks, protecting minor records, enforcing MFA for staff, and providing phishing training.',
     tags: ['Education', 'Schools', 'Colleges', 'Student Data', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '30-45 min',
+    totalQuestions: 41,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'education'
   },
@@ -126,8 +126,8 @@ const FRAMEWORKS = {
     description: 'For IT firms and consultancies, emphasizing secure SDLC, cloud governance, and client data protection.',
     longDescription: 'IT firms manage sensitive client data and code repositories. This assessment covers secure DevOps, strict IAM for cloud access, MDM for remote workstations, and managing shadow IT risks.',
     tags: ['IT Services', 'Software', 'SDLC', 'Cloud', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '25-40 min',
+    totalQuestions: 38,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'itservices'
   },
@@ -142,8 +142,8 @@ const FRAMEWORKS = {
     description: 'Focused on payment terminals, guest Wi-Fi segregation, and securing booking platforms.',
     longDescription: 'Hotels and restaurants frequently face POS breaches and Wi-Fi misuse. Key checks include PCI-DSS basics, isolating guest Wi-Fi, managing staff login credentials amid high turnover, and encrypting guest PII.',
     tags: ['Hospitality', 'Hotels', 'Restaurants', 'POS', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '25-40 min',
+    totalQuestions: 39,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'hospitality'
   },
@@ -158,8 +158,8 @@ const FRAMEWORKS = {
     description: 'Targeted at protecting IoT tracking assets, route data, and ensuring continuous supply chain operations.',
     longDescription: 'Logistics relies on IoT, telematics, and cloud TMS. This module weights asset inventory, zero-default credentials for tracking devices, secure VPNs for remote depots, and backing up critical route manifests.',
     tags: ['Logistics', 'Transport', 'IoT', 'Supply Chain', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '25-40 min',
+    totalQuestions: 37,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'logistics'
   },
@@ -174,8 +174,8 @@ const FRAMEWORKS = {
     description: 'For law firms, consultancies, and accounting, stressing strict client data confidentiality and email security.',
     longDescription: 'Professional services hold highly sensitive client documents. The module focuses on mitigating human error, enforcing MFA on all remote access, robust email encryption, and careful access control reviews for client projects.',
     tags: ['Professional', 'Law Firms', 'Consultancy', 'Confidentiality', 'SMB'],
-    estimatedTime: '20-30 min',
-    totalQuestions: 15,
+    estimatedTime: '30-45 min',
+    totalQuestions: 40,
     scoringModel: 'Risk-weighted percentage (0-100%)',
     dataFile: 'professional'
   }

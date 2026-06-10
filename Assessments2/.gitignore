@@ -4,6 +4,9 @@ node_modules/
 # Environment secrets
 .env
 
+# Database (auto-created on startup)
+database.sqlite
+
 # OS files
 .DS_Store
 Thumbs.db
