@@ -2,7 +2,7 @@ const EDUCATION_DATA = {
   id: 'education',
   modules: [
     {
-      id: 'access_control', name: 'Access Control (MFA)', description: 'MFA, account management, and identity governance.', icon: '🔐',
+      id: 'access_control', name: 'Access Control (MFA)', description: 'MFA, account management, and identity governance.', icon: '',
       categories: [
         { id: 'mfa', name: 'Authentication', description: 'Protecting staff and student accounts.', questions: [
           { id: 'EDU-1.1', text: 'Are student/staff accounts protected with MFA (especially admin)?', context: 'MFA config screenshot', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -22,7 +22,7 @@ const EDUCATION_DATA = {
       ]
     },
     {
-      id: 'endpoint_patch', name: 'Endpoint & Patch Management', description: 'EDR, LMS updates, and device management.', icon: '💻',
+      id: 'endpoint_patch', name: 'Endpoint & Patch Management', description: 'EDR, LMS updates, and device management.', icon: '',
       categories: [
         { id: 'mdm', name: 'Device Management', description: 'Managing student/staff devices.', questions: [
           { id: 'EDU-2.1', text: 'Are laptops/tablets used by students managed by the school (EDR/antivirus)?', context: 'MDM/EDR logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -38,7 +38,7 @@ const EDUCATION_DATA = {
       ]
     },
     {
-      id: 'network_data', name: 'Network & Data Protection', description: 'Segmentation, student privacy, and data controls.', icon: '🌐',
+      id: 'network_data', name: 'Network & Data Protection', description: 'Segmentation, student privacy, and data controls.', icon: '',
       categories: [
         { id: 'segmentation', name: 'Network Segmentation', description: 'Guest vs. staff networks.', questions: [
           { id: 'EDU-3.1', text: 'Are school networks segmented (guest Wi-Fi vs staff vs servers)?', context: 'Network config diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -59,7 +59,7 @@ const EDUCATION_DATA = {
       ]
     },
     {
-      id: 'backup_continuity', name: 'Backup & Continuity', description: 'Protecting educational records and disaster recovery.', icon: '🔄',
+      id: 'backup_continuity', name: 'Backup & Continuity', description: 'Protecting educational records and disaster recovery.', icon: '',
       categories: [
         { id: 'backup', name: 'Data Backups', description: 'Offline backups of grades/records.', questions: [
           { id: 'EDU-4.1', text: 'Are backups of student records and admin data kept offsite/offline?', context: 'Backup logs', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Monthly', value: 2}, {label: 'Weekly', value: 4}, {label: 'Daily', value: 5}] },
@@ -75,7 +75,7 @@ const EDUCATION_DATA = {
       ]
     },
     {
-      id: 'awareness_policies', name: 'Awareness, Policies & Email', description: 'Training, platform audits, and email security.', icon: '🧠',
+      id: 'awareness_policies', name: 'Awareness, Policies & Email', description: 'Training, platform audits, and email security.', icon: '',
       categories: [
         { id: 'training', name: 'Security Training', description: 'Educating staff and students.', questions: [
           { id: 'EDU-5.1', text: 'Do employees and students receive security awareness training (phishing/QR)?', context: 'Training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

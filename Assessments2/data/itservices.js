@@ -2,7 +2,7 @@ const ITSERVICES_DATA = {
   id: 'itservices',
   modules: [
     {
-      id: 'sdlc', name: 'Secure SDLC & DevSecOps', description: 'Code reviews, secure development, and CI/CD security.', icon: '💻',
+      id: 'sdlc', name: 'Secure SDLC & DevSecOps', description: 'Code reviews, secure development, and CI/CD security.', icon: '',
       categories: [
         { id: 'code_review', name: 'Code Scanning', description: 'SAST/DAST usage.', questions: [
           { id: 'ITS-1.1', text: 'Do you enforce code reviews and use SAST/DAST for all projects?', context: 'CI logs/reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -22,7 +22,7 @@ const ITSERVICES_DATA = {
       ]
     },
     {
-      id: 'cloud_iam', name: 'Cloud Security & IAM', description: 'MFA, least privilege, and cloud governance.', icon: '☁️',
+      id: 'cloud_iam', name: 'Cloud Security & IAM', description: 'MFA, least privilege, and cloud governance.', icon: '',
       categories: [
         { id: 'mfa', name: 'Cloud Authentication', description: 'MFA for cloud consoles.', questions: [
           { id: 'ITS-2.1', text: 'Is multi-factor authentication required for all cloud console logins?', context: 'IAM logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -41,7 +41,7 @@ const ITSERVICES_DATA = {
       ]
     },
     {
-      id: 'endpoint_shadowit', name: 'Endpoint & SaaS Management', description: 'Device encryption, shadow IT, and remote work security.', icon: '📱',
+      id: 'endpoint_shadowit', name: 'Endpoint & SaaS Management', description: 'Device encryption, shadow IT, and remote work security.', icon: '',
       categories: [
         { id: 'endpoint', name: 'Workstation Security', description: 'MDM and encryption.', questions: [
           { id: 'ITS-3.1', text: 'Are all employee devices (workstations) encrypted and managed?', context: 'MDM logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -60,7 +60,7 @@ const ITSERVICES_DATA = {
       ]
     },
     {
-      id: 'data_repo', name: 'Data Protection & Code Repos', description: 'Client DBs, repo security, and data handling.', icon: '🛡️',
+      id: 'data_repo', name: 'Data Protection & Code Repos', description: 'Client DBs, repo security, and data handling.', icon: '',
       categories: [
         { id: 'client_data', name: 'Database Encryption', description: 'Securing client data.', questions: [
           { id: 'ITS-4.1', text: 'Are client databases (even dev/test) encrypted and access-logged?', context: 'DB config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -75,7 +75,7 @@ const ITSERVICES_DATA = {
       ]
     },
     {
-      id: 'training_ir', name: 'Training, IR & Compliance', description: 'Security awareness, IR plans, and client compliance.', icon: '🧠',
+      id: 'training_ir', name: 'Training, IR & Compliance', description: 'Security awareness, IR plans, and client compliance.', icon: '',
       categories: [
         { id: 'training', name: 'Phishing Awareness', description: 'Email and DevOps security training.', questions: [
           { id: 'ITS-5.1', text: 'Do you train staff on email security (common IT threats, safe dev ops)?', context: 'Training records', weight: 2, options: [{label: 'No', value: 0}, {label: 'Partial', value: 1}, {label: 'Yes', value: 5}] },

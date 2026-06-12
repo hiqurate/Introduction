@@ -47,7 +47,7 @@ class QuestionnaireEngine {
 
   findFirstUnanswered() {
     for (let i = 0; i < this.flatQuestions.length; i++) {
-      if (!this.answers[this.flatQuestions[i].id]) return i;
+      if (this.answers[this.flatQuestions[i].id] === undefined || this.answers[this.flatQuestions[i].id] === null) return i;
     }
     return 0;
   }
@@ -110,7 +110,7 @@ class QuestionnaireEngine {
 
   getModuleProgress(moduleIndex) {
     const moduleQuestions = this.flatQuestions.filter(q => q.moduleIndex === moduleIndex);
-    const answered = moduleQuestions.filter(q => this.answers[q.id]).length;
+    const answered = moduleQuestions.filter(q => this.answers[q.id] !== undefined && this.answers[q.id] !== null).length;
     return { answered, total: moduleQuestions.length, percentage: Math.round((answered / moduleQuestions.length) * 100) };
   }
 
@@ -119,10 +119,21 @@ class QuestionnaireEngine {
   }
 
   saveAnswers() {
+    if (window.adminViewingUserReport) return; // Admins cannot overwrite user data
     localStorage.setItem(`cybershield_answers_${this.frameworkId}`, JSON.stringify(this.answers));
+    if (app && app.currentUser) {
+      fetch('/api/assessments/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ frameworkId: this.frameworkId, answers: this.answers })
+      }).catch(e => console.error('Auto-save failed:', e));
+    }
   }
 
   loadAnswers() {
+    if (window.adminViewingUserReport && window.adminViewingUserReport.frameworkId === this.frameworkId) {
+      return window.adminViewingUserReport.answers || {};
+    }
     const saved = localStorage.getItem(`cybershield_answers_${this.frameworkId}`);
     return saved ? JSON.parse(saved) : {};
   }
@@ -130,6 +141,33 @@ class QuestionnaireEngine {
   clearAnswers() {
     this.answers = {};
     localStorage.removeItem(`cybershield_answers_${this.frameworkId}`);
+  }
+
+  isNonNegotiable(q) {
+    if (!q || !q.text) return false;
+    const text = q.text.toLowerCase();
+    return text.includes('mfa') || 
+           text.includes('multi-factor') || 
+           text.includes('two-factor') ||
+           text.includes('edr') || 
+           text.includes('endpoint detection') || 
+           text.includes('antivirus') || 
+           text.includes('anti-virus') ||
+           text.includes('endpoint protection') ||
+           text.includes('siem') || 
+           text.includes('security monitoring') || 
+           text.includes('alert management') || 
+           text.includes('tamper-proof') || 
+           text.includes('log audit') || 
+           text.includes('central log') ||
+           text.includes('offline backup') || 
+           text.includes('backups are encrypted') || 
+           text.includes('backup restoration') ||
+           text.includes('network segment') || 
+           text.includes('firewall') ||
+           text.includes('vulnerability management') || 
+           text.includes('vulnerability scan') ||
+           text.includes('incident response');
   }
 
   calculateScores() {
@@ -152,9 +190,10 @@ class QuestionnaireEngine {
 
         cat.questions.forEach(q => {
           const maxVal = Math.max(...q.options.map(o => o.value));
-          catMax += maxVal;
-          if (this.answers[q.id]) {
-            catScore += this.answers[q.id];
+          const weight = this.isNonNegotiable(q) ? 12 : (q.weight || 1);
+          catMax += maxVal * weight;
+          if (this.answers[q.id] !== undefined && this.answers[q.id] !== null) {
+            catScore += this.answers[q.id] * weight;
             catAnswered++;
           }
         });
@@ -242,12 +281,32 @@ class QuestionnaireEngine {
     return recommendations.slice(0, 10);
   }
 
-  getCriticality(pct, answerValue, maxVal) {
+  getCriticality(question, pct, answerValue, maxVal, orgSettings = {}) {
     if (answerValue >= maxVal) return null;
-    if (pct < 40) return 'HIGH';
-    if (pct < 70) return 'MEDIUM';
-    if (pct < 85) return 'LOW';
-    return 'ADVISORY';
+
+    // 1. Non-negotiable check
+    if (this.isNonNegotiable(question)) {
+      return 'HIGH';
+    }
+
+    // 2. Base on percentage
+    let severity = 'LOW';
+    if (pct < 40) severity = 'HIGH';
+    else if (pct < 70) severity = 'MEDIUM';
+    else if (pct < 85) severity = 'LOW';
+    else severity = 'ADVISORY';
+
+    // 3. Elevate based on context
+    const employeeCount = orgSettings.employeeCount || '';
+    const officeLocations = parseInt(orgSettings.officeLocations) || 1;
+    const isLarge = employeeCount === '250 - 1000' || employeeCount === '1000+' || officeLocations > 3;
+
+    if (isLarge) {
+      if (severity === 'LOW') severity = 'MEDIUM';
+      else if (severity === 'MEDIUM') severity = 'HIGH';
+    }
+
+    return severity;
   }
 
   buildFindings(orgSettings = {}) {
@@ -264,7 +323,7 @@ class QuestionnaireEngine {
       if (maxVal <= 0) return;
 
       const pct = Math.round((answerValue / maxVal) * 100);
-      const criticality = this.getCriticality(pct, answerValue, maxVal);
+      const criticality = this.getCriticality(q, pct, answerValue, maxVal, orgSettings);
       if (!criticality) return;
 
       const selectedOption = q.options.find(o => o.value === answerValue);
@@ -275,7 +334,7 @@ class QuestionnaireEngine {
       const ref = `${q.moduleIndex + 1}.${String(moduleCounters[q.moduleIndex]).padStart(2, '0')}`;
 
       const description = detail ? `${label}. ${detail}` : label;
-      const finding = `Current state: ${description}`;
+      const finding = `Control gap: "${q.text}" (${description})`;
       const recommendation = q.recommendation || this.generateFindingRecommendation(q, criticality, frameworkName, label, detail, orgSettings);
       const action = q.action || this.generateFindingAction(q, criticality, defaultOwner, label, detail, orgSettings);
 
@@ -301,10 +360,13 @@ class QuestionnaireEngine {
       if (priorityCounts[key] !== undefined) priorityCounts[key]++;
     });
 
+    // Only include HIGH and MEDIUM severity rows in the findings table
+    const meaningfulRows = rows.filter(r => r.criticality === 'HIGH' || r.criticality === 'MEDIUM');
+
     const sections = [];
-    const moduleIndices = [...new Set(rows.map(r => r.moduleIndex))].sort((a, b) => a - b);
+    const moduleIndices = [...new Set(meaningfulRows.map(r => r.moduleIndex))].sort((a, b) => a - b);
     moduleIndices.forEach(mi => {
-      const moduleRows = rows.filter(r => r.moduleIndex === mi);
+      const moduleRows = meaningfulRows.filter(r => r.moduleIndex === mi);
       sections.push({
         moduleIndex: mi,
         moduleName: moduleRows[0].moduleName,
@@ -313,7 +375,7 @@ class QuestionnaireEngine {
       });
     });
 
-    return { rows, sections, priorityCounts };
+    return { rows: meaningfulRows, sections, priorityCounts };
   }
 
   generateFindingRecommendation(question, criticality, frameworkName, selectedLabel, detail, orgSettings = {}) {
@@ -397,6 +459,9 @@ class QuestionnaireEngine {
           </div>
         </div>
         <div style="text-align:center;font-size:0.8rem;color:var(--text-tertiary)">${this.getAnsweredCount()} of ${this.getTotalQuestions()} questions</div>
+        ${this.getAnsweredCount() > 0 ? `
+          <button class="btn btn-secondary btn-sm" style="width:100%; margin-top:16px;" onclick="app.showReport('${this.frameworkId}')">View Partial Report</button>
+        ` : ''}
       </div>
       <div class="module-nav">`;
 
@@ -478,11 +543,11 @@ class QuestionnaireEngine {
   renderComplete() {
     return `
       <div class="completion-screen">
-        <div class="completion-icon">🎉</div>
+        <div class="completion-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feather"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
         <h2>Assessment Complete!</h2>
         <p>You have answered all ${this.getTotalQuestions()} questions in the ${this.framework.name} assessment. Generate your report to see your results.</p>
         <div style="display:flex;gap:16px;justify-content:center;margin-top:24px">
-          <button class="btn btn-primary btn-lg" onclick="app.showReport('${this.frameworkId}')">📊 Generate Report</button>
+          <button class="btn btn-primary btn-lg" onclick="app.showReport('${this.frameworkId}')">Generate Report</button>
           <button class="btn btn-secondary" onclick="app.questionnaire.goToQuestion(0); app.renderQuestionnaire();">Review Answers</button>
         </div>
       </div>`;

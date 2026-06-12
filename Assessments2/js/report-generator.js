@@ -28,28 +28,33 @@ class ReportGenerator {
     const orgSettings = OrgSettings.get();
     const findings = this.getFindings();
     const counts = findings.priorityCounts;
+    const isAdmin = app.currentUser?.user?.role === 'admin';
 
     let html = `
       <div class="report-page">
         <div class="back-link" onclick="app.showFramework('${this.frameworkId}')">← Back to ${this.framework.shortName}</div>
 
+        ${window.adminViewingUserReport ? `
+        <div style="background: var(--accent-pink); color: white; padding: 12px; text-align: center; border-radius: 8px; margin-bottom: 24px; font-weight: bold;">
+          Viewing as Admin: Read-Only User Report (User ID: ${window.adminViewingUserReport.userId})
+        </div>` : ''}
         <div class="report-header">
           <h1>${this.framework.name}</h1>
           <p class="report-meta">Assessment Report • Generated on ${date}</p>
           <div class="report-actions">
-            <button class="btn btn-primary" id="download-pdf-btn" onclick="app.reportGen.exportPDF(event)">📥 Download PDF Report</button>
-            <button class="btn btn-secondary" onclick="app.startAssessment('${this.frameworkId}')">🔄 Retake Assessment</button>
-            <button class="btn btn-ghost" onclick="window.print()">🖨️ Print</button>
+            <button class="btn btn-primary" id="download-pdf-btn" onclick="app.reportGen.exportPDF(event)">Download PDF Report</button>
+            ${!window.adminViewingUserReport ? `<button class="btn btn-secondary" onclick="app.startAssessment('${this.frameworkId}')">Retake Assessment</button>` : ''}
           </div>
         </div>
 
-        ${OrgSettings.renderSettingsBar()}
+        ${!window.adminViewingUserReport ? OrgSettings.renderSettingsBar() : ''}
 
         <div id="report-content" class="formal-report-doc">
           ${this.renderFormalCover(orgSettings, date, overall, scoreClass, scoreLabel)}
           ${this.renderExecutiveSection(overall, modules, counts)}
+          ${this.renderCriticalFindingsSection(findings)}
           ${this.renderModuleScoresSection(modules)}
-          ${this.renderFindingsSection(findings)}
+          ${isAdmin ? this.renderFindingsSection(findings) : ''}
           ${this.renderAiSection()}
         </div>
       </div>`;
@@ -59,7 +64,7 @@ class ReportGenerator {
 
   renderFormalCover(org, date, overall, scoreClass, scoreLabel) {
     const orgName = org.organizationName || 'Organization';
-    const industry = org.industry ? OrgSettings.getIndustryLabel(org.industry) : '';
+    const footprint = org.employeeCount ? `${org.employeeCount} Employees • ${org.officeLocations} Offices` : '';
     return `
       <div class="formal-cover">
         <div class="formal-cover-top">
@@ -68,7 +73,7 @@ class ReportGenerator {
         </div>
         <h2 class="formal-cover-title">${this.escapeHtml(this.framework.name)}</h2>
         <p class="formal-cover-org">${this.escapeHtml(orgName)}</p>
-        ${industry ? `<p class="formal-cover-meta">Industry: ${this.escapeHtml(industry)}</p>` : ''}
+        ${footprint ? `<p class="formal-cover-meta">${this.escapeHtml(footprint)}</p>` : ''}
         <p class="formal-cover-meta">Assessment Report • ${date}</p>
         ${org.requirementsDetails ? `<p class="formal-cover-req"><strong>Requirements:</strong> ${this.escapeHtml(org.requirementsDetails)}</p>` : ''}
         <div class="formal-cover-score">
@@ -98,6 +103,43 @@ class ReportGenerator {
         <h4 class="formal-subtitle">Findings by Priority</h4>
         ${this.renderPriorityBoxes(counts)}
       </section>`;
+  }
+
+  renderCriticalFindingsSection(findings) {
+    const criticalRows = findings.rows.filter(r => r.criticality === 'HIGH');
+    if (criticalRows.length === 0) {
+      return '';
+    }
+
+    return `
+      <section class="formal-section critical-findings-section" style="border: 2px solid #ef4444; border-radius: 8px; padding: 24px; background: rgba(239, 68, 68, 0.02); margin-top: 24px;">
+        <h3 class="formal-section-title" style="color: #ef4444; margin-top: 0; display: flex; align-items: center; gap: 8px; font-size: 1.2rem; border-bottom: 2px solid #ef4444; padding-bottom: 8px;">
+          <span>Critical Findings & Urgent Gaps</span>
+        </h3>
+        <p class="formal-section-note" style="color: #64748b; margin-bottom: 16px; font-size: 0.85rem;">The following high-priority controls are missing or only partially implemented, representing immediate security exposure. Remediate these items urgently.</p>
+        <div class="critical-findings-grid" style="display: flex; flex-direction: column; gap: 16px;">
+          ${criticalRows.map(r => `
+            <div class="critical-finding-card" style="border-left: 4px solid #ef4444; background: #fff; border-top: 1px solid #e2e4e8; border-right: 1px solid #e2e4e8; border-bottom: 1px solid #e2e4e8; border-radius: 6px; padding: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 12px; flex-wrap: wrap;">
+                <span style="font-weight: 700; color: #1a1a1b; font-size: 1rem; font-family: inherit;">[Ref ${r.ref}] ${this.escapeHtml(r.summary)}</span>
+                <span class="criticality-badge high" style="flex-shrink:0;">${r.criticality}</span>
+              </div>
+              <div style="font-size: 0.88rem; color: #475569; margin-bottom: 10px; line-height: 1.45;">
+                <strong>Current State / Gap:</strong> ${this.escapeHtml(r.description)}
+              </div>
+              <div style="font-size: 0.88rem; color: #1a1a1b; line-height: 1.5; padding: 12px; background: #fbf9ff; border-left: 3px solid #5b2c8e; border-radius: 0 4px 4px 0;">
+                <strong>HiQurate Advisory Recommendation:</strong> ${this.escapeHtml(r.recommendation)}
+              </div>
+              ${r.action ? `
+                <div style="font-size: 0.82rem; color: #475569; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #e2e4e8; line-height: 1.4;">
+                  <strong>Remediation Steps:</strong> ${this.escapeHtml(r.action)}
+                </div>
+              ` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `;
   }
 
   renderPriorityBoxes(counts) {
@@ -176,7 +218,7 @@ class ReportGenerator {
               <tr>
                 <td class="col-ref">${r.ref}</td>
                 <td>${this.escapeHtml(r.function)}</td>
-                <td class="col-summary">${this.escapeHtml(r.summary)}</td>
+                <td class="col-summary">${this.escapeHtml(r.finding)}</td>
                 <td class="col-rec">${this.escapeHtml(this.truncate(r.recommendation, 160))}</td>
                 <td><span class="criticality-badge ${r.criticality.toLowerCase()}">${r.criticality}</span></td>
               </tr>`).join('')}
@@ -188,15 +230,16 @@ class ReportGenerator {
   }
 
   renderAiSection() {
+    const isAdmin = app.currentUser?.user?.role === 'admin';
     return `
       <section class="formal-section formal-section-ai">
         <h3 class="formal-section-title">AI Remediation</h3>
         <p class="formal-section-note">PDF findings use Hiqurates AI for control-specific recommendations. Generate an executive remediation summary below.</p>
         <div id="ai-recommendations-content" class="ai-recommendations-content">
           <button class="btn btn-ai" id="generate-ai-btn" onclick="app.reportGen.generateAIRecommendations()">
-            <span class="ai-btn-icon">✨</span> Generate Executive Summary
+            <span class="ai-btn-icon"></span> Generate Executive Summary
           </button>
-          <button class="btn btn-ghost" style="margin-left:8px" onclick="app.reportGen.enrichFindingsNow()">🔄 Refresh PDF recommendations</button>
+          ${isAdmin ? `<button class="btn btn-ghost" style="margin-left:8px" onclick="app.reportGen.enrichFindingsNow()">Refresh PDF recommendations</button>` : ''}
         </div>
       </section>`;
   }
@@ -218,6 +261,48 @@ class ReportGenerator {
   initCharts() {
     this.destroyCharts();
     this.animateScore();
+    this.autoEnrichFindings();
+  }
+
+  async autoEnrichFindings() {
+    if (!aiService.isConfigured || !this.questionnaire) return;
+
+    const currentAnswers = localStorage.getItem(`cybershield_answers_${this.frameworkId}`);
+    const cachedRaw = localStorage.getItem(aiService.getFindingsCacheKey(this.frameworkId));
+    if (cachedRaw) {
+      try {
+        const data = JSON.parse(cachedRaw);
+        if (data.answersHash === aiService.hashString(currentAnswers || '')) {
+          return; // Valid cache exists, skip
+        }
+      } catch (e) {}
+    }
+
+    const findingsTable = document.querySelector('.formal-findings-table');
+    if (findingsTable) {
+      const loader = document.createElement('div');
+      loader.id = 'ai-enrichment-loader';
+      loader.style.cssText = 'display:flex;align-items:center;gap:8px;padding:12px;background:rgba(91,44,142,0.05);border:1px solid rgba(91,44,142,0.2);border-radius:6px;margin-bottom:12px;font-size:0.85rem;color:#5b2c8e;';
+      loader.innerHTML = `
+        <div class="ai-loading-spinner" style="width:14px;height:14px;border:2px solid #5b2c8e;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div>
+        <span>Enhancing report findings and recommendations with AI...</span>
+      `;
+      findingsTable.parentNode.insertBefore(loader, findingsTable);
+    }
+
+    try {
+      const orgSettings = OrgSettings.get();
+      const rawFindings = this.questionnaire.buildFindings(orgSettings);
+      const scores = this.questionnaire.calculateScores();
+      await aiService.enrichFindingsForPdf(this.frameworkId, rawFindings, orgSettings, scores);
+      
+      // Re-render report view to load enriched content
+      app.showReport(this.frameworkId);
+    } catch (err) {
+      console.warn('Auto AI enrichment failed:', err);
+      const loader = document.getElementById('ai-enrichment-loader');
+      if (loader) loader.remove();
+    }
   }
 
   animateScore() {
@@ -309,7 +394,7 @@ class ReportGenerator {
           regenBtn.className = 'ai-regen-actions';
           regenBtn.innerHTML = `
             <button class="btn btn-ghost" onclick="localStorage.removeItem('${aiService.getCacheKey(this.frameworkId)}'); app.reportGen.generateAIRecommendations();">
-              🔄 Regenerate Recommendations
+              Regenerate Recommendations
             </button>`;
           targetEl.appendChild(regenBtn);
         }

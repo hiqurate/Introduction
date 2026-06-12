@@ -68,6 +68,10 @@ class CyberShieldApp {
     const hash = window.location.hash.slice(1) || 'home';
     const parts = hash.split('/');
 
+    if (parts[0] !== 'report') {
+      window.adminViewingUserReport = null;
+    }
+
     if (!this.currentUser && hash !== 'login') {
       window.location.hash = 'login';
       return;
@@ -179,7 +183,7 @@ class CyberShieldApp {
       <section class="section" id="frameworks-section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">🏗️ Security Frameworks</span>
+            <span class="section-tag">Security Frameworks</span>
             <h2>Best-Practice <span class="gradient-text">Frameworks</span></h2>
             <p>Voluntary, industry-standard frameworks that provide structured methodologies for managing cybersecurity risk and improving your security posture.</p>
           </div>
@@ -195,7 +199,7 @@ class CyberShieldApp {
                 <h3>${fw.shortName}</h3>
                 <p>${fw.description}</p>
                 <div class="framework-card-meta">
-                  <span><i>📝</i> ${fw.totalQuestions} questions</span>
+                  <span><i>Questions:</i> ${fw.totalQuestions}</span>
                   <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   ${progress > 0 ? `<span style="color:var(--color-success)"><i>✓</i> In progress</span>` : ''}
                 </div>
@@ -205,7 +209,7 @@ class CyberShieldApp {
           </div>
 
           <div class="section-header" style="margin-top:64px">
-            <span class="section-tag">🏢 Industry Modules</span>
+            <span class="section-tag">Industry Modules</span>
             <h2>Industry-Specific <span class="gradient-text">Assessments</span></h2>
             <p>AI-powered risk assessments tailored to your specific sector, focusing on key threats, required controls, and realistic business impact.</p>
           </div>
@@ -221,7 +225,7 @@ class CyberShieldApp {
                 <h3>${fw.shortName}</h3>
                 <p>${fw.description}</p>
                 <div class="framework-card-meta">
-                  <span><i>📝</i> ${fw.totalQuestions} questions</span>
+                  <span><i>Questions:</i> ${fw.totalQuestions}</span>
                   <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   ${progress > 0 ? `<span style="color:var(--color-success)"><i>✓</i> In progress</span>` : ''}
                 </div>
@@ -236,7 +240,7 @@ class CyberShieldApp {
       <section class="section" id="how-it-works">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">📋 Process</span>
+            <span class="section-tag">Process</span>
             <h2>How It <span class="gradient-text">Works</span></h2>
             <p>Complete your cybersecurity assessment in four simple steps.</p>
           </div>
@@ -340,17 +344,17 @@ class CyberShieldApp {
                 <p>${fw.longDescription}</p>
                 <div class="framework-tags">
                   ${fw.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                  <span class="type-badge ${fw.type === 'framework' ? 'type-framework' : 'type-compliance'}">${fw.type === 'framework' ? '🏗️ Framework' : '🏢 Industry Module'}</span>
+                  <span class="type-badge ${fw.type === 'framework' ? 'type-framework' : 'type-compliance'}">${fw.type === 'framework' ? 'Framework' : 'Industry Module'}</span>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-                  <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">📝 ${totalQ} Questions</span>
+                  <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">Questions: ${totalQ}</span>
                   <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">⏱️ ${fw.estimatedTime}</span>
-                  <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">📊 ${fw.scoringModel}</span>
+                  <span class="tag" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">Score: ${fw.scoringModel}</span>
                 </div>
                 <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
-                  <button class="btn btn-primary btn-lg" onclick="app.startAssessment('${frameworkId}')">${hasProgress ? '▶ Continue Assessment' : '🚀 Start Assessment'}</button>
+                  <button class="btn btn-primary btn-lg" onclick="app.startAssessment('${frameworkId}')">${hasProgress ? 'Continue Assessment' : 'Start Assessment'}</button>
                   ${hasProgress ? `
-                    <button class="btn btn-success" onclick="app.showReport('${frameworkId}')">📊 View Report (${Math.round(answeredCount/totalQ*100)}%)</button>
+                    <button class="btn btn-success" onclick="app.showReport('${frameworkId}')">View Report (${Math.round(answeredCount/totalQ*100)}%)</button>
                     <button class="btn btn-danger btn-sm" onclick="if(confirm('This will clear all your answers. Are you sure?')){localStorage.removeItem('cybershield_answers_${frameworkId}');app.showFramework('${frameworkId}');}">Reset</button>
                   ` : ''}
                 </div>
@@ -472,11 +476,11 @@ class CyberShieldApp {
         if (content) {
           content.innerHTML = `
             <div class="completion-screen">
-              <div class="completion-icon" style="background:rgba(0, 212, 255, 0.15);border-color:var(--accent-cyan)">📊</div>
+              <div class="completion-icon" style="background:rgba(0, 212, 255, 0.15);border-color:var(--accent-cyan)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feather"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
               <h2>Assessment Review</h2>
               <p>You've completed ${this.questionnaire.getAnsweredCount()} of ${this.questionnaire.getTotalQuestions()} questions (${this.questionnaire.getProgress()}%). You can generate a partial report or continue answering remaining questions.</p>
               <div style="display:flex;gap:16px;justify-content:center;margin-top:24px;flex-wrap:wrap">
-                <button class="btn btn-primary btn-lg" onclick="app.showReport('${this.currentFramework}')">📊 Generate Report</button>
+                <button class="btn btn-primary btn-lg" onclick="app.showReport('${this.currentFramework}')">Generate Report</button>
                 <button class="btn btn-secondary" onclick="app.questionnaire.goToQuestion(app.questionnaire.findFirstUnanswered()); app.renderQuestionnaire();">Continue Answering</button>
               </div>
             </div>`;
@@ -529,7 +533,7 @@ class CyberShieldApp {
       <section class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">🏗️ Security Frameworks</span>
+            <span class="section-tag">Security Frameworks</span>
             <h2>Framework <span class="gradient-text">Assessments</span></h2>
             <p>Start or continue voluntary framework-based assessments to evaluate your security posture.</p>
           </div>
@@ -546,7 +550,7 @@ class CyberShieldApp {
                   <h3>${fw.shortName}</h3>
                   <p>${fw.description}</p>
                   <div class="framework-card-meta">
-                    <span><i>📝</i> ${fw.totalQuestions} questions</span>
+                    <span><i>Questions:</i> ${fw.totalQuestions}</span>
                     <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   </div>
                   <div class="framework-card-type"><span class="type-badge type-framework">Framework</span></div>
@@ -559,7 +563,7 @@ class CyberShieldApp {
           </div>
 
           <div class="section-header" style="margin-top:64px">
-            <span class="section-tag">🏢 Industry Modules</span>
+            <span class="section-tag">Industry Modules</span>
             <h2>Industry <span class="gradient-text">Assessments</span></h2>
             <p>Assess your organization's adherence to industry-specific risk mitigation standards.</p>
           </div>
@@ -576,7 +580,7 @@ class CyberShieldApp {
                   <h3>${fw.shortName}</h3>
                   <p>${fw.description}</p>
                   <div class="framework-card-meta">
-                    <span><i>📝</i> ${fw.totalQuestions} questions</span>
+                    <span><i>Questions:</i> ${fw.totalQuestions}</span>
                     <span><i>⏱️</i> ${fw.estimatedTime}</span>
                   </div>
                   <div class="framework-card-type"><span class="type-badge type-compliance">Industry Module</span></div>

@@ -2,7 +2,7 @@ const MANUFACTURING_DATA = {
   id: 'manufacturing',
   modules: [
     {
-      id: 'ot_network', name: 'Network & ICS Segmentation', description: 'IT/OT isolation, firewalls, and network controls.', icon: '🌐',
+      id: 'ot_network', name: 'Network & ICS Segmentation', description: 'IT/OT isolation, firewalls, and network controls.', icon: '',
       categories: [
         { id: 'segmentation', name: 'IT/OT Segregation', description: 'Separating networks.', questions: [
           { id: 'MFG-1.1', text: 'Do you segregate your OT/Industrial Control Systems (ICS) network from IT network?', context: 'Network diagram', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -22,7 +22,7 @@ const MANUFACTURING_DATA = {
       ]
     },
     {
-      id: 'asset_mgmt', name: 'Asset Management (IoT/OT)', description: 'Inventory, patching, and lifecycle management.', icon: '💻',
+      id: 'asset_mgmt', name: 'Asset Management (IoT/OT)', description: 'Inventory, patching, and lifecycle management.', icon: '',
       categories: [
         { id: 'inventory', name: 'Device Inventory', description: 'Tracking SCADA/IoT devices.', questions: [
           { id: 'MFG-2.1', text: 'Are IoT/SCADA devices (sensors, controllers) inventoried and patched?', context: 'Asset inventory, patch logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -43,7 +43,7 @@ const MANUFACTURING_DATA = {
       ]
     },
     {
-      id: 'bcp_ir', name: 'Business Continuity & IR', description: 'Disaster recovery and incident response.', icon: '🔄',
+      id: 'bcp_ir', name: 'Business Continuity & IR', description: 'Disaster recovery and incident response.', icon: '',
       categories: [
         { id: 'ir', name: 'Incident Response', description: 'Planning for disruptions.', questions: [
           { id: 'MFG-3.1', text: 'Is there an incident response plan specific to production disruptions or ransomware?', context: 'IR plan, BCP procedures', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -60,7 +60,7 @@ const MANUFACTURING_DATA = {
       ]
     },
     {
-      id: 'vendor_supply', name: 'Supply Chain/Vendor Risk', description: 'Remote access, vendor assessments, and supply chain.', icon: '🔗',
+      id: 'vendor_supply', name: 'Supply Chain/Vendor Risk', description: 'Remote access, vendor assessments, and supply chain.', icon: '',
       categories: [
         { id: 'mfa', name: 'Remote Access', description: 'Vendor maintenance access.', questions: [
           { id: 'MFG-4.1', text: 'Do you require MFA for remote maintenance or vendor access to equipment?', context: 'MFA logs, vendor access records', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -76,7 +76,7 @@ const MANUFACTURING_DATA = {
       ]
     },
     {
-      id: 'data_physical', name: 'IP, Physical Security & Training', description: 'Design encryption, site security, and staff awareness.', icon: '🛡️',
+      id: 'data_physical', name: 'IP, Physical Security & Training', description: 'Design encryption, site security, and staff awareness.', icon: '',
       categories: [
         { id: 'ip_encrypt', name: 'IP Encryption', description: 'Securing sensitive designs.', questions: [
           { id: 'MFG-5.1', text: 'Do you encrypt sensitive design/IP data at rest?', context: 'Encryption policy, logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

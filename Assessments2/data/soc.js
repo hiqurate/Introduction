@@ -11,7 +11,7 @@ const SOC_DATA = {
       id: 'mission_governance',
       name: 'Mission & Governance',
       description: 'Evaluate SOC mission alignment, charter documentation, governance structures, and stakeholder engagement.',
-      icon: '🎯',
+      icon: '',
       categories: [
         {
           id: 'business_drivers',
@@ -52,7 +52,7 @@ const SOC_DATA = {
       id: 'people',
       name: 'People',
       description: 'Assess SOC staffing, skills, training, and organizational structure.',
-      icon: '👥',
+      icon: '',
       categories: [
         {
           id: 'org_structure',
@@ -83,7 +83,7 @@ const SOC_DATA = {
       id: 'process',
       name: 'Process',
       description: 'Evaluate SOC operational processes, incident management, threat intelligence, and continuous improvement.',
-      icon: '⚙️',
+      icon: '',
       categories: [
         {
           id: 'incident_management',
@@ -122,7 +122,7 @@ const SOC_DATA = {
       id: 'technology',
       name: 'Technology',
       description: 'Assess SOC technology stack including SIEM, EDR, SOAR, and supporting tools.',
-      icon: '🖥️',
+      icon: '',
       categories: [
         {
           id: 'siem',
@@ -152,7 +152,7 @@ const SOC_DATA = {
       id: 'coverage',
       name: 'Coverage',
       description: 'Assess the breadth and depth of SOC monitoring coverage across the environment.',
-      icon: '📊',
+      icon: '',
       categories: [
         {
           id: 'monitoring_scope',

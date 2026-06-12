@@ -59,7 +59,12 @@ class AIService {
   /**
    * Build the prompt from assessment data
    */
-  buildPrompt(frameworkName, overallScore, gaps, recommendations, modules) {
+  buildPrompt(frameworkName, overallScore, gaps, recommendations, modules, orgSettings = {}) {
+    const orgName = orgSettings.organizationName || 'Organization';
+    const employees = orgSettings.employeeCount || 'not specified';
+    const offices = orgSettings.officeLocations || 'not specified';
+    const tools = (orgSettings.securityTools || []).join(', ') || 'None reported';
+
     const gapSummary = gaps.slice(0, 10).map(g =>
       `- ${g.name}: ${g.percentage}% (${g.severityLabel} severity, ${g.answered}/${g.total} answered)`
     ).join('\n');
@@ -72,7 +77,14 @@ class AIService {
       `- [${r.priority}] ${r.title}: ${r.description}`
     ).join('\n');
 
-    return `You are an expert cybersecurity consultant. Based on the following ${frameworkName} assessment results, provide specific, actionable remediation recommendations for each identified gap. Focus on practical steps the organization can take to improve their security posture.
+    return `You are an expert cybersecurity advisory consultant from HiQurate.
+Based on the following ${frameworkName} assessment results, provide specific, highly tailored, and actionable remediation recommendations for ${orgName}.
+
+## Organization Profile
+- Company Name: ${orgName}
+- Company Size: ${employees} employees
+- Office Locations: ${offices} locations
+- Existing Security Technologies: ${tools}
 
 ## Assessment Overview
 - Overall Score: ${overallScore}%
@@ -87,14 +99,19 @@ ${gapSummary || 'No significant gaps identified.'}
 ## Current Recommendations
 ${recSummary || 'No critical recommendations.'}
 
-## Instructions
-For each gap area, provide:
-1. **What's at risk**: Brief explanation of the security risk
-2. **Quick wins**: Immediate actions (can be done in 1-2 weeks)  
-3. **Medium-term fixes**: Actions for 1-3 months
-4. **Long-term strategy**: Strategic improvements for 3-12 months
+## Instructions for Report Generation & Advisory Alignment:
+1. **Contextual Tailoring**: Customize all findings, risks, and timelines specifically to the company's size (${employees} employees) and footprint (${offices} locations). For example, a larger footprint requires centralized, automated controls rather than localized manual checks.
+2. **Existing Technologies Integration**: Do not suggest implementing tools they already have (which are: ${tools}). Instead, recommend *integrating* or *optimizing* those existing technologies (e.g. integrating EDR logs with SIEM).
+3. **Advisory Remediation Pathways**: Provide a natural, professional path toward HiQurate's security remediation services. The tone must be expert and advisory, NOT sales-oriented.
+   - For example: if they lack SIEM: "The organization currently lacks centralized security monitoring and alert management capabilities. Implementing a SIEM platform integrated with key security technologies such as endpoint protection, firewalls, identity systems, and cloud services would improve threat detection, incident visibility, and compliance reporting."
+   - If they lack EDR: "To mitigate endpoint risks, establish an EDR program covering all workstations to provide behavior-based threat hunting, isolation capabilities, and detailed forensic logging."
+   - If they lack Vulnerability Management: "Establish a continuous vulnerability management program to identify and remediate server and endpoint vulnerabilities before exploitation."
+4. **Structured Format**: For each major gap area, structure your output as:
+   - **What's at risk**: Contextual risk explanation
+   - **Remediation Strategy**: Actionable steps mapped to 1-2 weeks (Quick wins), 1-3 months (Medium-term), and 3-12 months (Long-term)
+   - **Strategic Advisory**: How they can partner with HiQurate to build, manage, or audit this capability.
 
-Keep recommendations specific and practical. Use bullet points. Focus on the most critical gaps first. Keep the total response concise and actionable (under 800 words).`;
+Keep recommendations specific, practical, and highly aligned with their actual organization profile. Under 800 words.`;
   }
 
   /**
@@ -158,22 +175,28 @@ Keep recommendations specific and practical. Use bullet points. Focus on the mos
       owner: r.owner
     }));
 
-    const industry = orgSettings.industry ? OrgSettings.getIndustryLabel(orgSettings.industry) : 'General';
     const org = orgSettings.organizationName || 'Organization';
+    const employees = orgSettings.employeeCount || 'not specified';
+    const offices = orgSettings.officeLocations || 'not specified';
+    const tools = (orgSettings.securityTools || []).join(', ') || 'None';
     const req = orgSettings.requirementsDetails || 'None specified';
 
-    return `You are a senior cybersecurity assessor writing remediation text for a formal audit report.
+    return `You are a senior cybersecurity assessor from HiQurate writing remediation text for a formal audit report.
 
 Organization: ${org}
-Industry: ${industry}
+Company Size: ${employees} employees
+Footprint: ${offices} office locations
+Existing Security Technologies: ${tools}
 Framework: ${framework.name}
 Overall score: ${scores.overall.percentage}%
 Requirements context: ${req}
 
-For EACH finding below, write specific, practical content (not generic boilerplate). Reference the actual control and current state.
+For EACH finding below, write specific, practical content (not generic boilerplate). Reference the actual control, the current state, and the organization's size/footprint context.
+Align recommendations with their existing technologies (${tools}). For example, if they have SIEM but lack central logging on endpoints, recommend forwarding logs to the existing SIEM.
+Ensure recommendations offer a natural path to HiQurate's advisory and implementation services in a non-salesy, professional manner (e.g. suggesting implementing a SIEM platform, EDR deployment, IAM strategy, or vulnerability program audits).
 
-Return ONLY a JSON array (no markdown fences), each object:
-{"ref":"1.01","finding":"one sentence current-state summary","recommendation":"2-3 sentences: what to do and why","action":"numbered steps the owner can execute in 30-90 days"}
+Return ONLY a JSON array (no markdown fences, no extra text, valid JSON), where each object is:
+{"ref":"[ref]","finding":"one sentence current-state summary tailored to company profile","recommendation":"2-3 sentences: what to do, why, and how it aligns with their IT footprint, incorporating advisory pathways","action":"numbered steps the owner can execute in 30-90 days"}
 
 Findings:
 ${JSON.stringify(items, null, 2)}`;
@@ -362,12 +385,14 @@ ${JSON.stringify(items, null, 2)}`;
     }
 
     // Build prompt and stream
+    const orgSettings = OrgSettings.get();
     const prompt = this.buildPrompt(
       framework.name,
       scores.overall.percentage,
       scores.gaps,
       scores.recommendations,
-      scores.modules
+      scores.modules,
+      orgSettings
     );
 
     targetEl.innerHTML = '<span class="ai-cursor">▊</span>';
@@ -592,30 +617,30 @@ ${JSON.stringify(items, null, 2)}`;
       if (err.message.includes('API_KEY_INVALID') || err.message.includes('API key')) {
         errorHtml = `
           <div class="ai-error-box">
-            <p><strong>⚠️ AI authentication failed</strong></p>
+            <p><strong>Warning: AI authentication failed</strong></p>
             <p>The configured AI credentials are invalid or expired. Please contact your Hiqurates administrator.</p>
-            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">🔄 Retry</button>
+            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">Retry</button>
           </div>`;
       } else if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RATE_LIMIT')) {
         errorHtml = `
           <div class="ai-error-box">
-            <p><strong>⚠️ Rate Limit Reached</strong></p>
+            <p><strong>Warning: Rate Limit Reached</strong></p>
             <p>You've exceeded the free tier rate limit. Please wait a moment and try again.</p>
-            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">🔄 Retry</button>
+            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">Retry</button>
           </div>`;
       } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
         errorHtml = `
           <div class="ai-error-box">
-            <p><strong>⚠️ Connection Failed</strong></p>
+            <p><strong>Warning: Connection Failed</strong></p>
             <p>Could not reach the AI service. Check your network connection and try again.</p>
-            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">🔄 Retry</button>
+            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">Retry</button>
           </div>`;
       } else {
         errorHtml = `
           <div class="ai-error-box">
-            <p><strong>⚠️ AI Generation Failed</strong></p>
+            <p><strong>Warning: AI Generation Failed</strong></p>
             <p>${err.message}</p>
-            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">🔄 Retry</button>
+            <button class="btn btn-secondary" onclick="app.reportGen.retryAI()" style="margin-top:12px">Retry</button>
           </div>`;
       }
 

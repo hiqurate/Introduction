@@ -56,12 +56,18 @@ class PdfReportBuilder {
     const { jsPDF } = window.jspdf;
     this.doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
 
+    const isAdmin = window.app?.currentUser?.user?.role === 'admin';
+
     this.drawCover();
     this.drawIntroduction();
     this.drawExecutiveSummary();
-    this.drawFindingsTable();
-    this.drawObservationsTable();
-    this.drawModuleSummary();
+    this.drawCriticalFindingsSection();
+
+    if (isAdmin) {
+      this.drawFindingsTable();
+      this.drawObservationsTable();
+      this.drawModuleSummary();
+    }
     this.addFootersToAllPages();
   }
 
@@ -106,7 +112,8 @@ class PdfReportBuilder {
   drawCover() {
     const doc = this.doc;
     const orgName = this.orgSettings.organizationName || 'Organization';
-    const industry = OrgSettings.getIndustryLabel(this.orgSettings.industry);
+    const footprint = this.orgSettings.employeeCount ? `${this.orgSettings.employeeCount} Employees • ${this.orgSettings.officeLocations} Offices` : '';
+    const toolsStr = (this.orgSettings.securityTools || []).join(', ') || 'None reported';
     const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     doc.setFillColor(...PDF_THEME.primary);
@@ -134,8 +141,12 @@ class PdfReportBuilder {
     doc.text(orgName, this.margin, y);
     y += 8;
     doc.setFontSize(11);
-    doc.text(`Industry: ${industry}`, this.margin, y);
-    y += 7;
+    if (footprint) {
+      doc.text(`Size & Footprint: ${footprint}`, this.margin, y);
+      y += 6;
+    }
+    doc.text(`Existing Technologies: ${toolsStr}`, this.margin, y);
+    y += 6;
     doc.text(`Assessment Report • ${date}`, this.margin, y);
 
     if (this.orgSettings.requirementsDetails) {
@@ -183,7 +194,8 @@ class PdfReportBuilder {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...PDF_THEME.text);
 
-    const healthCheckIntro = `This report presents the results of a ${this.framework.shortName} security and compliance health check conducted for ${this.orgSettings.organizationName || 'the organization'}. ${OrgSettings.getIndustryContext(this.orgSettings.industry)}`;
+    const footprint = this.orgSettings.employeeCount ? ` (${this.orgSettings.employeeCount} employees across ${this.orgSettings.officeLocations} locations)` : '';
+    const healthCheckIntro = `This report presents the results of a ${this.framework.shortName} security and compliance health check conducted for ${this.orgSettings.organizationName || 'the organization'}${footprint}. The findings are prioritized based on control criticality and the organization's unique operating scale and security profile.`;
     const introLines = doc.splitTextToSize(healthCheckIntro, this.contentWidth);
     doc.text(introLines, this.margin, y);
     y += introLines.length * 5 + 4;
@@ -361,11 +373,66 @@ class PdfReportBuilder {
     });
   }
 
+  drawCriticalFindingsSection() {
+    const doc = this.doc;
+    this.drawPageHeader();
+    let y = this.contentTop;
+    y = this.drawSectionHeading('6 Critical Security Findings', y);
+
+    const criticalRows = this.findings.rows.filter(r => r.criticality === 'HIGH');
+    const isAdmin = window.app?.currentUser?.user?.role === 'admin';
+    if (criticalRows.length === 0) {
+      doc.setFontSize(10);
+      doc.setTextColor(...PDF_THEME.textMuted);
+      doc.text('No critical, high-risk security gaps were identified during this assessment.', this.margin, y + 6);
+      if (isAdmin) {
+        doc.addPage();
+      }
+      return;
+    }
+
+    doc.setFontSize(10);
+    doc.setTextColor(...PDF_THEME.text);
+    const introText = doc.splitTextToSize(
+      'The following critical security controls were found to be missing or only partially implemented. These represent the highest priority security risks and should be remediated immediately.',
+      this.contentWidth
+    );
+    doc.text(introText, this.margin, y);
+    y += introText.length * 5 + 6;
+
+    const head = [['Ref', 'Area', 'Summary', 'Critical Risk & Recommendation']];
+    const body = criticalRows.map(r => [
+      r.ref,
+      r.function,
+      r.summary,
+      `Observation: ${r.description}\n\nRecommendation: ${r.recommendation}`
+    ]);
+
+    doc.autoTable({
+      startY: y,
+      head,
+      body,
+      margin: { left: this.margin, right: this.margin, bottom: 22, top: 18 },
+      styles: { fontSize: 8, cellPadding: 3, overflow: 'linebreak', valign: 'top' },
+      headStyles: { fillColor: [226, 31, 38], textColor: PDF_THEME.white, fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 15, fontStyle: 'bold' },
+        1: { cellWidth: 35 },
+        2: { cellWidth: 40 },
+        3: { cellWidth: 90 }
+      }
+    });
+
+    if (isAdmin) {
+      doc.addPage();
+    }
+  }
+
   drawFindingsTable() {
     const doc = this.doc;
     this.drawPageHeader();
     let y = this.contentTop;
-    y = this.drawSectionHeading('6 Detailed Findings', y);
+    y = this.drawSectionHeading('7 Detailed Findings', y);
 
     if (!this.findings.rows.length) {
       doc.setFontSize(10);
@@ -386,7 +453,7 @@ class PdfReportBuilder {
         body.push([
           row.ref,
           row.function,
-          row.summary,
+          row.finding,
           row.description,
           row.criticality,
           row.owner
@@ -429,7 +496,7 @@ class PdfReportBuilder {
     const doc = this.doc;
     this.drawPageHeader();
     let y = this.contentTop;
-    y = this.drawSectionHeading('7 Detailed Review and Observations', y);
+    y = this.drawSectionHeading('8 Detailed Review and Observations', y);
 
     if (!this.findings.rows.length) {
       doc.setFontSize(10);
@@ -473,7 +540,7 @@ class PdfReportBuilder {
     const doc = this.doc;
     doc.addPage();
     this.drawPageHeader();
-    const y = this.drawSectionHeading('8 Category Score Summary', this.contentTop);
+    const y = this.drawSectionHeading('9 Category Score Summary', this.contentTop);
     const body = this.scores.categories.map(c => [
       c.name,
       `${c.percentage}%`,

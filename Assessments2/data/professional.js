@@ -2,7 +2,7 @@ const PROFESSIONAL_DATA = {
   id: 'professional',
   modules: [
     {
-      id: 'access_email', name: 'Identity & Email Security', description: 'MFA, encrypted communications, and client data access.', icon: '📧',
+      id: 'access_email', name: 'Identity & Email Security', description: 'MFA, encrypted communications, and client data access.', icon: '',
       categories: [
         { id: 'mfa', name: 'Authentication', description: 'MFA for remote access.', questions: [
           { id: 'PRO-1.1', text: 'Is multi-factor auth enforced on all remote-access (VPN, email) and admin accounts?', context: 'Auth logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -22,7 +22,7 @@ const PROFESSIONAL_DATA = {
       ]
     },
     {
-      id: 'endpoint_cloud', name: 'Endpoint & Cloud Security', description: 'MDM, Drive settings, and remote work.', icon: '💻',
+      id: 'endpoint_cloud', name: 'Endpoint & Cloud Security', description: 'MDM, Drive settings, and remote work.', icon: '',
       categories: [
         { id: 'endpoint', name: 'Device Security', description: 'Encrypting laptops.', questions: [
           { id: 'PRO-2.1', text: 'Are employee laptops fully encrypted and managed (MDM)?', context: 'MDM console', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -43,7 +43,7 @@ const PROFESSIONAL_DATA = {
       ]
     },
     {
-      id: 'access_audit', name: 'Access Reviews & Audits', description: 'Least privilege, monitoring, and compliance.', icon: '🔐',
+      id: 'access_audit', name: 'Access Reviews & Audits', description: 'Least privilege, monitoring, and compliance.', icon: '',
       categories: [
         { id: 'access', name: 'Rights Management', description: 'Quarterly access reviews.', questions: [
           { id: 'PRO-3.1', text: 'Are access rights reviewed quarterly for each client/project?', context: 'Access matrix', weight: 3, options: [{label: 'Never', value: 0}, {label: 'Annually', value: 1}, {label: 'Quarterly', value: 5}] },
@@ -62,7 +62,7 @@ const PROFESSIONAL_DATA = {
       ]
     },
     {
-      id: 'training_resilience', name: 'Training, IR & Resilience', description: 'Awareness, IR, backups, and business continuity.', icon: '🔄',
+      id: 'training_resilience', name: 'Training, IR & Resilience', description: 'Awareness, IR, backups, and business continuity.', icon: '',
       categories: [
         { id: 'training', name: 'Security Training', description: 'Data handling and phishing.', questions: [
           { id: 'PRO-4.1', text: 'Do you conduct regular security awareness training on phishing and data handling?', context: 'Training certs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

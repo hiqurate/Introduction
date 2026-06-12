@@ -2,7 +2,7 @@ const FINTECH_DATA = {
   id: 'fintech',
   modules: [
     {
-      id: 'access_identity', name: 'Identity & Access Control', description: 'MFA, RBAC, and privileged access management.', icon: '🔐',
+      id: 'access_identity', name: 'Identity & Access Control', description: 'MFA, RBAC, and privileged access management.', icon: '',
       categories: [
         { id: 'mfa', name: 'Authentication', description: 'MFA for finance apps.', questions: [
           { id: 'FT-1.1', text: 'Do you enforce MFA on all banking/finance applications (online banking, trading)?', context: 'MFA config screenshot', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -21,7 +21,7 @@ const FINTECH_DATA = {
       ]
     },
     {
-      id: 'data_security', name: 'Data Security & Tokenization', description: 'Encryption, tokenization, and data handling.', icon: '🛡️',
+      id: 'data_security', name: 'Data Security & Tokenization', description: 'Encryption, tokenization, and data handling.', icon: '',
       categories: [
         { id: 'encryption', name: 'Data at Rest', description: 'Encryption of PII.', questions: [
           { id: 'FT-2.1', text: 'Is customer financial data (transaction logs, PII) encrypted in storage?', context: 'DB encryption settings', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -40,7 +40,7 @@ const FINTECH_DATA = {
       ]
     },
     {
-      id: 'network_app', name: 'Network & Application Security', description: 'Segmentation, API security, and code review.', icon: '🌐',
+      id: 'network_app', name: 'Network & Application Security', description: 'Segmentation, API security, and code review.', icon: '',
       categories: [
         { id: 'segmentation', name: 'Network Architecture', description: 'DMZ and segmentation.', questions: [
           { id: 'FT-3.1', text: 'Is network segmentation in place between public internet systems and core financial systems?', context: 'Network diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -63,7 +63,7 @@ const FINTECH_DATA = {
       ]
     },
     {
-      id: 'fraud_monitoring', name: 'Fraud Monitoring & Audits', description: 'Anomaly detection, pentesting, and compliance.', icon: '📊',
+      id: 'fraud_monitoring', name: 'Fraud Monitoring & Audits', description: 'Anomaly detection, pentesting, and compliance.', icon: '',
       categories: [
         { id: 'monitoring', name: 'Transaction Monitoring', description: 'Detecting anomalies.', questions: [
           { id: 'FT-4.1', text: 'Are transaction systems and databases regularly monitored for anomalies/fraud?', context: 'Monitoring dashboard', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -82,7 +82,7 @@ const FINTECH_DATA = {
       ]
     },
     {
-      id: 'vendor_training_bcp', name: 'Resilience, Vendor & Training', description: 'Training, vendors, BCP, and IR.', icon: '🔄',
+      id: 'vendor_training_bcp', name: 'Resilience, Vendor & Training', description: 'Training, vendors, BCP, and IR.', icon: '',
       categories: [
         { id: 'vendor', name: 'Third-Party Risk', description: 'SLA and assessments.', questions: [
           { id: 'FT-5.1', text: 'Are third-party vendors (payment gateways, cloud) security-assessed and SLA-bound?', context: 'Vendor assessments', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

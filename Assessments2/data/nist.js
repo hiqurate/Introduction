@@ -11,7 +11,7 @@ const NIST_DATA = {
       id: 'identify',
       name: 'IDENTIFY (ID)',
       description: 'Develop organizational understanding to manage cybersecurity risk to systems, people, assets, data, and capabilities.',
-      icon: '🔎',
+      icon: '',
       categories: [
         {
           id: 'id_am',
@@ -78,7 +78,7 @@ const NIST_DATA = {
       id: 'protect',
       name: 'PROTECT (PR)',
       description: 'Develop and implement appropriate safeguards to ensure delivery of critical services.',
-      icon: '🔒',
+      icon: '',
       categories: [
         {
           id: 'pr_ac',
@@ -159,7 +159,7 @@ const NIST_DATA = {
       id: 'detect',
       name: 'DETECT (DE)',
       description: 'Develop and implement appropriate activities to identify the occurrence of a cybersecurity event.',
-      icon: '📡',
+      icon: '',
       categories: [
         {
           id: 'de_ae',
@@ -206,7 +206,7 @@ const NIST_DATA = {
       id: 'respond',
       name: 'RESPOND (RS)',
       description: 'Develop and implement appropriate activities to take action regarding a detected cybersecurity event.',
-      icon: '⚡',
+      icon: '',
       categories: [
         {
           id: 'rs_rp',
@@ -264,7 +264,7 @@ const NIST_DATA = {
       id: 'recover',
       name: 'RECOVER (RC)',
       description: 'Develop and implement appropriate activities to maintain plans for resilience and to restore any capabilities or services impaired due to a cybersecurity event.',
-      icon: '🔄',
+      icon: '',
       categories: [
         {
           id: 'rc_rp',

@@ -2,7 +2,7 @@ const HEALTHCARE_DATA = {
   id: 'healthcare',
   modules: [
     {
-      id: 'data_privacy', name: 'Data & Privacy (PHI)', description: 'Encryption and compliance for patient data.', icon: '🛡️',
+      id: 'data_privacy', name: 'Data & Privacy (PHI)', description: 'Encryption and compliance for patient data.', icon: '',
       categories: [
         { id: 'encryption', name: 'Encryption', description: 'Patient data protection.', questions: [
           { id: 'HC-1.1', text: 'Do you encrypt patient/PHI data at rest and in transit (DB, EMR, devices)?', context: 'Encryption certificates/logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -23,7 +23,7 @@ const HEALTHCARE_DATA = {
       ]
     },
     {
-      id: 'endpoint_medical', name: 'Endpoint & Medical Device Security', description: 'EDR, patching, and medical IoT segmentation.', icon: '💻',
+      id: 'endpoint_medical', name: 'Endpoint & Medical Device Security', description: 'EDR, patching, and medical IoT segmentation.', icon: '',
       categories: [
         { id: 'edr', name: 'Endpoint Protection', description: 'Antivirus and EDR.', questions: [
           { id: 'HC-2.1', text: 'Do you use an EDR (Endpoint Detection & Response) or behavior-based antivirus on all hospital/clinic endpoints?', context: 'EDR deployment report', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -44,7 +44,7 @@ const HEALTHCARE_DATA = {
       ]
     },
     {
-      id: 'access_training', name: 'Access Control & Training', description: 'MFA, RBAC, and phishing awareness.', icon: '🔐',
+      id: 'access_training', name: 'Access Control & Training', description: 'MFA, RBAC, and phishing awareness.', icon: '',
       categories: [
         { id: 'mfa', name: 'MFA', description: 'Multi-factor authentication.', questions: [
           { id: 'HC-3.1', text: 'Are staff required to use MFA for hospital systems (EMR, admin portals)?', context: 'MFA configuration screenshot', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -63,7 +63,7 @@ const HEALTHCARE_DATA = {
       ]
     },
     {
-      id: 'monitoring_physical', name: 'Monitoring & Physical Security', description: 'Logging, SIEM, and physical access controls.', icon: '👁️',
+      id: 'monitoring_physical', name: 'Monitoring & Physical Security', description: 'Logging, SIEM, and physical access controls.', icon: '',
       categories: [
         { id: 'monitoring', name: 'Access Logging', description: 'Monitoring of patient records.', questions: [
           { id: 'HC-4.1', text: 'Do you log and monitor access to patient records and admin systems 24/7?', context: 'SIEM/monitoring screenshots', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -80,7 +80,7 @@ const HEALTHCARE_DATA = {
       ]
     },
     {
-      id: 'backup_ir', name: 'Backup, IR & Network Security', description: 'Ransomware readiness, network, and disaster recovery.', icon: '🔄',
+      id: 'backup_ir', name: 'Backup, IR & Network Security', description: 'Ransomware readiness, network, and disaster recovery.', icon: '',
       categories: [
         { id: 'backup', name: 'Offline Backups', description: 'Data backups.', questions: [
           { id: 'HC-5.1', text: 'Are there offline (disconnected) backups of critical data (imaging, records)?', context: 'Backup logs', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Monthly', value: 2}, {label: 'Weekly', value: 4}, {label: 'Daily', value: 5}] },

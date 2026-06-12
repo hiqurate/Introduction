@@ -20,7 +20,9 @@ const OrgSettings = {
   defaults() {
     return {
       organizationName: '',
-      industry: '',
+      employeeCount: '',
+      officeLocations: '',
+      securityTools: [],
       requirementsDetails: '',
       defaultOwner: 'Organization'
     };
@@ -44,12 +46,12 @@ const OrgSettings = {
 
   hasRequired() {
     const s = this.get();
-    return Boolean(s.organizationName.trim() && s.industry);
+    return Boolean(s.organizationName.trim() && s.employeeCount && s.officeLocations);
   },
 
   getIndustryLabel(industryId) {
     const found = this.INDUSTRIES.find(i => i.id === industryId);
-    return found ? found.label : industryId || 'Not specified';
+    return found ? found.label : industryId || 'General';
   },
 
   getIndustryContext(industryId) {
@@ -69,9 +71,26 @@ const OrgSettings = {
 
   renderSetupPage(frameworkId, framework) {
     const settings = this.get();
-    const industryOptions = this.INDUSTRIES.map(ind => `
-      <option value="${ind.id}" ${settings.industry === ind.id ? 'selected' : ''}>${ind.label}</option>
+    const securityTools = settings.securityTools || [];
+
+    const employeeOptions = [
+      { value: '< 50', label: 'Under 50 employees (Small)' },
+      { value: '50 - 250', label: '50 to 250 employees (Medium)' },
+      { value: '250 - 1000', label: '250 to 1000 employees (Enterprise)' },
+      { value: '1000+', label: '1000+ employees (Large Enterprise)' }
+    ].map(opt => `
+      <option value="${opt.value}" ${settings.employeeCount === opt.value ? 'selected' : ''}>${opt.label}</option>
     `).join('');
+
+    const toolsList = [
+      { id: 'SIEM', label: 'SIEM (Centralized Log Monitoring)' },
+      { id: 'EDR', label: 'EDR / Behavior-based Antivirus' },
+      { id: 'Firewall', label: 'Next-Generation Firewall' },
+      { id: 'IAM', label: 'IAM (Identity & Access Management / SSO)' },
+      { id: 'DLP', label: 'DLP (Data Loss Prevention)' },
+      { id: 'Email Security', label: 'Secure Email Gateway' },
+      { id: 'Vulnerability Management', label: 'Vulnerability Scanning program' }
+    ];
 
     return `
       <div class="assessment-setup-page">
@@ -90,19 +109,38 @@ const OrgSettings = {
             <form id="assessment-setup-form" class="assessment-setup-form" onsubmit="event.preventDefault(); app.submitAssessmentSetup('${frameworkId}');">
               <div class="setup-form-grid">
                 <label class="setup-field setup-field-full">
-                  <span>Organization Name <em class="required">*</em></span>
+                  <span>Company Name <em class="required">*</em></span>
                   <input type="text" id="setup-org-name" required
-                    placeholder="e.g. Acme Healthcare Corp"
+                    placeholder="e.g. Acme Corporation"
                     value="${this.escapeHtml(settings.organizationName)}">
                 </label>
 
                 <label class="setup-field">
-                  <span>Industry <em class="required">*</em></span>
-                  <select id="setup-industry" required>
-                    <option value="">Select industry...</option>
-                    ${industryOptions}
+                  <span>Number of Employees <em class="required">*</em></span>
+                  <select id="setup-employee-count" required>
+                    <option value="">Select size...</option>
+                    ${employeeOptions}
                   </select>
                 </label>
+
+                <label class="setup-field">
+                  <span>Number of Office Locations <em class="required">*</em></span>
+                  <input type="number" id="setup-office-locations" required min="1"
+                    placeholder="e.g. 3"
+                    value="${this.escapeHtml(settings.officeLocations || '1')}">
+                </label>
+
+                <div class="setup-field setup-field-full">
+                  <span>Existing Security Technologies/Tools</span>
+                  <div class="tools-checkbox-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px; padding: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+                    ${toolsList.map(t => `
+                      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" class="setup-tool-checkbox" value="${t.id}" ${securityTools.includes(t.id) ? 'checked' : ''}>
+                        <span>${t.label}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
 
                 <label class="setup-field">
                   <span>Default Owner (findings table)</span>
@@ -131,12 +169,20 @@ const OrgSettings = {
 
   saveFromSetupForm() {
     const orgInput = document.getElementById('setup-org-name');
-    const industryInput = document.getElementById('setup-industry');
+    const employeeInput = document.getElementById('setup-employee-count');
+    const officeInput = document.getElementById('setup-office-locations');
     const requirementsInput = document.getElementById('setup-requirements');
     const ownerInput = document.getElementById('setup-default-owner');
+    
+    const checkboxes = document.querySelectorAll('.setup-tool-checkbox');
+    const securityTools = [];
+    checkboxes.forEach(cb => {
+      if (cb.checked) securityTools.push(cb.value);
+    });
 
     const organizationName = orgInput ? orgInput.value.trim() : '';
-    const industry = industryInput ? industryInput.value : '';
+    const employeeCount = employeeInput ? employeeInput.value : '';
+    const officeLocations = officeInput ? officeInput.value.trim() : '1';
     const requirementsDetails = requirementsInput ? requirementsInput.value.trim() : '';
     const defaultOwner = ownerInput ? ownerInput.value.trim() || 'Organization' : 'Organization';
 
@@ -144,25 +190,30 @@ const OrgSettings = {
       if (orgInput) orgInput.focus();
       return false;
     }
-    if (!industry) {
-      if (industryInput) industryInput.focus();
+    if (!employeeCount) {
+      if (employeeInput) employeeInput.focus();
+      return false;
+    }
+    if (!officeLocations) {
+      if (officeInput) officeInput.focus();
       return false;
     }
 
-    this.set({ organizationName, industry, requirementsDetails, defaultOwner });
+    this.set({ organizationName, employeeCount, officeLocations, securityTools, requirementsDetails, defaultOwner });
     return true;
   },
 
   renderSettingsBar() {
     const settings = this.get();
-    const industryLabel = settings.industry ? this.getIndustryLabel(settings.industry) : 'Not set';
+    const toolsStr = (settings.securityTools || []).join(', ') || 'None reported';
     return `
       <div class="report-settings-bar" id="report-settings-bar">
         <h4>Report Details</h4>
         <p class="report-settings-hint">Captured at assessment setup. <a href="#" onclick="app.showAssessmentSetup(app.currentFramework); return false;">Edit details</a></p>
         <div class="report-settings-summary">
           <div><strong>Organization:</strong> ${this.escapeHtml(settings.organizationName) || '—'}</div>
-          <div><strong>Industry:</strong> ${this.escapeHtml(industryLabel)}</div>
+          <div><strong>Size & Footprint:</strong> ${this.escapeHtml(settings.employeeCount)} Employees • ${parseInt(settings.officeLocations) || 1} Offices</div>
+          <div><strong>Existing Tech:</strong> ${this.escapeHtml(toolsStr)}</div>
           ${settings.requirementsDetails ? `<div><strong>Requirements:</strong> ${this.escapeHtml(settings.requirementsDetails)}</div>` : ''}
         </div>
         <div class="report-settings-fields" style="margin-top:12px">

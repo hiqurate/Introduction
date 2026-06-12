@@ -2,7 +2,7 @@ const RETAIL_DATA = {
   id: 'retail',
   modules: [
     {
-      id: 'access_control', name: 'Identity & Access Control', description: 'Authentication and access policies for retail environments.', icon: '🔐',
+      id: 'access_control', name: 'Identity & Access Control', description: 'Authentication and access policies for retail environments.', icon: '',
       categories: [
         { id: 'auth', name: 'Authentication', description: 'MFA and account security.', questions: [
           { id: 'RET-1.1', text: 'Do you use multi-factor authentication (MFA) for all user and administrator accounts (including e-shop back-end)?', context: 'Screenshot of MFA setup', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -19,7 +19,7 @@ const RETAIL_DATA = {
       ]
     },
     {
-      id: 'network_security', name: 'Network & POS Security', description: 'Segmentation, firewalls, and network controls.', icon: '🌐',
+      id: 'network_security', name: 'Network & POS Security', description: 'Segmentation, firewalls, and network controls.', icon: '',
       categories: [
         { id: 'pos', name: 'POS Systems', description: 'Point-of-sale security.', questions: [
           { id: 'RET-2.1', text: 'Are your point-of-sale (POS) or payment systems segmented from other networks?', context: 'Network diagram, VLAN config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -39,7 +39,7 @@ const RETAIL_DATA = {
       ]
     },
     {
-      id: 'data_protection', name: 'Data Protection & Privacy', description: 'Encryption, PCI compliance, and customer data handling.', icon: '🛡️',
+      id: 'data_protection', name: 'Data Protection & Privacy', description: 'Encryption, PCI compliance, and customer data handling.', icon: '',
       categories: [
         { id: 'encryption', name: 'Encryption', description: 'Data at rest and in transit.', questions: [
           { id: 'RET-3.1', text: 'Is all payment and customer data encrypted at rest and in transit?', context: 'Encryption certificates, logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -59,7 +59,7 @@ const RETAIL_DATA = {
       ]
     },
     {
-      id: 'endpoint_security', name: 'Endpoint & Asset Security', description: 'Patching, AV, MDM, and asset management.', icon: '💻',
+      id: 'endpoint_security', name: 'Endpoint & Asset Security', description: 'Patching, AV, MDM, and asset management.', icon: '',
       categories: [
         { id: 'patching', name: 'Patch Management', description: 'Updates and patching.', questions: [
           { id: 'RET-4.1', text: 'Do you regularly update and patch e-commerce platforms and POS software?', context: 'Patch records, version history', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Occasionally', value: 2}, {label: 'Most', value: 4}, {label: 'Always', value: 5}] },
@@ -80,7 +80,7 @@ const RETAIL_DATA = {
       ]
     },
     {
-      id: 'email_phishing', name: 'Email, Phishing & Staff Training', description: 'Phishing protection, awareness, and insider threat.', icon: '📧',
+      id: 'email_phishing', name: 'Email, Phishing & Staff Training', description: 'Phishing protection, awareness, and insider threat.', icon: '',
       categories: [
         { id: 'email', name: 'Email Security', description: 'Filtering and gateways.', questions: [
           { id: 'RET-5.1', text: 'Do you use email filtering or cloud email security to scan order/customer emails for phishing/malware?', context: 'Email gateway logs, policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -96,7 +96,7 @@ const RETAIL_DATA = {
       ]
     },
     {
-      id: 'resilience', name: 'Resilience, Monitoring & Third-Party', description: 'Backups, IR, vendor management, and monitoring.', icon: '🔄',
+      id: 'resilience', name: 'Resilience, Monitoring & Third-Party', description: 'Backups, IR, vendor management, and monitoring.', icon: '',
       categories: [
         { id: 'bcp', name: 'Backups & Incident Response', description: 'Disaster recovery and IR plan.', questions: [
           { id: 'RET-6.1', text: 'Are critical systems (server/backups) backed up offline or to an isolated cloud?', context: 'Backup logs, cloud backup config', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Monthly', value: 2}, {label: 'Weekly', value: 4}, {label: 'Daily', value: 5}] },

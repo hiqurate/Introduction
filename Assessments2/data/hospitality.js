@@ -2,7 +2,7 @@ const HOSPITALITY_DATA = {
   id: 'hospitality',
   modules: [
     {
-      id: 'payment_wifi', name: 'Payment & Wi-Fi Security', description: 'POS terminals, PCI compliance, and guest networks.', icon: '💳',
+      id: 'payment_wifi', name: 'Payment & Wi-Fi Security', description: 'POS terminals, PCI compliance, and guest networks.', icon: '',
       categories: [
         { id: 'pos', name: 'POS Terminals', description: 'PCI-DSS basics.', questions: [
           { id: 'HOS-1.1', text: 'Are POS terminals updated and encrypted according to PCI-DSS?', context: 'POS config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -21,7 +21,7 @@ const HOSPITALITY_DATA = {
       ]
     },
     {
-      id: 'data_staff', name: 'Data & Staff Security', description: 'Guest PII, shift credential management, and access control.', icon: '👥',
+      id: 'data_staff', name: 'Data & Staff Security', description: 'Guest PII, shift credential management, and access control.', icon: '',
       categories: [
         { id: 'pii', name: 'Guest PII', description: 'Data encryption.', questions: [
           { id: 'HOS-2.1', text: 'Is guest PII (passport, credit info) encrypted in databases?', context: 'DB config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -38,7 +38,7 @@ const HOSPITALITY_DATA = {
       ]
     },
     {
-      id: 'booking_endpoint', name: 'Third-Party & Endpoints', description: 'OTA integrations, MDM, and IoT security.', icon: '📱',
+      id: 'booking_endpoint', name: 'Third-Party & Endpoints', description: 'OTA integrations, MDM, and IoT security.', icon: '',
       categories: [
         { id: 'ota', name: 'Booking Platforms', description: 'OTA integrations.', questions: [
           { id: 'HOS-3.1', text: 'Are online booking platforms/security updated (e.g. OTA integrations)?', context: 'Vendor SLA', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -58,7 +58,7 @@ const HOSPITALITY_DATA = {
       ]
     },
     {
-      id: 'monitoring_ir', name: 'Monitoring, IR & Training', description: 'Logs, breach notification, and staff awareness.', icon: '👁️',
+      id: 'monitoring_ir', name: 'Monitoring, IR & Training', description: 'Logs, breach notification, and staff awareness.', icon: '',
       categories: [
         { id: 'monitoring', name: 'Anomaly Detection', description: 'Flagging unusual activity.', questions: [
           { id: 'HOS-4.1', text: 'Are unusual logins (e.g. admin at midnight) flagged?', context: 'SIEM logs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

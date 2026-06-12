@@ -2,7 +2,7 @@ const LOGISTICS_DATA = {
   id: 'logistics',
   modules: [
     {
-      id: 'iot_assets', name: 'IoT & Asset Security', description: 'Tracking devices, inventory, and fleet security.', icon: '🛰️',
+      id: 'iot_assets', name: 'IoT & Asset Security', description: 'Tracking devices, inventory, and fleet security.', icon: '',
       categories: [
         { id: 'iot', name: 'GPS/IoT Tracking', description: 'Securing tracking devices.', questions: [
           { id: 'LOG-1.1', text: 'Are all tracking devices (GPS/IoT) on unique accounts (no default credentials)?', context: 'Device config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
@@ -19,7 +19,7 @@ const LOGISTICS_DATA = {
       ]
     },
     {
-      id: 'network_data', name: 'Network & Data Protection', description: 'VPN access, encryption, and TMS security.', icon: '🌐',
+      id: 'network_data', name: 'Network & Data Protection', description: 'VPN access, encryption, and TMS security.', icon: '',
       categories: [
         { id: 'vpn', name: 'Remote Access', description: 'Warehouse and server access.', questions: [
           { id: 'LOG-2.1', text: 'Is remote warehouse/server access via VPN or zero-trust?', context: 'VPN logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -38,7 +38,7 @@ const LOGISTICS_DATA = {
       ]
     },
     {
-      id: 'vendor_staff', name: 'Third-Party & Staff Training', description: 'Carriers, dispatchers, and security awareness.', icon: '👥',
+      id: 'vendor_staff', name: 'Third-Party & Staff Training', description: 'Carriers, dispatchers, and security awareness.', icon: '',
       categories: [
         { id: 'vendor', name: 'Partner Vetting', description: 'Cargo vendors and carriers.', questions: [
           { id: 'LOG-3.1', text: 'Do you vet partner carriers/cargo vendors for security (e.g. data sharing agreements)?', context: 'Vendor audits/SLA', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
@@ -58,7 +58,7 @@ const LOGISTICS_DATA = {
       ]
     },
     {
-      id: 'resilience_physical', name: 'Resilience & Physical Security', description: 'Backups, monitoring, gates, and disaster recovery.', icon: '🏢',
+      id: 'resilience_physical', name: 'Resilience & Physical Security', description: 'Backups, monitoring, gates, and disaster recovery.', icon: '',
       categories: [
         { id: 'backup', name: 'Data Backups', description: 'Logistics data backups.', questions: [
           { id: 'LOG-4.1', text: 'Is logistics data (routes, manifests) backed up to offsite/cloud?', context: 'Backup logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },

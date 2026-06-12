@@ -29,7 +29,7 @@ class AdminDashboard {
       <section class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">👑 Admin</span>
+            <span class="section-tag">Admin</span>
             <h2>User <span class="gradient-text">Management</span></h2>
             <p>Create user accounts and assign specific security frameworks to them.</p>
           </div>
@@ -81,11 +81,12 @@ class AdminDashboard {
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-color)">
           <h4 style="font-size:0.9rem;margin-bottom:8px">Assigned Frameworks:</h4>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            ${user.assignments.map(aId => {
-              const fwName = FRAMEWORKS[aId] ? FRAMEWORKS[aId].shortName : aId;
-              return `<span class="tag" style="background:rgba(255,51,102,0.1);border-color:var(--accent-pink);color:var(--accent-pink);display:flex;align-items:center;gap:4px">
+            ${user.assignments.map(a => {
+              const fwName = FRAMEWORKS[a.id] ? FRAMEWORKS[a.id].shortName : a.id;
+              return `<span class="tag" style="background:rgba(255,51,102,0.1);border-color:var(--accent-pink);color:var(--accent-pink);display:flex;align-items:center;gap:8px">
                         ${fwName}
-                        <span style="cursor:pointer;font-weight:bold" onclick="adminDashboard.removeAssignment(${user.id}, '${aId}')">×</span>
+                        ${a.hasReport ? `<button class="btn btn-sm" style="padding:2px 8px;font-size:0.75rem;background:var(--accent-cyan);color:#000" onclick="adminDashboard.viewUserReport(${user.id}, '${a.id}')">View Report</button>` : ''}
+                        <span style="cursor:pointer;font-weight:bold;margin-left:4px" onclick="adminDashboard.removeAssignment(${user.id}, '${a.id}')">×</span>
                       </span>`;
             }).join('')}
             ${user.assignments.length === 0 ? '<span style="color:var(--text-secondary);font-size:0.8rem">No frameworks assigned</span>' : ''}
@@ -94,7 +95,7 @@ class AdminDashboard {
           <div style="margin-top:12px;display:flex;gap:8px">
             <select id="assign-fw-${user.id}" class="form-control" style="flex:1;padding:8px;background:var(--bg-dark);border:1px solid var(--border-color);color:white;border-radius:4px;">
               <option value="">-- Select Framework --</option>
-              ${this.frameworkList.filter(f => !user.assignments.includes(f.id)).map(f => `<option value="${f.id}">${f.name}</option>`).join('')}
+              ${this.frameworkList.filter(f => !user.assignments.some(a => a.id === f.id)).map(f => `<option value="${f.id}">${f.name}</option>`).join('')}
             </select>
             <button class="btn btn-secondary btn-sm" onclick="adminDashboard.addAssignment(${user.id})">Assign</button>
           </div>
@@ -185,6 +186,22 @@ class AdminDashboard {
       }
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  async viewUserReport(userId, frameworkId) {
+    try {
+      const res = await fetch(`/api/admin/reports/${userId}/${frameworkId}`);
+      if (res.ok) {
+        const data = await res.json();
+        window.adminViewingUserReport = { userId, frameworkId, answers: data.answers };
+        app.showReport(frameworkId);
+      } else {
+        alert("Report not found or error loading report.");
+      }
+    } catch(e) {
+      console.error(e);
+      alert("Error loading report");
     }
   }
 }

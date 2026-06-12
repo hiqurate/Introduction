@@ -47,6 +47,15 @@ db.serialize(async () => {
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
   )`);
 
+  db.run(`CREATE TABLE IF NOT EXISTS user_answers (
+    user_id INTEGER NOT NULL,
+    framework_id TEXT NOT NULL,
+    answers_json TEXT NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, framework_id),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`);
+
   // Create default admin
   const defaultAdminEmail = 'admin@admin.com';
   const defaultAdminPass = 'admin';
@@ -115,11 +124,22 @@ app.get('/api/admin/users', requireAdmin, (req, res) => {
     db.all("SELECT * FROM assignments", (err, assignments) => {
       if (err) return res.status(500).json({ error: 'Database error' });
       
-      const usersWithAssigments = users.map(u => {
-        u.assignments = assignments.filter(a => a.user_id === u.id).map(a => a.framework_id);
-        return u;
+      db.all("SELECT user_id, framework_id, updated_at FROM user_answers", (err, answers) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+
+        const usersWithAssigments = users.map(u => {
+          u.assignments = assignments.filter(a => a.user_id === u.id).map(a => {
+            const hasAnswer = answers.find(ans => ans.user_id === u.id && ans.framework_id === a.framework_id);
+            return {
+              id: a.framework_id,
+              hasReport: !!hasAnswer,
+              updatedAt: hasAnswer ? hasAnswer.updated_at : null
+            };
+          });
+          return u;
+        });
+        res.json(usersWithAssigments);
       });
-      res.json(usersWithAssigments);
     });
   });
 });
@@ -159,6 +179,27 @@ app.delete('/api/admin/assignments', requireAdmin, (req, res) => {
   db.run("DELETE FROM assignments WHERE user_id = ? AND framework_id = ?", [userId, frameworkId], function(err) {
     if (err) return res.status(500).json({ error: 'Database error' });
     res.json({ message: 'Assignment removed' });
+  });
+});
+
+app.post('/api/assessments/save', (req, res) => {
+  if (!req.session.userId) return res.status(401).json({ error: 'Not authenticated' });
+  const { frameworkId, answers } = req.body;
+  if (!frameworkId || !answers) return res.status(400).json({ error: 'Missing parameters' });
+  
+  db.run("INSERT OR REPLACE INTO user_answers (user_id, framework_id, answers_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", 
+    [req.session.userId, frameworkId, JSON.stringify(answers)], function(err) {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    res.json({ message: 'Saved successfully' });
+  });
+});
+
+app.get('/api/admin/reports/:userId/:frameworkId', requireAdmin, (req, res) => {
+  const { userId, frameworkId } = req.params;
+  db.get("SELECT answers_json, updated_at FROM user_answers WHERE user_id = ? AND framework_id = ?", [userId, frameworkId], (err, row) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    if (!row) return res.status(404).json({ error: 'Report not found' });
+    res.json({ answers: JSON.parse(row.answers_json), updatedAt: row.updated_at });
   });
 });
 
