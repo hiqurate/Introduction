@@ -82,6 +82,10 @@
     eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
     refresh: '<path d="M20 6v5h-5"/><path d="M4 18v-5h5"/><path d="M19 11a7 7 0 0 0-12.5-3.5M5 13a7 7 0 0 0 12.5 3.5"/>',
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+    trendUp: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+    zap: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+    user2: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    keyboard: '<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
     compare: '<path d="M8 4v16M16 4v16"/><path d="M4 8l4-4 4 4M12 16l4 4 4-4"/>',
     flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
     scale: '<path d="M12 3v18M7 21h10M4 7h16"/><path d="M4 7l-2 6a3 3 0 0 0 4 0zM20 7l-2 6a3 3 0 0 0 4 0z"/>',
@@ -93,12 +97,13 @@
   }
 
   // HawkSight brand assets (assets/brand). The master artwork is a silver
-  // and gold hawk on graphite. On light surfaces the product uses the
+  // and HiQurate-red hawk on graphite (the earlier gold artwork is kept in
+  // assets/brand/legacy-gold). On light surfaces the product uses the
   // graphite tile at small sizes and the graphite-ink mark at large sizes;
   // the reversed (original) artwork is used on graphite surfaces.
   const BRAND = '/assets/brand/';
-  const LOGO = raw(`<img class="brand-mark" src="${BRAND}hawksight-mark-reversed.png" alt="" width="512" height="333">`);
-  const LOGO_LIGHT = raw(`<img class="brand-mark" src="${BRAND}hawksight-mark.png" alt="" width="512" height="333">`);
+  const LOGO = raw(`<img class="brand-mark" src="${BRAND}hawksight-mark-reversed.png" alt="" width="512" height="340">`);
+  const LOGO_LIGHT = raw(`<img class="brand-mark" src="${BRAND}hawksight-mark.png" alt="" width="512" height="340">`);
   function wordmark(sub, variant) {
     const dark = variant === 'dark';
     const glyph = dark

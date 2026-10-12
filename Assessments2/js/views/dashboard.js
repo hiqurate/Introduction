@@ -97,7 +97,22 @@
     const actionItems = s.actions.items.filter(i => i.frameworkId === s.selected);
     const statusCount = st => actionItems.filter(i => i.status === st).length;
     const overdue = actionItems.filter(i => i.overdue).length;
-    const priority = actionItems.filter(i => (i.severity === 'critical' || i.severity === 'high') && ['open', 'in_progress', 'acceptance_expired'].includes(i.status)).slice(0, 6);
+    // Open critical and high findings, one row per control (its points summed).
+    const byControl = new Map();
+    actionItems.filter(i => (i.severity === 'critical' || i.severity === 'high') && ['open', 'in_progress', 'acceptance_expired'].includes(i.status)).forEach(i => {
+      const k = i.controlId || i.questionId;
+      if (!byControl.has(k)) byControl.set(k, { ...i, gain: 0, count: 0 });
+      const g = byControl.get(k);
+      g.gain += i.gain || 0;
+      g.count++;
+      if (i.severity === 'critical') g.severity = 'critical';
+      if (!g.owner && i.owner) g.owner = i.owner;
+      if (i.dueDate && (!g.dueDate || i.dueDate < g.dueDate)) g.dueDate = i.dueDate;
+    });
+    const priority = Array.from(byControl.values())
+      .sort((x, y) => (x.severity === y.severity ? 0 : x.severity === 'critical' ? -1 : 1) || y.gain - x.gain).slice(0, 6);
+    const priorityGain = priority.reduce((n, i) => n + (i.gain || 0), 0);
+    const source = s.actions.sources.find(x => x.frameworkId === s.selected);
     const heat = rep.result.heatmap.map(r => ({ ...r, overall: (rep.result.modules.find(m => m.id === r.moduleId) || {}).percentage }));
     const stale = daysBetween(rep.issuedAt, new Date()) > (s.method.staleAfterDays || 365);
 
@@ -144,11 +159,13 @@
       </div>
 
       <div class="grid grid-2 mt-16" style="align-items:start">
-        <div class="card"><div class="card-head"><h3>What to fix first</h3><span class="muted">Open critical and high findings</span></div>
+        <div class="card"><div class="card-head"><div><h3>What to fix first</h3><div class="muted small">Open critical and high findings</div></div>${UI.fmtGain(priorityGain) ? html`<span class="small muted">Worth ${UI.liftChip(priorityGain)}</span>` : ''}</div>
           ${priority.length ? html`<div class="table-wrap"><table class="table"><tbody>${priority.map(i => html`<tr>
             <td style="width:90px">${severityBadge(i.severity)}</td>
-            <td><div class="strong">${i.title}</div><div class="small muted">${i.question}</div></td>
-            <td class="small nowrap">${i.owner || html`<span class="faint">No owner</span>`}<div class="faint">${i.dueDate ? `Due ${fmtDate(i.dueDate)}` : i.timeframe}</div></td></tr>`)}</tbody></table></div>`
+            <td><div class="strong">${i.title}</div><div class="small muted act-sub" title="${i.question}">${i.count > 1 ? `${i.count} findings · ` : ''}${i.question}</div></td>
+            <td class="nowrap" style="width:80px">${UI.liftChip(i.gain)}</td>
+            <td class="small nowrap">${i.owner || html`<span class="faint">No owner</span>`}<div class="faint">${i.dueDate ? `Due ${fmtDate(i.dueDate)}` : i.timeframe}</div></td></tr>`)}</tbody></table></div>
+            <div class="card-foot small row row-between"><span class="muted">${source && source.baseline ? html`Closing every action takes your score from <strong>${source.baseline.healthScore}</strong> to about <strong>${source.final.healthScore}</strong>.` : ''}</span><a href="#/app/actions">Open the action plan ${icon('chevronRight')}</a></div>`
             : html`<div class="card-body muted">No open critical or high findings.</div>`}
         </div>
         <div class="card"><div class="card-head"><h3>Score history</h3><span class="muted">${rep.frameworkName}</span></div>

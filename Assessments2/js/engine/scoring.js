@@ -832,6 +832,58 @@
     };
   }
 
+  // Score lift per fix. Controls are fixed one at a time in priority order
+  // (most severe first, then the largest stand-alone gain), each re-scored on
+  // top of the fixes before it. The gains therefore add up to the final score,
+  // and the fix that lifts a critical-control cap is credited with that jump.
+  function projectActionLadder(result) {
+    const baseline = projectScores(result, {});
+    const findings = result.findings || [];
+    const sevIdx = s => SEVERITIES.indexOf(s);
+    const round1 = n => Math.round(n * 10) / 10;
+
+    const groups = new Map();
+    findings.forEach(f => {
+      const key = f.controlId || f.id;
+      if (!groups.has(key)) groups.set(key, { key, controlId: f.controlId, controlName: f.controlName || f.question, severity: f.severity, timeframe: f.timeframe, recommendation: f.recommendation, items: [] });
+      const g = groups.get(key);
+      if (sevIdx(f.severity) < sevIdx(g.severity)) { g.severity = f.severity; g.timeframe = f.timeframe; }
+      g.items.push(f);
+    });
+    const list = Array.from(groups.values());
+    list.forEach(g => {
+      const fr = {};
+      g.items.forEach(f => { fr[f.id] = 1; });
+      g.solo = projectScores(result, fr).health - baseline.health;
+    });
+    list.sort((a, b) => sevIdx(a.severity) - sevIdx(b.severity) || b.solo - a.solo || b.items.length - a.items.length);
+
+    const fixed = {};
+    let prev = baseline;
+    const steps = list.map((g, i) => {
+      const items = g.items.slice().sort((a, b) => sevIdx(a.severity) - sevIdx(b.severity)).map(f => {
+        const before = projectScores(result, fixed).health;
+        fixed[f.id] = 1;
+        return { id: f.id, gain: round1(projectScores(result, fixed).health - before) };
+      });
+      const after = projectScores(result, fixed);
+      const step = {
+        rank: i + 1, key: g.key, controlId: g.controlId, controlName: g.controlName, severity: g.severity, timeframe: g.timeframe,
+        recommendation: g.recommendation, owner: g.recommendation ? g.recommendation.owner : '', findingIds: g.items.map(f => f.id), items,
+        gain: round1(after.health - prev.health), riskDrop: round1(prev.risk - after.risk),
+        healthAfter: after.healthScore, riskAfter: after.riskScore, riskBandAfter: after.riskBand, maturityAfter: after.maturity.name,
+        liftsCap: prev.capped && !after.capped
+      };
+      prev = after;
+      return step;
+    });
+    return {
+      baseline: { healthScore: baseline.healthScore, riskScore: baseline.riskScore, riskBand: baseline.riskBand, maturity: baseline.maturity.name, capped: baseline.capped },
+      final: { healthScore: prev.healthScore, riskScore: prev.riskScore, riskBand: prev.riskBand, maturity: prev.maturity.name },
+      steps
+    };
+  }
+
   const api = {
     SCORING_MODEL_VERSION,
     ANSWER_STATES,
@@ -855,6 +907,7 @@
     scoreAssessment,
     projectScores,
     projectRemediation,
+    projectActionLadder,
     REMEDIATION_STAGES
   };
 

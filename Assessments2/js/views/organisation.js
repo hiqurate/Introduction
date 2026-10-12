@@ -45,10 +45,30 @@
     return html`<div class="tabs" role="tablist">${list.map(([k, l]) => html`<button class="tab" role="tab" aria-selected="${tab === k ? 'true' : 'false'}" data-action="org-tab" data-tab="${k}">${l}</button>`)}</div>`;
   }
 
+  function hero() {
+    const p = org.profile || {};
+    const label = (key, v) => { const f = (OPTIONS[key] || []).find(o => o[0] === String(v)); return f ? f[1] : v; };
+    const required = ['organizationName', 'industry', 'employeeCount'];
+    const extra = ['geography', 'dataTypes', 'regulations', 'technology', 'securityTools'];
+    const filled = [...required, ...extra].filter(k => Array.isArray(p[k]) ? p[k].length : p[k]).length;
+    const pct = Math.round((filled / (required.length + extra.length)) * 100);
+    return UI.pageHero({
+      icon: 'building', eyebrow: 'Organisation', title: org.tenant.name,
+      sub: 'Your profile tells HawkSight which questions apply and which attack paths matter most to an organisation like yours.',
+      actions: html`<span class="row" style="gap:10px">${UI.miniRing(pct, { size: 52, label: `Profile ${pct}% complete` })}<span class="small muted">Profile<br>${pct === 100 ? 'complete' : 'completeness'}</span></span>`,
+      stats: [
+        { label: 'Plan', value: org.tenant.package === 'snapshot' ? 'Snapshot' : org.tenant.package === 'managed' ? 'Managed' : 'Comprehensive' },
+        { label: 'Industry', value: p.industry ? label('industry', p.industry) : '—' },
+        { label: 'People', value: p.employeeCount ? label('employeeCount', p.employeeCount) : '—' },
+        { label: 'Templates enabled', value: org.tenant.frameworks.length }
+      ]
+    });
+  }
+
   function render() {
     const body = tab === 'people' ? people() : tab === 'branding' ? branding() : tab === 'schedule' ? schedule() : profileForm();
     App.renderApp(html`<div class="page page-narrow" style="max-width:980px">
-      <div class="page-head"><div><h1>${org.tenant.name}</h1><div class="sub">${org.tenant.package === 'snapshot' ? 'Snapshot plan' : org.tenant.package === 'managed' ? 'Managed plan' : 'Comprehensive plan'} · ${org.tenant.frameworks.length} assessment templates enabled</div></div></div>
+      ${hero()}
       ${tabs()}
       ${body}
     </div>`);

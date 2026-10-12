@@ -29,8 +29,20 @@
   const STAGE_LIMIT = 6;
 
   function withPlan(d) {
-    d.plan = root.HawkScoring.projectRemediation(d.result);
+    d.ladder = root.HawkScoring.projectActionLadder(d.result);
+    d.liftByControl = {};
+    d.ladder.steps.forEach(st => { d.liftByControl[st.key] = st; });
     return d;
+  }
+
+  // Score once every critical and high fix is done (or the first five fixes).
+  function priorityMilestone(d) {
+    const steps = d.ladder.steps;
+    if (!steps.length) return null;
+    const urgent = steps.filter(st => st.severity === 'critical' || st.severity === 'high');
+    const upto = urgent.length && urgent.length < steps.length ? urgent.length : Math.min(5, steps.length);
+    const last = steps[upto - 1];
+    return { count: upto, urgent: urgent.length > 0 && urgent.length < steps.length, healthScore: last.healthAfter, riskBand: last.riskBandAfter };
   }
 
   function isSnapshot(d) {
@@ -80,7 +92,8 @@
       paras.push(`${strongest.name} is the strongest area (${strongest.percentage}). The most attention is needed in ${weakest.map(m => `${m.name} (${m.percentage})`).join(' and ')}.`);
     }
     const top = groupFindings(d, ['critical', 'high']).slice(0, 3).map(g => g.controlName);
-    if (top.length && d.plan) paras.push(`The most urgent priorities are ${top.length > 1 ? `${top.slice(0, -1).map(lowerFirst).join(', ')} and ${lowerFirst(top[top.length - 1])}` : lowerFirst(top[0])}. Completing the quick wins in the remediation plan is expected to raise the score to about ${d.plan.stages[0].healthScore} and bring risk exposure to ${d.plan.stages[0].riskBand.toLowerCase()}.`);
+    const ms = priorityMilestone(d);
+    if (top.length && ms) paras.push(`The most urgent priorities are ${top.length > 1 ? `${top.slice(0, -1).map(lowerFirst).join(', ')} and ${lowerFirst(top[top.length - 1])}` : lowerFirst(top[0])}. Fixing the ${ms.count} ${ms.urgent ? 'critical and high priority controls' : 'highest-priority controls'} in the remediation plan is expected to raise the score to about ${ms.healthScore} and bring risk exposure to ${ms.riskBand.toLowerCase()}.`);
     const c = o.confidence;
     paras.push(`Confidence in these results is ${c.label.toLowerCase()}: ${c.factors.completion}% of questions answered and ${c.factors.evidenceQuality}% evidence quality for the most important controls${c.factors.validatedControls ? `, with ${plural(c.factors.validatedControls, 'control')} independently validated` : ''}.`);
     return paras;
@@ -167,13 +180,14 @@
         <div><div class="finding-label">${sc.category} · ${sc.relevance} relevance</div><h4>${sc.name}</h4></div>
         <div class="attack-score"><span class="badge ${cls}">${label}</span>${sc.readiness !== null ? html`<span class="attack-readiness">Readiness <strong>${sc.readiness}</strong>/100</span>` : ''}</div>
       </div>
-      ${lib ? html`<p class="attack-hook">${lib.hook}</p><p class="attack-story">${lib.narrative}</p>` : ''}
+      ${lib ? html`<p class="attack-hook">${lib.hook}</p>` : ''}
       ${stageChain(sc)}
-      <div class="attack-foot">
-        ${sc.breaker ? html`<div><span class="finding-label">Best single fix</span><p><strong>${sc.breaker.controlName}</strong>: raises readiness by about ${sc.breaker.gain} points.</p></div>` : ''}
-        ${RECOVERY_TEXT[sc.recoveryStatus] ? html`<div><span class="finding-label">If it succeeds</span><p>${lib ? lib.impact : ''} ${RECOVERY_TEXT[sc.recoveryStatus]}</p></div>` : ''}
-      </div>
-      ${lib && lib.examples.length ? html`<div class="attack-examples"><span class="finding-label">It has happened before</span>${lib.examples.map(e => html`<p><strong>${e.org} (${e.year}).</strong> ${e.summary}</p>`)}</div>` : ''}
+      ${sc.breaker ? html`<div class="attack-fix">${icon('shield')}<span><span class="muted">Best single fix:</span> <strong>${sc.breaker.controlName}</strong></span><span class="lift">+${sc.breaker.gain}<small>readiness</small></span></div>` : ''}
+      ${lib ? html`<details class="readmore"><summary>How the attack works ${icon('chevronDown')}</summary>
+        <p class="attack-story">${lib.narrative}</p>
+        ${RECOVERY_TEXT[sc.recoveryStatus] ? html`<p class="attack-story"><strong>If it succeeds:</strong> ${lib.impact} ${RECOVERY_TEXT[sc.recoveryStatus]}</p>` : ''}
+        ${lib.examples.length ? html`<div class="attack-examples"><span class="finding-label">It has happened before</span>${lib.examples.map(e => html`<p><strong>${e.org} (${e.year}).</strong> ${e.summary}</p>`)}</div>` : ''}
+      </details>` : ''}
     </div>`;
   }
 
@@ -187,17 +201,17 @@
     return html`
       <section class="report-section attack-section">
         <h2>How you could be attacked</h2>
-        <p class="section-intro">The attack paths ${peers} are actually breached through, tested against your answers. Each path is a chain of stages. The attacker has to get through every stage; you only need one strong barrier to stop them.</p>
+        <p class="section-intro">Real attack paths used against ${peers}, tested against your answers. An attacker must pass every stage; one strong barrier stops them.</p>
         <div class="attack-tally">
           <div class="tally-open"><strong>${t.summary.open}</strong><span>Open</span></div>
           <div class="tally-partial"><strong>${t.summary.partial}</strong><span>Partly defended</span></div>
           <div class="tally-defended"><strong>${t.summary.defended}</strong><span>Defended</span></div>
         </div>
         ${t.breakers.length ? html`<h3 class="mt-24 mb-8">Fixes that break the most attack paths</h3>
-          <ol class="breaker-list">${t.breakers.slice(0, 3).map(b => html`<li><strong>${b.controlName}</strong><span>Strengthens ${plural(b.scenarios.length, 'attack path')}: ${b.scenarios.map(x => lowerFirst(x.name)).join('; ')}</span></li>`)}</ol>` : ''}
+          <div class="breaker-chips">${t.breakers.slice(0, 3).map((b, n) => html`<div class="breaker-chip" title="${b.scenarios.map(x => x.name).join('; ')}"><span class="finding-num">${n + 1}</span><strong>${b.controlName}</strong><span class="muted">breaks ${plural(b.scenarios.length, 'path')}</span></div>`)}</div>` : ''}
         <div class="mt-24">${shown.map(attackCard)}</div>
         ${!d.full && paths.length > shown.length ? html`<p class="small muted mt-8">${plural(paths.length - shown.length, 'further path')} ${paths.length - shown.length === 1 ? 'is' : 'are'} defended or lower priority; the detailed report shows every path.</p>` : ''}
-        <p class="small muted mt-8">Readiness estimates how likely the chain is to be broken before harm is done, from the controls you answered. It is directional, not a probability; see the methodology.</p>
+        <p class="small muted mt-8">Readiness is directional, not a probability; see the methodology.</p>
       </section>`;
   }
 
@@ -249,16 +263,34 @@
       <section class="report-section">
         <h2>Executive summary</h2>
         <div class="headline mt-16">
-          <div><div class="metric-label">Cyber Health Score</div><div class="metric-value">${o.healthScore}<small> /100</small></div><div class="metric-sub">${o.healthBand}${o.capped ? html` · held from ${o.rawScore}` : ''}</div></div>
+          <div class="headline-score">${UI.scoreRing(o.healthScore, 'Cyber Health')}<div><div class="metric-label">Cyber Health Score</div><div class="metric-value" style="font-size:22px">${o.healthBand}</div><div class="metric-sub">${o.healthScore} out of 100${o.capped ? html` · held from ${o.rawScore}` : ''}</div></div></div>
           <div><div class="metric-label">Maturity</div><div class="metric-value" style="font-size:22px">${o.maturity.name}</div>${UI.maturityScale(o.maturity.level)}<div class="metric-sub">Level ${o.maturity.level} of 5</div></div>
           <div><div class="metric-label">Risk exposure</div><div class="metric-value" style="font-size:22px">${o.riskBand}</div><div class="metric-sub">${o.riskScore} out of 100</div></div>
           <div><div class="metric-label">Confidence</div><div class="metric-value" style="font-size:22px">${o.confidence.label}</div><div class="metric-sub">${o.completion.answered} of ${o.completion.applicable} answered</div></div>
         </div>
-        <div class="mt-24 summary-text">${paras.map(p => html`<p>${p}</p>`)}</div>
+        ${takeaways(d)}
+        <details class="readmore mt-16"><summary>Read the full summary ${icon('chevronDown')}</summary><div class="summary-text">${paras.map(p => html`<p>${p}</p>`)}</div></details>
         ${d.aiSummary ? html`<div class="panel mt-16"><div class="label mb-8">Executive narrative</div><div class="ai-output">${d.aiSummary}</div><div class="ai-label">Drafted with AI assistance from the verified results and reviewed before issue.</div></div>` : ''}
         <h3 class="mt-24 mb-8">Findings by severity</h3>
         ${severityBreakdown(d)}
       </section>`;
+  }
+
+  // Four short, scannable conclusions; the full narrative sits underneath.
+  function takeaways(d) {
+    const o = d.result.overall;
+    const t = threatModel(d);
+    const paths = t ? assessedPaths(t) : [];
+    const exposed = paths.find(x => x.status !== 'defended');
+    const mods = d.result.modules.filter(m => m.percentage !== null).slice().sort((a, b) => a.percentage - b.percentage);
+    const ms = priorityMilestone(d);
+    const cards = [];
+    if (paths.length) cards.push({ tone: t.summary.open ? 'bad' : 'ok', label: 'Attack paths', value: `${t.summary.open} of ${paths.length} open`, sub: exposed ? `Most exposed: ${lowerFirst(exposed.name)}` : 'Every tested path is defended' });
+    if (mods.length) cards.push({ tone: mods[0].percentage < 55 ? 'bad' : 'warn', label: 'Weakest area', value: `${mods[0].name}`, sub: `Scores ${mods[0].percentage}; strongest is ${mods[mods.length - 1].name} (${mods[mods.length - 1].percentage})` });
+    const top = groupFindings(d, ['critical', 'high'])[0];
+    if (top) cards.push({ tone: 'warn', label: 'Fix first', value: top.controlName, sub: d.liftByControl[top.key] ? `Adds about ${UI.fmtGain(d.liftByControl[top.key].gain).replace('+', '')} points on its own` : `${SEVERITY_LABEL[top.severity]} priority` });
+    if (ms) cards.push({ tone: 'good', label: 'Where you could be', value: `${o.healthScore} → ${ms.healthScore}`, sub: `After the first ${ms.count} fixes · ${ms.riskBand.toLowerCase()} risk` });
+    return html`<div class="takeaways mt-16">${cards.map(c => html`<div class="takeaway takeaway-${c.tone}"><span class="takeaway-label">${c.label}</span><strong>${c.value}</strong><span class="takeaway-sub">${c.sub}</span></div>`)}</div>`;
   }
 
   function explainSection(d) {
@@ -343,17 +375,17 @@
     return html`
       <section class="report-section">
         <div class="section-head">
-          <div><h2>Priority findings</h2><p class="section-intro">${groups.length ? `Critical and high findings, grouped by control${groups.length > shown.length ? `. The ${shown.length} most important of ${groups.length} are shown; the detailed report lists every finding` : ''}. The actions for each are in the remediation plan.` : 'No critical or high findings were recorded.'}</p></div>
+          <div><h2>Priority findings</h2><p class="section-intro">${groups.length ? `Critical and high gaps, one per control${groups.length > shown.length ? ` (top ${shown.length} of ${groups.length}; the detailed report lists all)` : ''}.` : 'No critical or high findings were recorded.'}</p></div>
           <button class="btn btn-sm no-print" data-action="print-report" data-full="1">${icon('download')} Download detailed report</button>
         </div>
-        ${shown.map(g => {
+        ${shown.map((g, n) => {
           const r = g.recommendation || {};
-          return html`<div class="finding">
-            <div class="finding-head"><h4>${g.controlName}</h4><div class="row">${severityBadge(g.severity)}<span class="badge badge-outline">Fix within ${g.timeframe.replace('-', '–')}</span></div></div>
-            <div class="finding-grid">
-              <div><div class="finding-label">What we found</div><ul class="finding-items">${g.items.slice(0, d.full ? 50 : 3).map(f => html`<li><span>${f.question}</span><span class="faint nowrap">${f.answerLabel || f.state}</span></li>`)}${!d.full && g.items.length > 3 ? html`<li class="faint">and ${g.items.length - 3} more</li>` : ''}</ul></div>
-              <div><div class="finding-label">What good looks like</div><p>${r.summary}</p>${r.owner ? html`<div class="finding-label mt-8">Owner</div><p>${r.owner}</p>` : ''}</div>
-            </div>
+          const lift = d.liftByControl[g.key];
+          return html`<div class="finding finding-${g.severity}">
+            <div class="finding-head"><h4><span class="finding-num">${n + 1}</span>${g.controlName}</h4><div class="row">${lift ? UI.liftChip(lift.gain) : ''}${severityBadge(g.severity)}<span class="badge badge-outline">Fix within ${g.timeframe.replace('-', '–')}</span></div></div>
+            <p class="finding-target"><span class="finding-label">Target</span>${r.summary}</p>
+            <details class="readmore"><summary>${plural(g.items.length, 'question')} behind this${r.owner ? ` · owner: ${r.owner}` : ''} ${icon('chevronDown')}</summary>
+              <ul class="finding-items">${g.items.map(f => html`<li><span>${f.question}</span><span class="faint nowrap">${f.answerLabel || f.state}</span></li>`)}</ul></details>
           </div>`;
         })}
       </section>`;
@@ -385,43 +417,50 @@
       </section>`;
   }
 
+  const LADDER_LIMIT = 10;
   function roadmapSection(d) {
-    const plan = d.plan;
-    if (!plan.actions.length) {
+    const L = d.ladder;
+    if (!L.steps.length) {
       return html`<section class="report-section"><h2>Remediation plan</h2><p>No remediation is needed for the controls assessed.</p></section>`;
     }
+    const ms = priorityMilestone(d);
+    const shown = d.full ? L.steps : L.steps.slice(0, LADDER_LIMIT);
+    const base = L.baseline.healthScore;
     return html`
       <section class="report-section">
         <h2>Remediation plan</h2>
-        <p class="section-intro">What to do, in three stages. Start each stage with the most severe findings. The expected result shows where the organisation should stand once the stage is complete.</p>
-        <div class="plan">
-          ${STAGES.map((st, i) => {
-            const after = plan.stages[i];
-            const actions = plan.actions.slice().sort((a, b) =>
-              SEVERITY_ORDER.indexOf(a.severity) - SEVERITY_ORDER.indexOf(b.severity) || b.steps[st.id].health - a.steps[st.id].health);
-            const shown = d.full ? actions : actions.slice(0, STAGE_LIMIT);
-            return html`<div class="plan-stage">
-              <div class="plan-rail">
-                <div class="plan-when">${st.when}</div>
-                <h3>${st.title}</h3>
-                <p>${st.framing}</p>
-                <div class="plan-result">
-                  <div class="finding-label">Expected result</div>
-                  <div><strong>${after.healthScore}</strong> Cyber Health Score</div>
-                  <div>${after.maturity} maturity</div>
-                  <div>${after.riskBand} risk</div>
-                </div>
-              </div>
-              <ol class="plan-actions">${shown.map(a => html`<li>
-                <span class="sev-dot sev-fill-${a.severity}" title="${SEVERITY_LABEL[a.severity]}"></span>
-                <div><div class="plan-action">${a.steps[st.id].action}</div><div class="plan-ctrl">${a.controlName}${a.owner ? ` · ${a.owner}` : ''}</div></div>
-              </li>`)}
-              ${actions.length > shown.length ? html`<li class="plan-more">${plural(actions.length - shown.length, 'further action')} in the detailed report and the action plan</li>` : ''}</ol>
-            </div>`;
-          })}
+        <p class="section-intro">Every fix in priority order, with the points it adds. The running score shows where you stand once you reach that line.</p>
+        <div class="ladder">
+          <div class="ladder-milestones">
+            <div class="milestone"><span>Today</span><strong>${base}</strong><em>${L.baseline.riskBand} risk · ${L.baseline.maturity}</em></div>
+            ${ms ? html`<div class="milestone"><span>After the first ${ms.count} fixes</span><strong>${ms.healthScore}<small>+${ms.healthScore - base}</small></strong><em>${ms.urgent ? 'All critical and high priorities closed' : 'The highest-priority fixes'} · ${ms.riskBand} risk</em></div>` : ''}
+            <div class="milestone milestone-goal"><span>Every fix complete</span><strong>${L.final.healthScore}<small>+${L.final.healthScore - base}</small></strong><em>${L.final.riskBand} risk · ${L.final.maturity}</em></div>
+          </div>
+          ${shown.map(st => ladderRow(st, base, d.full))}
+          ${L.steps.length > shown.length ? html`<div class="ladder-more">${plural(L.steps.length - shown.length, 'further fix', 'further fixes')} worth about ${UI.fmtGain(L.steps.slice(shown.length).reduce((n, x) => n + x.gain, 0)) || '+0'} points are in the detailed report and the action plan.</div>` : ''}
         </div>
-        <p class="small muted mt-8">Expected results are estimates: the assessment is re-scored as if each stage were complete. The actual change is measured at the next assessment.</p>
+        <p class="small muted mt-8">Points are estimates from re-scoring the assessment with each fix in place; the real change is measured at the next assessment.</p>
       </section>`;
+  }
+
+  function ladderRow(st, base, full) {
+    const r = st.recommendation || {};
+    const before = Math.max(0, st.healthAfter - st.gain);
+    return html`<div class="ladder-row ladder-${st.severity}">
+      <span class="ladder-rank">${st.rank}</span>
+      <div style="min-width:0">
+        <div class="ladder-name">${st.controlName}${severityBadge(st.severity)}${st.liftsCap ? html`<span class="ladder-cap">Removes the score cap</span>` : ''}</div>
+        ${r.quickWin ? html`<div class="ladder-do"><strong>Start:</strong> ${r.quickWin}</div>` : ''}
+        <div class="ladder-meta">${st.owner ? `${st.owner} · ` : ''}fix within ${String(st.timeframe || '').replace('-', '–')}${st.findingIds.length > 1 ? ` · closes ${st.findingIds.length} findings` : ''}</div>
+        ${r.mediumTerm || r.longTerm ? html`<details class="ladder-steps" ${full ? raw('open') : ''}><summary>Full steps ${icon('chevronDown')}</summary><ol>
+          ${r.quickWin ? html`<li><b>Next 30 days:</b> ${r.quickWin}</li>` : ''}
+          ${r.mediumTerm ? html`<li><b>1 to 3 months:</b> ${r.mediumTerm}</li>` : ''}
+          ${r.longTerm ? html`<li><b>3 to 12 months:</b> ${r.longTerm}</li>` : ''}</ol></details>` : ''}
+      </div>
+      <div>${UI.liftChip(st.gain) || html`<span class="lift lift-muted" title="Lowers risk; the score effect is under one point">Risk ↓</span>`}</div>
+      <div class="ladder-total"><span>Score after this fix <strong>${st.healthAfter}</strong></span>
+        <div class="ladder-bar"><i style="width:${before}%"></i><u style="left:${before}%;width:${Math.max(0, st.healthAfter - before)}%"></u></div></div>
+    </div>`;
   }
 
   function trendSection(d) {
@@ -619,7 +658,7 @@
     const strengths = snapshotStrengths(d);
     const counts = d.result.severityCounts || {};
     const urgent = (counts.critical || 0) + (counts.high || 0);
-    const after = d.plan.stages[0];
+    const ms = priorityMilestone(d);
     return html`
       <article class="report-doc snapshot-doc" id="report-doc">
         <header class="snap-head">
@@ -661,7 +700,7 @@
           <div>
             <h2>Fix these first</h2>
             ${priorities.length ? html`<ol class="snap-fix">${priorities.map(g => html`<li>
-              <div class="row" style="gap:8px"><strong>${g.controlName}</strong>${severityBadge(g.severity)}</div>
+              <div class="row" style="gap:8px"><strong class="grow">${g.controlName}</strong>${d.liftByControl[g.key] ? UI.liftChip(d.liftByControl[g.key].gain) : ''}${severityBadge(g.severity)}</div>
               <div class="snap-fix-action">${g.recommendation ? g.recommendation.quickWin : ''}</div>
             </li>`)}</ol>` : html`<p class="muted">No gaps were found in the controls assessed.</p>`}
           </div>
@@ -670,7 +709,7 @@
         <section class="report-section">
           <h2>Next steps</h2>
           <ol class="snap-steps">
-            <li><strong>Start with the priorities above.</strong> Each is a quick win using tools and people you already have. Completing the quick win for every gap found is expected to lift your score to about ${after.healthScore}.</li>
+            <li><strong>Start with the priorities above.</strong> Each starts with a quick win using tools and people you already have. ${ms ? `Fixing the first ${ms.count} is expected to lift your score from ${o.healthScore} to about ${ms.healthScore}; fixing every gap would take it to about ${d.ladder.final.healthScore}.` : ''}</li>
             <li><strong>Track progress in your action plan.</strong> Every gap is listed there with an owner and a due date.</li>
             <li><strong>Get an independent view.</strong> A Comprehensive assessment covers the full question set, checks your evidence and gives you an assessor-issued report and remediation roadmap for your board.</li>
           </ol>
@@ -744,7 +783,10 @@
       rerender();
       if ($('#appendix-body')) setHtml('#appendix-body', appendixTable(doc, { ref: 'iso27001' }));
     }
+    const closed = $all('#report-doc details:not([open])');
+    closed.forEach(el => { el.open = true; });
     const restore = () => {
+      closed.forEach(el => { if (document.body.contains(el)) el.open = false; });
       document.title = prev;
       if (doc.full) { doc.full = false; rerender(); }
     };
@@ -811,26 +853,41 @@
     const { reports } = await API.get(`/api/reports${API.qs({ tenantId: App.tenantId })}`);
     const byFramework = {};
     reports.forEach(r => { (byFramework[r.frameworkId] = byFramework[r.frameworkId] || []).push(r); });
+    const latest = reports[0];
+    const prevSame = latest ? (byFramework[latest.frameworkId] || [])[1] : null;
+    const change = latest && prevSame ? latest.healthScore - prevSame.healthScore : null;
     App.renderApp(html`<div class="page">
-      <div class="page-head"><div><h1>Reports</h1><div class="sub">Issued reports are immutable. Each new cycle creates a new version, so earlier results are preserved.</div></div></div>
+      ${UI.pageHero({
+        icon: 'file', eyebrow: 'Reports', title: 'Issued reports',
+        sub: 'Every issued report is fingerprinted and never changes. Each new cycle adds a version, so you can see how far you have come.',
+        stats: latest ? [
+          { label: 'Latest score', value: latest.healthScore, sub: latest.frameworkName },
+          { label: 'Change', value: change === null ? '—' : `${change > 0 ? '+' : ''}${change}`, tone: change > 0 ? 'success' : change < 0 ? 'critical' : '', sub: prevSame ? `Since v${prevSame.version}` : 'First report' },
+          { label: 'Reports issued', value: reports.length, sub: plural(Object.keys(byFramework).length, 'assessment type') },
+          { label: 'Last issued', value: fmtDate(latest.issuedAt, { day: 'numeric', month: 'short' }), sub: ageLabel(latest.issuedAt) }
+        ] : []
+      })}
       ${!reports.length ? html`<div class="card">${UI.emptyState({ title: 'No reports yet', message: 'Reports appear here once an assessment has been submitted and issued.', action: html`<a class="btn" href="#/app/assessments">Go to assessments</a>` })}</div>` : ''}
       ${Object.keys(byFramework).map(fw => {
         const list = byFramework[fw];
+        const top = list[0];
+        const delta = list[1] ? top.healthScore - list[1].healthScore : null;
         return html`<div class="card mb-16">
-          <div class="card-head"><h3>${list[0].frameworkName}</h3>
-            ${list.length > 1 ? html`<button class="btn btn-sm" data-action="compare-latest" data-a="${list[1].id}" data-b="${list[0].id}">${icon('compare')} Compare latest two</button>` : ''}</div>
-          <div class="table-wrap"><table class="table">
-            <thead><tr><th>Report</th><th>Issued</th><th>Review</th><th class="num">Health</th><th class="num">Risk</th><th>Fingerprint</th><th></th></tr></thead>
-            <tbody>${list.map((r, i) => html`<tr class="clickable" data-action="open-report" data-id="${r.id}" tabindex="0">
-              <td><div class="strong">Version ${r.version}${i === 0 ? html` <span class="badge badge-brand">Latest</span>` : ''}</div><div class="small muted">${r.title}</div></td>
-              <td class="nowrap">${fmtDate(r.issuedAt)}<div class="small muted">${ageLabel(r.issuedAt)}</div></td>
-              <td>${r.reviewType}</td>
-              <td class="num strong">${r.healthScore}</td>
-              <td class="num">${r.riskScore}</td>
-              <td class="mono faint">${r.contentHash.slice(0, 10)}</td>
-              <td class="right">${icon('chevronRight')}</td>
-            </tr>`)}</tbody>
-          </table></div></div>`;
+          <div class="card-head" style="padding:18px 20px">
+            <div class="row" style="gap:16px">${UI.scoreRing(top.healthScore, 'Health')}
+              <div><div class="eyebrow">${list[0].reviewType}</div><h3 style="font-size:17px;margin-top:3px">${list[0].frameworkName}</h3>
+                <div class="small muted mt-8">Latest v${top.version} · issued ${fmtDate(top.issuedAt)}${delta !== null ? html` · <span class="delta-chip ${delta >= 0 ? 'delta-up' : 'delta-down'}">${delta > 0 ? '+' : ''}${delta} since v${list[1].version}</span>` : ''}</div></div></div>
+            <div class="btn-group">
+              ${list.length > 1 ? html`<button class="btn btn-sm" data-action="compare-latest" data-a="${list[1].id}" data-b="${list[0].id}">${icon('compare')} Compare latest two</button>` : ''}
+              <a class="btn btn-sm btn-primary" href="#/app/reports/${top.id}">Open latest ${icon('chevronRight')}</a>
+            </div>
+          </div>
+          <ul class="version-list">${list.map((r, i) => html`<li data-action="open-report" data-id="${r.id}" tabindex="0" role="button">
+            <span class="version-dot"></span>
+            <div><div class="strong">Version ${r.version}${i === 0 ? html` <span class="badge badge-brand">Latest</span>` : ''}</div><div class="small muted">${fmtDate(r.issuedAt)} · ${ageLabel(r.issuedAt)} · ${r.reviewType} · <span class="mono faint">${r.contentHash.slice(0, 10)}</span></div></div>
+            <span class="small muted">Health <strong class="tile-score" style="font-size:20px">${r.healthScore}</strong></span>
+            <span class="small muted">Risk <strong style="color:var(--ink-900)">${r.riskScore}</strong> ${icon('chevronRight')}</span>
+          </li>`)}</ul></div>`;
       })}
     </div>`);
   });

@@ -16,18 +16,28 @@ module.exports = function actionRoutes(app, ctx) {
   async function findingsSource(tenantId, frameworkId) {
     const report = await db.get('SELECT id, version, issued_at, result_json FROM reports WHERE tenant_id = ? AND framework_id = ? ORDER BY issued_at DESC LIMIT 1', [tenantId, frameworkId]);
     if (report) {
-      return { source: 'report', reportId: report.id, reportVersion: report.version, issuedAt: report.issued_at, findings: services.parseJson(report.result_json, {}).findings || [] };
+      const result = services.parseJson(report.result_json, {});
+      return { source: 'report', reportId: report.id, reportVersion: report.version, issuedAt: report.issued_at, result, findings: result.findings || [] };
     }
     const a = await db.get("SELECT * FROM assessments WHERE tenant_id = ? AND framework_id = ? AND status != 'archived' ORDER BY updated_at DESC LIMIT 1", [tenantId, frameworkId]);
     if (!a) return null;
     const result = await services.scoreAssessmentRow(a);
-    return { source: 'provisional', assessmentId: a.id, findings: result.findings };
+    return { source: 'provisional', assessmentId: a.id, result, findings: result.findings };
   }
 
   function effectiveStatus(action) {
     if (!action) return 'open';
     if (action.status === 'risk_accepted' && action.acceptance_expiry && action.acceptance_expiry < new Date().toISOString().slice(0, 10)) return 'acceptance_expired';
     return action.status;
+  }
+
+  // Score lift for each finding, from the shared ladder (fixes in priority order).
+  function scoreLift(result) {
+    const byQuestion = {};
+    if (!result || !result.controls || !result.overall) return { baseline: null, final: null, byQuestion };
+    const ladder = Scoring.projectActionLadder(result);
+    ladder.steps.forEach(st => st.items.forEach(it => { byQuestion[it.id] = { rank: st.rank, gain: it.gain, controlGain: st.gain }; }));
+    return { baseline: ladder.baseline, final: ladder.final, byQuestion };
   }
 
   async function buildPlan(tenantId, frameworkFilter) {
@@ -40,8 +50,10 @@ module.exports = function actionRoutes(app, ctx) {
     for (const fw of frameworks) {
       const src = await findingsSource(tenantId, fw);
       if (!src) continue;
-      sources.push({ frameworkId: fw, frameworkName: content.FRAMEWORKS[fw] ? content.FRAMEWORKS[fw].shortName : fw, source: src.source, reportId: src.reportId || null, reportVersion: src.reportVersion || null, issuedAt: src.issuedAt || null });
+      const lift = scoreLift(src.result);
+      sources.push({ frameworkId: fw, frameworkName: content.FRAMEWORKS[fw] ? content.FRAMEWORKS[fw].shortName : fw, source: src.source, reportId: src.reportId || null, reportVersion: src.reportVersion || null, issuedAt: src.issuedAt || null, baseline: lift.baseline, final: lift.final });
       for (const f of src.findings) {
+        const step = lift.byQuestion[f.id] || null;
         const action = byKey.get(`${fw}|${f.id}`);
         const status = effectiveStatus(action);
         items.push({
@@ -68,11 +80,14 @@ module.exports = function actionRoutes(app, ctx) {
             justification: action.acceptance_justification, expiry: action.acceptance_expiry, acceptedAt: action.accepted_at
           } : null,
           updatedAt: action ? action.updated_at : null,
+          rank: step ? step.rank : null,
+          gain: step ? step.gain : 0,
+          controlGain: step ? step.controlGain : 0,
           overdue: !!(action && action.due_date && ['open', 'in_progress'].includes(status) && action.due_date < new Date().toISOString().slice(0, 10))
         });
       }
     }
-    items.sort((a, b) => Scoring.SEVERITIES.indexOf(a.severity) - Scoring.SEVERITIES.indexOf(b.severity));
+    items.sort((a, b) => Scoring.SEVERITIES.indexOf(a.severity) - Scoring.SEVERITIES.indexOf(b.severity) || (a.rank || 999) - (b.rank || 999));
     return { items, sources };
   }
 
@@ -169,6 +184,7 @@ module.exports = function actionRoutes(app, ctx) {
     { key: 'question', header: 'Finding', width: 60 },
     { key: 'severity', header: 'Severity', width: 12 },
     { key: 'timeframe', header: 'Target timeframe', width: 16 },
+    { key: 'scoreLift', header: 'Score lift (points)', width: 12 },
     { key: 'action', header: 'Recommended action', width: 70 },
     { key: 'owner', header: 'Owner', width: 24 },
     { key: 'dueDate', header: 'Due date', width: 12 },
@@ -186,7 +202,7 @@ module.exports = function actionRoutes(app, ctx) {
     return {
       tenant: t,
       rows: plan.items.map(i => ({
-        framework: i.frameworkName, ref: i.ref, control: i.title, question: i.question, severity: i.severityLabel, timeframe: i.timeframe,
+        framework: i.frameworkName, ref: i.ref, control: i.title, question: i.question, severity: i.severityLabel, timeframe: i.timeframe, scoreLift: i.gain ? `+${i.gain}` : '',
         action: i.recommendation ? `${i.recommendation.quickWin} ${i.recommendation.mediumTerm}` : '',
         owner: i.owner || i.suggestedOwner, dueDate: i.dueDate || '', status: i.statusLabel, ticketRef: i.ticketRef || '', notes: i.notes || ''
       }))

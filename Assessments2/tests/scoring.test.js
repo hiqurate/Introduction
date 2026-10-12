@@ -295,6 +295,26 @@ test('remediation stages improve the score step by step and end fully remediated
   assert.equal(plan.actions.length, 4, 'one action per control with a gap');
 });
 
+test('score lift per fix adds up to the fully remediated score, most severe first', () => {
+  const data = fixture([
+    { id: 'a', name: 'Protect', questions: [q('mfa', 'critical', [1, 2, 3, 4]), q('edr', 'critical', [1, 2, 3, 4]), q('pol', 'foundational', [1, 2, 3, 4])] },
+    { id: 'b', name: 'Recover', questions: [q('bak', 'critical', [1, 2, 3, 4]), q('rst', 'high', [1, 2, 3, 4])] }
+  ]);
+  const result = Scoring.scoreAssessment({ frameworkId: 'nist', data, answers: { mfa: 1, edr: 2, pol: 1, bak: 4, rst: 2 }, config: NO_RULES });
+  const ladder = Scoring.projectActionLadder(result);
+  assert.equal(ladder.baseline.healthScore, result.overall.healthScore);
+  assert.equal(ladder.final.healthScore, 100);
+  assert.equal(ladder.steps.length, 4, 'one step per control with a gap');
+  const total = ladder.steps.reduce((n, s) => n + s.gain, 0);
+  assert.ok(Math.abs(result.overall.healthScore + total - 100) <= 1, 'gains add up to the final score');
+  ladder.steps.forEach((s, i) => {
+    if (i) assert.ok(Scoring.SEVERITIES.indexOf(s.severity) >= Scoring.SEVERITIES.indexOf(ladder.steps[i - 1].severity), 'ordered by severity');
+    assert.ok(s.gain >= 0);
+    assert.ok(Math.abs(s.items.reduce((n, x) => n + x.gain, 0) - s.gain) <= 0.2, 'item gains add up to the step gain');
+  });
+  if (ladder.baseline.capped) assert.ok(ladder.steps.some(s => s.liftsCap), 'one fix lifts the critical-control cap');
+});
+
 // ── Question quality guarantees ──
 
 test('every shipped question outside SOC-CMM names its control explicitly', () => {

@@ -273,10 +273,68 @@
       <div class="deadline-strip-when">${d.when}</div>
       <div class="deadline-strip-bars" aria-hidden="true">
         <div><span>Time used</span><div class="bar"><span style="width:${d.elapsed}%;background:var(--ink-300)"></span></div></div>
-        <div><span>Completed</span><div class="bar"><span style="width:${d.pctDone}%;background:var(--brand-500)"></span></div></div>
+        <div><span>Completed</span><div class="bar"><span style="width:${d.pctDone}%;background:var(--accent)"></span></div></div>
       </div>
     </div>`;
   }
 
-  root.UI = { deadline, deadlineBadge, deadlineStrip, toast, error, modal, confirm, reveal, closeModal, drawer, closeDrawer, skeleton, emptyState, scoreRing, maturityScale, severityBar, pctBar, trendChart, heatmap, riskMatrix };
+  // ── Portal building blocks ──
+  // Page header with an eyebrow, optional stat tiles and actions.
+  function pageHero({ eyebrow, title, sub, actions, stats, icon: iconName }) {
+    return html`<header class="page-hero">
+      <div class="page-hero-main">
+        ${iconName ? html`<span class="page-hero-icon">${icon(iconName)}</span>` : ''}
+        <div class="grow">
+          ${eyebrow ? html`<div class="eyebrow">${eyebrow}</div>` : ''}
+          <h1>${title}</h1>
+          ${sub ? html`<div class="sub">${sub}</div>` : ''}
+        </div>
+        ${actions ? html`<div class="btn-group">${actions}</div>` : ''}
+      </div>
+      ${stats && stats.length ? html`<div class="hero-stats">${stats.map(s => html`<div class="hero-stat ${s.tone ? `hero-stat-${s.tone}` : ''}">
+        <span class="hero-stat-label">${s.label}</span><strong>${s.value}</strong>${s.sub ? html`<span class="hero-stat-sub">${s.sub}</span>` : ''}</div>`)}</div>` : ''}
+    </header>`;
+  }
+
+  // Score points gained by completing a fix.
+  function fmtGain(gain) {
+    if (!gain || gain <= 0) return '';
+    return gain < 1 ? '+<1' : `+${Math.round(gain)}`;
+  }
+  function liftChip(gain, { size, label = 'pts' } = {}) {
+    const text = fmtGain(gain);
+    if (!text) return '';
+    return html`<span class="lift ${size === 'lg' ? 'lift-lg' : ''}" title="Expected rise in Cyber Health Score when this is fixed">${icon('trendUp')}${text}<small>${label}</small></span>`;
+  }
+
+  // Horizontal bar: where the score is, what resolved work has banked, and
+  // what the open work would add.
+  function scorePath({ now, banked = 0, potential, labels = {} }) {
+    const clamp = v => Math.max(0, Math.min(100, v));
+    const a = clamp(now);
+    const b = clamp(now + banked);
+    const c = clamp(potential);
+    return html`<div class="score-path" role="img" aria-label="Score now ${a}${banked ? `, ${Math.round(b)} with resolved fixes` : ''}, ${Math.round(c)} when every open fix is complete">
+      <div class="score-path-track">
+        <span class="score-path-now" style="width:${a}%"></span>
+        ${b > a ? html`<span class="score-path-banked" style="left:${a}%;width:${b - a}%"></span>` : ''}
+        ${c > b ? html`<span class="score-path-gain" style="left:${b}%;width:${c - b}%"></span>` : ''}
+        <i class="score-path-mark ${a < 10 ? 'edge-start' : a > 90 ? 'edge-end' : ''}" style="left:${a}%"><b>${Math.round(a)}</b><em>${labels.now || 'Now'}</em></i>
+        ${c > b ? html`<i class="score-path-mark score-path-mark-end ${c > 90 ? 'edge-end' : ''}" style="left:${c}%"><b>${Math.round(c)}</b><em>${labels.potential || 'When fixed'}</em></i>` : ''}
+      </div>
+    </div>`;
+  }
+
+  // Small ring for completion percentages.
+  function miniRing(pct, { size = 44, color, label } = {}) {
+    const r = 18;
+    const c = 2 * Math.PI * r;
+    const v = Math.max(0, Math.min(100, pct || 0));
+    return html`<span class="mini-ring" style="width:${size}px;height:${size}px" role="img" aria-label="${label || `${v} percent`}">
+      <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="${r}" fill="none" stroke="var(--subtle)" stroke-width="5"/>
+      <circle cx="22" cy="22" r="${r}" fill="none" stroke="${color || (v === 100 ? 'var(--success)' : 'var(--accent)')}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c - (v / 100) * c}" transform="rotate(-90 22 22)"/></svg>
+      <b>${Math.round(v)}%</b></span>`;
+  }
+
+  root.UI = { pageHero, fmtGain, liftChip, scorePath, miniRing, deadline, deadlineBadge, deadlineStrip, toast, error, modal, confirm, reveal, closeModal, drawer, closeDrawer, skeleton, emptyState, scoreRing, maturityScale, severityBar, pctBar, trendChart, heatmap, riskMatrix };
 })(window);

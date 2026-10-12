@@ -128,7 +128,7 @@
       const template = await Content.template(detail.assessment.frameworkId);
       const evidence = {};
       detail.result.controls.forEach(c => { if (c.evidenceCount) evidence[c.id] = c.evidenceCount; });
-      qs = { detail, template, answers: { ...detail.answers }, evidence, filter: 'all', open: {} };
+      qs = { detail, template, answers: { ...detail.answers }, evidence, filter: 'all', open: {}, cur: {}, dir: 1 };
       saver.assessmentId = detail.assessment.id;
       saver.lastSaved = null;
       saver.error = null;
@@ -155,6 +155,7 @@
     const canMark = editable && (isOwner || App.can('assessment:assign'));
     const modResult = modules.find(m => m.id === mod.id);
     const hiddenCount = qs.result.controls.filter(c => c.moduleId === mod.id && c.state === 'hidden' && c.applicability.ruleId !== 'scope').length;
+    const pct = modResult && modResult.applicable ? Math.round((modResult.answered / modResult.applicable) * 100) : 0;
 
     App.renderApp(html`<div class="page">
       <div class="breadcrumb"><a href="#/app/assessments">Assessments</a>${icon('chevronRight')}<a href="#/app/assessments/${a.id}">${a.title}</a>${icon('chevronRight')}<span>${mod.name}</span></div>
@@ -168,37 +169,152 @@
           <div class="mt-16" id="section-links">${sectionLinks()}</div>
         </nav>
         <div>
-          <div class="card">
-            <div class="card-head" style="align-items:flex-start">
-              <div><h2 style="font-size:18px">${mod.name}</h2><div class="small muted mt-8">${mod.description || ''}</div>
-                <div class="small muted mt-8">Owner: ${section.owner_name || section.owner_email || 'Unassigned'}<span id="section-count">${modResult ? ` · ${modResult.answered} of ${modResult.applicable} answered` : ''}</span>${hiddenCount ? ` · ${plural(hiddenCount, 'question')} hidden by applicability rules` : ''}</div></div>
+          <div class="card q-card">
+            <div class="q-section-head">
+              <span id="section-ring">${UI.miniRing(pct, { size: 52, label: `${pct}% of this section answered` })}</span>
+              <div class="grow" style="min-width:220px">
+                <div class="eyebrow">Section ${idx + 1} of ${qs.template.data.modules.length}</div>
+                <h2 style="margin-top:3px">${mod.name}</h2>
+                <div class="small muted mt-8">Owner: ${section.owner_name || section.owner_email || 'Unassigned'}<span id="section-count">${modResult ? ` · ${modResult.answered} of ${modResult.applicable} answered` : ''}</span>${hiddenCount ? ` · ${plural(hiddenCount, 'question')} hidden by applicability rules` : ''}</div>
+              </div>
               <div class="stack-sm right">
                 <span id="section-deadline">${deadlineNow()}</span>
                 <span id="save-state" class="save-state"></span>
                 ${canMark ? html`<div><button class="btn btn-sm" data-action="mark-section" data-status="${section.status === 'complete' ? 'in_progress' : 'complete'}">${section.status === 'complete' ? 'Reopen section' : html`${icon('check')} Mark section complete`}</button></div>` : ''}
               </div>
             </div>
-            ${!editable ? html`<div class="callout callout-info" style="margin:16px 20px 0">${icon('lock')}<div>${!qs.detail.permissions.editable ? 'This assessment is locked for review. Answers are read-only.' : !qs.detail.permissions.canAnswer ? 'Your role can view answers but not change them.' : 'This section is assigned to someone else. You can view it but not change it.'}</div></div>` : ''}
-            <div class="row row-wrap" style="padding:14px 20px 0">
+            ${!editable ? html`<div class="callout callout-info" style="margin:16px 22px 0">${icon('lock')}<div>${!qs.detail.permissions.editable ? 'This assessment is locked for review. Answers are read-only.' : !qs.detail.permissions.canAnswer ? 'Your role can view answers but not change them.' : 'This section is assigned to someone else. You can view it but not change it.'}</div></div>` : ''}
+            <div class="q-filters">
               <span class="small muted">Show</span>
               ${[['all', 'All questions'], ['unanswered', 'Unanswered'], ['gaps', 'Gaps'], ['evidence', 'Evidence required'], ['carried', 'Carried forward']].map(([k, l]) => html`<button class="btn btn-sm ${qs.filter === k ? 'btn-dark' : ''}" data-action="q-filter" data-filter="${k}">${l}</button>`)}
             </div>
-            <div id="questions">${mod.categories.map(cat => html`
-              <div class="category" style="margin-top:12px">
-                <div style="padding:10px 20px;background:#fafbfc;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><h3 style="font-size:13px">${cat.name}</h3>${cat.description ? html`<div class="small muted">${cat.description}</div>` : ''}</div>
-                ${cat.questions.map(q => questionCard(q, editable))}
-              </div>`)}</div>
+            <div class="q-nav" id="q-nav">${navDots()}</div>
+            <div id="q-stage">${stage(editable)}</div>
+            <div class="q-footer" id="q-footer">${footer(prev, next)}</div>
           </div>
           <div class="row row-between mt-16">
-            ${prev ? html`<a class="btn" href="#/app/assessments/${a.id}/section/${prev.id}">${icon('chevronLeft')} ${prev.name}</a>` : html`<span></span>`}
-            ${next ? html`<a class="btn btn-primary" href="#/app/assessments/${a.id}/section/${next.id}">${next.name} ${icon('chevronRight')}</a>` : html`<a class="btn btn-primary" href="#/app/assessments/${a.id}">Review and submit ${icon('chevronRight')}</a>`}
+            ${prev ? html`<a class="btn btn-ghost" href="#/app/assessments/${a.id}/section/${prev.id}">${icon('chevronLeft')} ${prev.name}</a>` : html`<span></span>`}
+            ${next ? html`<a class="btn btn-ghost" href="#/app/assessments/${a.id}/section/${next.id}">${next.name} ${icon('chevronRight')}</a>` : html`<a class="btn btn-ghost" href="#/app/assessments/${a.id}">Review and submit ${icon('chevronRight')}</a>`}
           </div>
         </div>
       </div>
     </div>`);
     saver.render();
-    applyFilter();
   }
+
+  // ── One question at a time ──
+  function matchesFilter(item, q) {
+    const f = qs.filter;
+    if (f === 'unanswered') return item.state === 'unanswered';
+    if (f === 'gaps') return item.state === 'unknown' || item.state === 'planned' || (item.state === 'scored' && item.fraction < 1);
+    if (f === 'evidence') return item.evidenceRequired;
+    if (f === 'carried') return !!(qs.answers[q.id] && qs.answers[q.id].carried);
+    return true;
+  }
+
+  // Questions in this section that are in scope and match the filter.
+  function visibleList() {
+    const mod = moduleData(qs.moduleId) || qs.template.data.modules[0];
+    const out = [];
+    mod.categories.forEach(cat => cat.questions.forEach(q => {
+      const item = qs.items[q.id];
+      if (item && item.state !== 'hidden' && matchesFilter(item, q)) out.push({ q, cat });
+    }));
+    return out;
+  }
+
+  function currentIndex(list) {
+    const id = qs.cur[qs.moduleId];
+    const i = list.findIndex(x => x.q.id === id);
+    if (i >= 0) return i;
+    // Start at the first unanswered question when entering a section.
+    const firstOpen = list.findIndex(x => qs.items[x.q.id].state === 'unanswered');
+    return list.length ? Math.max(0, firstOpen) : -1;
+  }
+
+  function navDots() {
+    const list = visibleList();
+    const at = currentIndex(list);
+    if (!list.length) return html`<span class="small muted">No questions match this filter in this section.</span>`;
+    return html`${list.map((x, i) => {
+      const it = qs.items[x.q.id];
+      const cls = it.state === 'unanswered' ? '' : it.state === 'na' ? 'is-other' : it.state === 'unknown' || it.state === 'planned' ? 'is-gap' : 'is-answered';
+      return html`<button type="button" class="q-dot ${cls}" data-action="q-go" data-qid="${x.q.id}" aria-current="${i === at ? 'true' : 'false'}" title="${x.q.text}" aria-label="Question ${i + 1}">${i + 1}</button>`;
+    })}
+    <span class="q-legend"><span><i style="background:var(--ink-900);border-color:var(--ink-900)"></i>Answered</span><span><i style="background:#fff3dc;border-color:#f2cf8a"></i>Unknown or planned</span><span><i></i>To answer</span></span>`;
+  }
+
+  function stage(editable) {
+    const list = visibleList();
+    const at = currentIndex(list);
+    if (at < 0) return html`<div class="q-done"><div class="q-done-icon">${icon('check')}</div><h3>Nothing to show here</h3><p class="muted">No questions in this section match the current filter.</p><button class="btn" data-action="q-filter" data-filter="all">Show all questions</button></div>`;
+    const { q, cat } = list[at];
+    qs.cur[qs.moduleId] = q.id;
+    return html`<div class="q-stage ${qs.dir < 0 ? 'q-back' : ''}">
+      <div class="q-counter"><span class="eyebrow">Question <b>${at + 1}</b> of ${list.length} · ${cat.name}</span></div>
+      ${questionCard(q, editable === undefined ? canEditModule(qs.moduleId) : editable)}
+    </div>`;
+  }
+
+  function footer(prevMod, nextMod) {
+    const a = qs.detail.assessment;
+    const idx = qs.template.data.modules.findIndex(m => m.id === qs.moduleId);
+    prevMod = prevMod || qs.template.data.modules[idx - 1];
+    nextMod = nextMod || qs.template.data.modules[idx + 1];
+    const list = visibleList();
+    const at = currentIndex(list);
+    const last = at >= list.length - 1;
+    return html`
+      <button class="btn" data-action="q-step" data-dir="-1" ${at <= 0 ? raw('disabled') : ''}>${icon('chevronLeft')} Previous</button>
+      <span class="q-hint">${icon('keyboard')} <span class="kbd">1</span>–<span class="kbd">4</span> to answer · <span class="kbd">←</span> <span class="kbd">→</span> to move</span>
+      ${!last ? html`<button class="btn btn-primary" data-action="q-step" data-dir="1">Next question ${icon('chevronRight')}</button>`
+        : nextMod ? html`<a class="btn btn-primary" href="#/app/assessments/${a.id}/section/${nextMod.id}">Next section: ${nextMod.name} ${icon('chevronRight')}</a>`
+        : html`<a class="btn btn-primary" href="#/app/assessments/${a.id}">Review and submit ${icon('chevronRight')}</a>`}`;
+  }
+
+  function showQuestion(qid, dir) {
+    qs.dir = dir || 1;
+    qs.cur[qs.moduleId] = qid;
+    setHtml('#q-stage', stage());
+    setHtml('#q-nav', navDots());
+    setHtml('#q-footer', footer());
+    const stageEl = $('#q-stage');
+    if (stageEl && stageEl.getBoundingClientRect().top < 60) stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Move relative to the current question's place in the section, so this
+  // still works when the current question has just dropped out of a filter.
+  function step(dir) {
+    const list = visibleList();
+    const mod = moduleData(qs.moduleId) || qs.template.data.modules[0];
+    const order = mod.categories.flatMap(c => c.questions.map(q => q.id));
+    const pos = order.indexOf(qs.cur[qs.moduleId]);
+    const candidates = dir > 0 ? list.filter(x => order.indexOf(x.q.id) > pos) : list.filter(x => order.indexOf(x.q.id) < pos).reverse();
+    const target = candidates[0];
+    if (target) showQuestion(target.q.id, dir);
+  }
+
+  on('action', 'q-step', el => step(Number(el.dataset.dir)));
+  on('action', 'q-go', el => {
+    const list = visibleList();
+    const from = currentIndex(list);
+    const to = list.findIndex(x => x.q.id === el.dataset.qid);
+    showQuestion(el.dataset.qid, to < from ? -1 : 1);
+  });
+
+  // Keyboard: number keys answer, arrow keys move between questions.
+  document.addEventListener('keydown', e => {
+    if (!qs || !App.current || !/\/section\//.test(App.current.path)) return;
+    if (document.getElementById('modal-root') || document.getElementById('drawer-root')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input:not([type=radio]), textarea, select, [contenteditable]')) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); return; }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); return; }
+    if (/^[1-9]$/.test(e.key)) {
+      const radios = $all('#q-stage .opt input[type=radio]');
+      const r = radios[Number(e.key) - 1];
+      if (r && !r.disabled) { e.preventDefault(); r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+    }
+  });
 
   function deadlineNow() {
     const a = qs.detail.assessment;
@@ -230,9 +346,6 @@
     const open = qs.open[q.id] || {};
     const isIndustry = qs.template.framework.type === 'industry';
     const disabled = editable ? '' : raw('disabled');
-    // Questions whose answer levels are each described are laid out as a grid
-    // so the descriptions can be read side by side.
-    const described = q.options.length > 1 && q.options.every(o => o.detail && o.detail.length > 40);
     const secondary = html`${SECONDARY.map(s => html`<label class="option option-secondary ${value === s.v ? 'selected' : ''}" title="${s.help}">
           <input type="radio" name="${name}" value="${s.v}" aria-label="${s.label}" ${value === s.v ? raw('checked') : ''} ${disabled} data-change="answer-radio" data-qid="${q.id}"><span>${s.label}</span></label>`)}`;
 
@@ -248,14 +361,14 @@
       ${q.attack ? html`<div class="attacker-note">${icon('target')}<div><span class="attacker-label">Attacker's view</span>${q.attack}</div></div>` : ''}
       ${item.applicability && item.applicability.suggestNA && value !== 'NA' ? html`<div class="callout callout-info question-hint mb-8">${icon('info')}<div class="grow small">${item.applicability.reason}</div>${editable ? html`<button class="btn btn-sm" data-action="answer" data-qid="${q.id}" data-value="NA">Mark not applicable</button>` : ''}</div>` : ''}
       <div role="radiogroup" aria-labelledby="qt-${q.id}">
-        <div class="${described ? 'options options-described' : 'options'}">
-          ${q.options.map(o => html`<label class="option ${value === o.value ? 'selected' : ''}">
+        <div class="option-list">
+          ${q.options.map((o, k) => html`<label class="opt ${value === o.value ? 'selected' : ''} ${editable ? '' : 'is-disabled'}">
             <input type="radio" name="${name}" value="${o.value}" aria-label="${o.label}${o.detail ? `: ${o.detail}` : ''}" ${value === o.value ? raw('checked') : ''} ${disabled} data-change="answer-radio" data-qid="${q.id}">
-            <span>${o.label}</span>${o.detail ? html`<span class="detail">${o.detail}</span>` : ''}</label>`)}
-          ${described ? '' : html`<span class="options-divider" aria-hidden="true"></span>`}
-          ${described ? '' : secondary}
+            <span class="opt-key" aria-hidden="true">${k + 1}</span>
+            <span><span class="opt-label">${o.label}</span>${o.detail ? html`<span class="opt-detail">${o.detail}</span>` : ''}</span>
+            <span class="opt-check" aria-hidden="true">${icon('check')}</span></label>`)}
         </div>
-        ${described ? html`<div class="options options-secondary">${secondary}</div>` : ''}
+        <div class="opt-alt"><span>None of these fit?</span>${secondary}</div>
       </div>
       <div class="question-tools">
         <button class="btn btn-sm btn-ghost" data-action="toggle-guidance" data-qid="${q.id}" aria-expanded="${open.guidance ? 'true' : 'false'}">${icon('info')} Guidance</button>
@@ -311,7 +424,11 @@
     const m = qs.result.modules.find(x => x.id === qs.moduleId);
     const sc = $('#section-count'); if (sc && m) sc.textContent = ` · ${m.answered} of ${m.applicable} answered`;
     setHtml('#section-deadline', deadlineNow());
-    applyFilter();
+    if (m) setHtml('#section-ring', UI.miniRing(m.applicable ? Math.round((m.answered / m.applicable) * 100) : 0, { size: 52 }));
+    // Applicability can add or remove questions; keep the current one if it is still in scope.
+    if (changed.length && !visibleList().some(x => x.q.id === qs.cur[qs.moduleId])) setHtml('#q-stage', stage());
+    setHtml('#q-nav', navDots());
+    setHtml('#q-footer', footer());
   }
 
   function setAnswer(qid, patch) {
@@ -326,6 +443,10 @@
   on('change', 'answer-radio', el => {
     const raw = el.value;
     const v = ['NA', 'UNK', 'PLANNED'].includes(raw) ? raw : Number(raw);
+    const qid = el.dataset.qid;
+    const firstAnswer = !Scoring.normaliseAnswer(qs.answers[qid]);
+    // Move on after a first answer; a changed answer stays put so notes and evidence can follow.
+    if (firstAnswer) setTimeout(() => { if (qs.cur[qs.moduleId] === qid) step(1); }, 420);
     const patch = { v };
     if (qs.evidence[el.dataset.qid] && typeof v === 'number') {
       const cur = Scoring.normaliseAnswer(qs.answers[el.dataset.qid]);
@@ -357,31 +478,12 @@
   on('action', 'q-filter', el => {
     qs.filter = el.dataset.filter;
     $all('[data-action="q-filter"]').forEach(b => b.classList.toggle('btn-dark', b.dataset.filter === qs.filter));
-    applyFilter();
+    const list = visibleList();
+    if (!list.some(x => x.q.id === qs.cur[qs.moduleId])) qs.cur[qs.moduleId] = list.length ? list[0].q.id : null;
+    setHtml('#q-stage', stage());
+    setHtml('#q-nav', navDots());
+    setHtml('#q-footer', footer());
   });
-
-  function applyFilter() {
-    const f = qs.filter;
-    let visible = 0;
-    $all('#questions .question').forEach(el => {
-      const item = qs.items[el.dataset.qid];
-      if (!item || item.state === 'hidden') { el.classList.add('is-hidden'); return; }
-      let show = true;
-      if (f === 'unanswered') show = item.state === 'unanswered';
-      if (f === 'gaps') show = item.state === 'unknown' || item.state === 'planned' || (item.state === 'scored' && item.fraction < 1);
-      if (f === 'evidence') show = item.evidenceRequired;
-      if (f === 'carried') show = el.dataset.carried === '1';
-      el.classList.toggle('is-hidden', !show);
-      if (show) visible++;
-    });
-    $all('#questions .category').forEach(cat => {
-      cat.classList.toggle('hidden', !cat.querySelector('.question:not(.is-hidden)'));
-    });
-    const container = $('#questions');
-    const empty = $('#questions-empty');
-    if (container && !visible && !empty) container.insertAdjacentHTML('beforeend', '<p id="questions-empty" class="muted" style="padding:20px">No questions match this filter in this section.</p>');
-    if (visible && empty) empty.remove();
-  }
 
   on('action', 'mark-section', async el => {
     const a = qs.detail.assessment;

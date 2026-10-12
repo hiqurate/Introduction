@@ -30,42 +30,53 @@
     const entitled = catalog.filter(f => tenant.frameworks.includes(f.id));
     const canCreate = App.can('assessment:create');
 
+    const answered = active.reduce((n, a) => n + a.progress.answered, 0);
+    const toAnswer = active.reduce((n, a) => n + Math.max(0, a.progress.applicable - a.progress.answered), 0);
+    const nextDue = active.filter(a => a.dueDate).sort((x, y) => x.dueDate.localeCompare(y.dueDate))[0];
+    const planLine = tenant.package === 'snapshot' ? 'Snapshot plan: self-assessed, covering each security control once' : tenant.package === 'managed' ? 'Managed plan: assessor-led assessments on a schedule' : 'Comprehensive plan: full assessment reviewed by HiQurate Ops';
+
     App.renderApp(html`<div class="page">
-      <div class="page-head"><div><h1>Assessments</h1><div class="sub">${tenant.name} · ${tenant.package === 'snapshot' ? 'Snapshot plan: self-assessed, covering each security control once' : tenant.package === 'managed' ? 'Managed plan: assessor-led assessments on a schedule' : 'Comprehensive plan: full assessment reviewed by HiQurate Ops'}</div></div></div>
+      ${UI.pageHero({
+        icon: 'clipboard', eyebrow: 'Assessments', title: 'Your assessments',
+        sub: `${tenant.name} · ${planLine}`,
+        stats: [
+          { label: 'In progress', value: active.length, sub: active.length ? `${answered} questions answered` : 'Nothing open' },
+          { label: 'Still to answer', value: toAnswer, tone: toAnswer ? 'amber' : 'success', sub: toAnswer ? 'Across open assessments' : 'All caught up' },
+          { label: 'Next target date', value: nextDue ? fmtDate(nextDue.dueDate, { day: 'numeric', month: 'short' }) : '—', sub: nextDue ? ((UI.deadline(nextDue) || {}).when || nextDue.frameworkShortName) : 'No dates set' },
+          { label: 'Completed', value: done.length, tone: done.length ? 'success' : '', sub: done.length ? `Last ${fmtDate(done[0].completedAt)}` : 'None yet' }
+        ]
+      })}
 
-      <div class="card">
-        <div class="card-head"><h3>Active assessments</h3><span class="muted">${active.length}</span></div>
-        ${active.length ? html`<div class="table-wrap"><table class="table">
-          <thead><tr><th>Assessment</th><th>Status</th><th style="width:200px">Progress</th><th class="num">Provisional health</th><th>Due</th><th></th></tr></thead>
-          <tbody>${active.map(a => html`<tr class="clickable" data-action="open-assessment" data-id="${a.id}" tabindex="0">
-            <td><div class="strong">${a.title}</div><div class="small muted">${a.frameworkName} · started ${fmtDate(a.createdAt)} · updated ${ageLabel(a.updatedAt)}</div></td>
-            <td>${statusBadge(a)}${a.missingEvidence ? html`<div class="small" style="color:var(--medium);margin-top:4px">${plural(a.missingEvidence, 'evidence gap')}</div>` : ''}</td>
-            <td><div class="progress"><span style="width:${a.progress.percentage}%"></span></div><div class="small muted mt-8">${a.progress.answered} of ${a.progress.applicable} · ${a.progress.percentage}%</div></td>
-            <td class="num">${a.healthScore === null ? '—' : a.healthScore}</td>
-            <td class="nowrap">${UI.deadlineBadge(a)}</td>
-            <td class="right">${icon('chevronRight')}</td></tr>`)}</tbody></table></div>`
-          : html`<div class="card-body muted">No assessments are in progress.</div>`}
-      </div>
+      <div class="section-title"><h2>In progress</h2><span class="muted">${plural(active.length, 'assessment')}</span></div>
+      ${active.length ? html`<div class="tile-grid mb-24">${active.map(a => html`<div class="tile tile-accent clickable" data-action="open-assessment" data-id="${a.id}" tabindex="0" role="button">
+          <div class="tile-top">${UI.miniRing(a.progress.percentage, { size: 56 })}
+            <div class="grow" style="min-width:0"><h3>${a.title}</h3><div class="tile-sub">${a.frameworkName}</div>
+              <div class="row row-wrap mt-8" style="gap:6px">${statusBadge(a)}${a.missingEvidence ? html`<span class="badge badge-medium">${plural(a.missingEvidence, 'evidence gap')}</span>` : ''}</div></div></div>
+          <div class="row row-between small"><span class="muted">${a.progress.answered} of ${a.progress.applicable} answered</span><span>${a.healthScore === null ? html`<span class="faint">No score yet</span>` : html`Provisional score <strong>${a.healthScore}</strong>`}</span></div>
+          <div class="tile-foot">${UI.deadlineBadge(a)}<span class="btn btn-sm btn-primary">${a.status === 'in_progress' || a.status === 'evidence_requested' ? 'Resume' : 'View'} ${icon('chevronRight')}</span></div>
+        </div>`)}</div>`
+        : html`<div class="card mb-24"><div class="card-body muted">No assessments are in progress.${canCreate ? ' Start one below.' : ''}</div></div>`}
 
-      ${canCreate ? html`<div class="card mt-16">
-        <div class="card-head"><h3>Start an assessment</h3><span class="muted">Templates enabled for ${tenant.name}</span></div>
-        ${entitled.length ? html`<div class="table-wrap"><table class="table"><tbody>${entitled.map(f => {
+      ${canCreate ? html`<div class="section-title"><h2>Start an assessment</h2><span class="muted">Templates enabled for ${tenant.name}</span></div>
+        ${entitled.length ? html`<div class="tile-grid mb-24">${entitled.map(f => {
           const openOne = active.find(a => a.frameworkId === f.id);
           const hasCompleted = done.some(a => a.frameworkId === f.id);
-          return html`<tr>
-            <td><div class="strong">${f.name}</div><div class="small muted">${f.description}</div></td>
-            <td class="small nowrap">${tenant.package === 'snapshot' ? html`${f.snapshotQuestionCount} questions<div class="faint">about 15 to 25 minutes</div>` : html`${f.questionCount} questions<div class="faint">${f.estimatedTime}</div>`}</td>
-            <td class="small nowrap">Template v${f.templateVersion}</td>
-            <td class="right">${openOne ? html`<a class="btn btn-sm" href="#/app/assessments/${openOne.id}">Open current</a>` : html`<button class="btn btn-sm btn-primary" data-action="start-assessment" data-framework="${f.id}" data-name="${f.name}" data-carry="${hasCompleted ? '1' : ''}">${hasCompleted ? 'Start new cycle' : 'Start'}</button>`}</td></tr>`;
-        })}</tbody></table></div>` : html`<div class="card-body muted">No templates are enabled for this organisation. ${App.isStaff() ? 'Enable templates in the organisation settings.' : 'Contact your HiQurate Ops assessor.'}</div>`}
-      </div>` : ''}
+          return html`<div class="tile">
+            <div class="tile-top"><span class="page-hero-icon" style="width:38px;height:38px;border-radius:10px">${icon(f.type === 'industry' ? 'target' : 'layers')}</span>
+              <div class="grow"><h3>${f.name}</h3><div class="tile-sub">Template v${f.templateVersion}</div></div></div>
+            <p class="small muted" style="margin:0">${f.description}</p>
+            <div class="tile-foot"><span>${tenant.package === 'snapshot' ? `${f.snapshotQuestionCount} questions · 15 to 25 minutes` : `${f.questionCount} questions · ${f.estimatedTime}`}</span>
+              ${openOne ? html`<a class="btn btn-sm" href="#/app/assessments/${openOne.id}">Open current</a>` : html`<button class="btn btn-sm btn-primary" data-action="start-assessment" data-framework="${f.id}" data-name="${f.name}" data-carry="${hasCompleted ? '1' : ''}">${hasCompleted ? 'Start new cycle' : 'Start'}</button>`}</div>
+          </div>`;
+        })}</div>` : html`<div class="card mb-24"><div class="card-body muted">No templates are enabled for this organisation. ${App.isStaff() ? 'Enable templates in the organisation settings.' : 'Contact your HiQurate Ops assessor.'}</div></div>`}` : ''}
 
-      <div class="card mt-16">
-        <div class="card-head"><h3>Completed</h3><span class="muted">${done.length}</span></div>
-        ${done.length ? html`<div class="table-wrap"><table class="table"><tbody>${done.map(a => html`<tr class="clickable" data-action="open-assessment" data-id="${a.id}" tabindex="0">
-          <td><div class="strong">${a.title}</div><div class="small muted">${a.frameworkName} · completed ${fmtDate(a.completedAt)}</div></td>
-          <td class="num">${a.lastReport ? html`<span class="strong">${a.lastReport.healthScore}</span><div class="small muted">Health</div>` : ''}</td>
-          <td class="right">${a.lastReport ? html`<a class="btn btn-sm" href="#/app/reports/${a.lastReport.id}">Report v${a.lastReport.version}</a>` : ''}</td></tr>`)}</tbody></table></div>`
+      <div class="section-title"><h2>Completed</h2><span class="muted">${plural(done.length, 'assessment')}</span></div>
+      <div class="card">
+        ${done.length ? html`<ul class="version-list">${done.map(a => html`<li data-action="open-assessment" data-id="${a.id}" tabindex="0" role="button">
+          <span class="version-dot"></span>
+          <div><div class="strong">${a.title}</div><div class="small muted">${a.frameworkName} · completed ${fmtDate(a.completedAt)}</div></div>
+          <span>${a.lastReport ? html`<span class="tile-score" style="font-size:22px">${a.lastReport.healthScore}</span><span class="small muted"> health</span>` : ''}</span>
+          <span>${a.lastReport ? html`<a class="btn btn-sm" href="#/app/reports/${a.lastReport.id}">Report v${a.lastReport.version}</a>` : ''}</span></li>`)}</ul>`
           : html`<div class="card-body muted">No completed assessments yet.</div>`}
       </div>
     </div>`);
@@ -100,7 +111,7 @@
     if (result) App.navigate(`/app/assessments/${result}`);
   });
 
-  on('action', 'open-assessment', el => App.navigate(`/app/assessments/${el.dataset.id}`));
+  on('action', 'open-assessment', (el, e) => { if (e.target.closest('a')) return; App.navigate(`/app/assessments/${el.dataset.id}`); });
 
   // ── Workspace ──
   let ws = null;
