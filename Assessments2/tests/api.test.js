@@ -9,6 +9,18 @@ const os = require('os');
 const path = require('path');
 const { createApp } = require('../server/app');
 
+// Set TEST_DATABASE_URL to run these tests against Postgres. The database is
+// wiped at the start, so never point it at a database holding real data.
+const PG_URL = process.env.TEST_DATABASE_URL || '';
+
+async function resetPostgres() {
+  const { Client: PgClient } = require('pg');
+  const c = new PgClient({ connectionString: PG_URL });
+  await c.connect();
+  await c.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public;');
+  await c.end();
+}
+
 const ADMIN = { email: 'platform@hawksight.test', password: 'Platf0rm!Admin#2026' };
 let server;
 let baseUrl;
@@ -62,7 +74,9 @@ const ctx = {};
 
 test.before(async () => {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hawksight-test-'));
+  if (PG_URL) await resetPostgres();
   app = await createApp({
+    databaseUrl: PG_URL || null,
     storageDir: tmpDir, production: false, adminEmail: ADMIN.email, adminPassword: ADMIN.password,
     seedDemo: false, log: false, sessionSecret: 'test-secret-test-secret-test-secret-123'
   });
@@ -224,8 +238,10 @@ test('evidence is validated, encrypted at rest and tenant-scoped on download', a
   assert.equal(ok.status, 201, JSON.stringify(ok.body));
   const id = ok.body.evidence.id;
   const row = await app.locals.db.get('SELECT storage_key FROM evidence WHERE id = ?', [id]);
-  const onDisk = fs.readFileSync(path.join(tmpDir, 'evidence', row.storage_key));
-  assert.ok(!onDisk.includes(Buffer.from('HawkSight test evidence')), 'file is encrypted on disk');
+  const stored = PG_URL
+    ? (await app.locals.db.get('SELECT data FROM evidence_blobs WHERE storage_key = ?', [row.storage_key])).data
+    : fs.readFileSync(path.join(tmpDir, 'evidence', row.storage_key));
+  assert.ok(!stored.includes(Buffer.from('HawkSight test evidence')), 'file is encrypted at rest');
   const down = await c.request('GET', `/api/evidence/${id}/download`, undefined, { raw: true });
   assert.equal(down.status, 200);
   assert.deepEqual(Buffer.from(await down.arrayBuffer()), pdf);

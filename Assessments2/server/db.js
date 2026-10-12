@@ -1,17 +1,20 @@
 // ============================================
 // HawkSight — Database access and schema migrations
-// SQLite via sqlite3 with a small promise wrapper.
+// SQLite via sqlite3 with a small promise wrapper, used for local
+// development and tests. Hosted deployments use Postgres (db-pg.js) through
+// the same interface: run, get, all, exec, transaction, withLock.
 // ============================================
-
-const sqlite3 = require('sqlite3');
 
 class Database {
   constructor(filename) {
     this.filename = filename;
     this.db = null;
+    this.dialect = 'sqlite';
   }
 
   open() {
+    // Loaded lazily so hosted (Postgres) deployments do not need sqlite3.
+    const sqlite3 = require('sqlite3');
     return new Promise((resolve, reject) => {
       this.db = new sqlite3.Database(this.filename, err => (err ? reject(err) : resolve(this)));
     });
@@ -68,6 +71,11 @@ class Database {
     const next = (this.txQueue || Promise.resolve()).then(run, run);
     this.txQueue = next.catch(() => {});
     return next;
+  }
+
+  // A single process owns the SQLite file, so no cross-process lock is needed.
+  async withLock(fn) {
+    return fn();
   }
 }
 
@@ -331,8 +339,13 @@ async function migrate(db) {
   }
 }
 
-async function openDatabase(filename) {
-  const db = new Database(filename);
+// target: a SQLite file path, or { url } for Postgres.
+async function openDatabase(target) {
+  if (target && typeof target === 'object' && target.url) {
+    const { openPostgres } = require('./db-pg');
+    return openPostgres(target.url);
+  }
+  const db = new Database(target);
   await db.open();
   await migrate(db);
   return db;

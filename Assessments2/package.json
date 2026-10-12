@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node --test tests/",
-    "test:e2e": "node scripts/e2e-journey.js"
+    "test:e2e": "node scripts/e2e-journey.js",
+    "vercel-build": "node scripts/vercel-build.js"
   },
   "engines": {
     "node": "22.x"
@@ -17,7 +18,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.19.0",
-    "sqlite3": "^5.1.7"
+    "pg": "^8.23.1"
   },
-  "private": true
+  "private": true,
+  "optionalDependencies": {
+    "sqlite3": "^5.1.7"
+  }
 }

@@ -3,6 +3,7 @@
 
 const bcrypt = require('bcrypt');
 const { BCRYPT_ROUNDS } = require('../bootstrap');
+const { MAX_MB } = require('../evidence-store');
 
 const MAX_FAILED = 5;
 const LOCK_MINUTES = 15;
@@ -35,6 +36,7 @@ module.exports = function authRoutes(app, ctx) {
   async function sessionPayload(user) {
     const tenant = user.tenant_id ? await db.get('SELECT id, name, industry, package, is_demo, reassessment_frequency FROM tenants WHERE id = ?', [user.tenant_id]) : null;
     return {
+      limits: { evidenceMb: MAX_MB },
       user: { id: user.id, email: user.email, name: user.name, role: user.role, roleLabel: ROLE_LABELS[user.role], tenantId: user.tenant_id, mustChangePassword: !!user.must_change_password },
       tenant,
       capabilities: capabilitiesFor(user)
@@ -135,9 +137,9 @@ module.exports = function authRoutes(app, ctx) {
       const sections = JSON.parse(invite.sections_json || '[]');
       if (invite.assessment_id && sections.length) {
         for (const moduleId of sections) {
-          await tx.run(`INSERT INTO assessment_sections (assessment_id, module_id, owner_user_id) VALUES (?, ?, ?)
-            ON CONFLICT(assessment_id, module_id) DO UPDATE SET owner_user_id = excluded.owner_user_id, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now')`,
-          [invite.assessment_id, moduleId, r.lastID]);
+          await tx.run(`INSERT INTO assessment_sections (assessment_id, module_id, owner_user_id, updated_at) VALUES (?, ?, ?, ?)
+            ON CONFLICT(assessment_id, module_id) DO UPDATE SET owner_user_id = excluded.owner_user_id, updated_at = excluded.updated_at`,
+          [invite.assessment_id, moduleId, r.lastID, new Date().toISOString()]);
         }
       }
       return r.lastID;

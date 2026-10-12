@@ -1,7 +1,8 @@
 // ============================================
 // HawkSight — Encrypted evidence storage
-// Files are encrypted with AES-256-GCM before they touch disk and are kept
-// outside the web root. They are only returned through an authenticated,
+// Files are encrypted with AES-256-GCM before they are stored, either on disk
+// outside the web root or, on hosted deployments without a persistent disk,
+// in the database. They are only returned through an authenticated,
 // tenant-checked API route.
 // ============================================
 
@@ -20,7 +21,47 @@ const ALLOWED_TYPES = {
   'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx'
 };
 
-const MAX_BYTES = 10 * 1024 * 1024;
+// Serverless hosts cap request bodies (Vercel: 4.5 MB), and uploads are sent
+// base64-encoded, so the limit is lower there.
+const MAX_MB = Number(process.env.EVIDENCE_MAX_MB) || (process.env.VERCEL ? 3 : 10);
+const MAX_BYTES = MAX_MB * 1024 * 1024;
+const KEY_PATTERN = /^\d+\/[a-f0-9]{32}\.bin$/;
+
+// Where encrypted blobs live: files on disk, or a table in the database.
+class FileBackend {
+  constructor(directory) {
+    this.directory = directory;
+    fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+  }
+  async put(storageKey, tenantId, blob) {
+    const fullPath = path.join(this.directory, storageKey);
+    await fs.promises.mkdir(path.dirname(fullPath), { recursive: true, mode: 0o700 });
+    await fs.promises.writeFile(fullPath, blob, { mode: 0o600 });
+  }
+  get(storageKey) {
+    return fs.promises.readFile(path.join(this.directory, storageKey));
+  }
+  async remove(storageKey) {
+    await fs.promises.unlink(path.join(this.directory, storageKey)).catch(() => {});
+  }
+}
+
+class DatabaseBackend {
+  constructor(db) {
+    this.db = db;
+  }
+  async put(storageKey, tenantId, blob) {
+    await this.db.run('INSERT INTO evidence_blobs (storage_key, tenant_id, data) VALUES (?, ?, ?)', [storageKey, Number(tenantId), blob]);
+  }
+  async get(storageKey) {
+    const row = await this.db.get('SELECT data FROM evidence_blobs WHERE storage_key = ?', [storageKey]);
+    if (!row) throw new Error('Evidence file not found');
+    return row.data;
+  }
+  async remove(storageKey) {
+    await this.db.run('DELETE FROM evidence_blobs WHERE storage_key = ?', [storageKey]).catch(() => {});
+  }
+}
 
 // Magic-number checks so a renamed executable cannot be stored as a PDF.
 function sniffMatches(mime, buf) {
@@ -41,10 +82,10 @@ function sniffMatches(mime, buf) {
 }
 
 class EvidenceStore {
-  constructor({ directory, key }) {
-    this.directory = directory;
+  // Pass db to keep files in the database, otherwise directory.
+  constructor({ directory, db, key }) {
     this.key = key;
-    fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+    this.backend = db ? new DatabaseBackend(db) : new FileBackend(directory);
   }
 
   static loadKey({ envKey, keyFile, production }) {
@@ -66,7 +107,7 @@ class EvidenceStore {
   validate({ mime, buffer, filename }) {
     if (!ALLOWED_TYPES[mime]) return 'File type not permitted. Upload PDF, image, text or Office documents.';
     if (!buffer || !buffer.length) return 'File is empty.';
-    if (buffer.length > MAX_BYTES) return 'File exceeds the 10 MB limit.';
+    if (buffer.length > MAX_BYTES) return `File exceeds the ${MAX_MB} MB limit.`;
     if (!sniffMatches(mime, buffer)) return 'File content does not match its declared type.';
     if (!filename || filename.length > 200) return 'Invalid file name.';
     return null;
@@ -78,9 +119,7 @@ class EvidenceStore {
     const encrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
     const tag = cipher.getAuthTag();
     const storageKey = `${Number(tenantId)}/${crypto.randomBytes(16).toString('hex')}.bin`;
-    const fullPath = path.join(this.directory, storageKey);
-    await fs.promises.mkdir(path.dirname(fullPath), { recursive: true, mode: 0o700 });
-    await fs.promises.writeFile(fullPath, Buffer.concat([iv, tag, encrypted]), { mode: 0o600 });
+    await this.backend.put(storageKey, tenantId, Buffer.concat([iv, tag, encrypted]));
     return {
       storageKey,
       sha256: crypto.createHash('sha256').update(buffer).digest('hex')
@@ -88,8 +127,8 @@ class EvidenceStore {
   }
 
   async read(storageKey) {
-    if (!/^\d+\/[a-f0-9]{32}\.bin$/.test(storageKey)) throw new Error('Invalid storage key');
-    const blob = await fs.promises.readFile(path.join(this.directory, storageKey));
+    if (!KEY_PATTERN.test(storageKey)) throw new Error('Invalid storage key');
+    const blob = await this.backend.get(storageKey);
     const iv = blob.subarray(0, 12);
     const tag = blob.subarray(12, 28);
     const data = blob.subarray(28);
@@ -99,9 +138,9 @@ class EvidenceStore {
   }
 
   async remove(storageKey) {
-    if (!/^\d+\/[a-f0-9]{32}\.bin$/.test(storageKey)) return;
-    await fs.promises.unlink(path.join(this.directory, storageKey)).catch(() => {});
+    if (!KEY_PATTERN.test(storageKey)) return;
+    await this.backend.remove(storageKey);
   }
 }
 
-module.exports = { EvidenceStore, ALLOWED_TYPES, MAX_BYTES };
+module.exports = { EvidenceStore, ALLOWED_TYPES, MAX_BYTES, MAX_MB };

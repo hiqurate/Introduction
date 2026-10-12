@@ -18,3 +18,7 @@ Thumbs.db
 *~
 
 *.log
+
+# Vercel build output
+public/
+.vercel

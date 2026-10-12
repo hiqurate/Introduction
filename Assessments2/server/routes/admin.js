@@ -54,6 +54,27 @@ function validateConfig(cfg) {
   return errors;
 }
 
+// Week label in the form YYYY-WW, weeks starting on Monday (week 00 holds the
+// days before the year's first Monday), counted per event type.
+function weekLabel(iso) {
+  const d = new Date(iso);
+  const start = Date.UTC(d.getUTCFullYear(), 0, 1);
+  const dayOfYear = Math.floor((d.getTime() - start) / 86400000);
+  const jan1Weekday = (new Date(start).getUTCDay() + 6) % 7; // Monday = 0
+  const week = Math.floor((dayOfYear + jan1Weekday) / 7);
+  return `${d.getUTCFullYear()}-${String(week).padStart(2, '0')}`;
+}
+
+function weeklyCounts(rows) {
+  const counts = new Map();
+  rows.forEach(r => {
+    const key = `${weekLabel(r.created_at)}|${r.type}`;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  });
+  return Array.from(counts, ([key, n]) => { const [week, type] = key.split('|'); return { week, type, n }; })
+    .sort((a, b) => a.week.localeCompare(b.week));
+}
+
 module.exports = function adminRoutes(app, ctx) {
   const { db, services, security, asyncHandler } = ctx;
   const { HttpError, ROLES, STAFF_ROLES } = security;
@@ -247,8 +268,9 @@ module.exports = function adminRoutes(app, ctx) {
     const params = [];
     let where = '1 = 1';
     if (req.query.q) {
-      where += ' AND (l.user_email LIKE ? OR l.action LIKE ? OR l.target LIKE ? OR l.details LIKE ?)';
-      const q = `%${String(req.query.q).slice(0, 100)}%`;
+      // LOWER() on both sides: SQLite LIKE ignores case, Postgres LIKE does not.
+      where += ' AND (LOWER(l.user_email) LIKE ? OR LOWER(l.action) LIKE ? OR LOWER(l.target) LIKE ? OR LOWER(l.details) LIKE ?)';
+      const q = `%${String(req.query.q).slice(0, 100).toLowerCase()}%`;
       params.push(q, q, q, q);
     }
     if (req.query.action) { where += ' AND l.action = ?'; params.push(String(req.query.action)); }
@@ -274,18 +296,20 @@ module.exports = function adminRoutes(app, ctx) {
     const exported = await count('report_exported');
     const logins = await count('login');
     const staleOpen = (await db.get("SELECT COUNT(*) AS n FROM assessments WHERE status = 'in_progress' AND updated_at < ?", [new Date(Date.now() - 30 * 86400000).toISOString()])).n;
-    const durations = await db.all("SELECT framework_id, (julianday(completed_at) - julianday(created_at)) AS days FROM assessments WHERE status = 'completed' AND completed_at >= ?", [since]);
+    // Date arithmetic is done here rather than in SQL so it works on SQLite and Postgres.
+    const completed = await db.all("SELECT framework_id, created_at, completed_at FROM assessments WHERE status = 'completed' AND completed_at >= ?", [since]);
     const byFramework = {};
-    durations.forEach(d => {
+    completed.forEach(d => {
       if (!byFramework[d.framework_id]) byFramework[d.framework_id] = [];
-      byFramework[d.framework_id].push(d.days);
+      byFramework[d.framework_id].push((Date.parse(d.completed_at) - Date.parse(d.created_at)) / 86400000);
     });
     const completionTime = Object.keys(byFramework).map(fw => {
       const v = byFramework[fw].sort((a, b) => a - b);
       return { frameworkId: fw, name: content.FRAMEWORKS[fw] ? content.FRAMEWORKS[fw].shortName : fw, completed: v.length, medianDays: Math.round(v[Math.floor((v.length - 1) / 2)] * 10) / 10 };
     });
-    const weekly = await db.all(`SELECT strftime('%Y-%W', created_at) AS week, type, COUNT(*) AS n FROM events
-      WHERE created_at >= ? AND type IN ('assessment_started','assessment_submitted','report_issued') GROUP BY week, type ORDER BY week`, [since]);
+    const weeklyEvents = await db.all(`SELECT created_at, type FROM events
+      WHERE created_at >= ? AND type IN ('assessment_started','assessment_submitted','report_issued')`, [since]);
+    const weekly = weeklyCounts(weeklyEvents);
     const sectionEvents = await db.all("SELECT meta_json FROM events WHERE type = 'section_completed' AND created_at >= ?", [since]);
     res.json({
       periodDays: days,

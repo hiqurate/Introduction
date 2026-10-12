@@ -27,31 +27,43 @@ function asyncHandler(fn) {
 
 async function createApp(options = {}) {
   const production = options.production !== undefined ? options.production : process.env.NODE_ENV === 'production';
-  const storageDir = options.storageDir || process.env.DATA_DIR || path.join(ROOT, 'storage');
-  fs.mkdirSync(storageDir, { recursive: true, mode: 0o700 });
+  const databaseUrl = options.databaseUrl !== undefined ? options.databaseUrl : process.env.DATABASE_URL;
+  const sessionSecret = options.sessionSecret || process.env.SESSION_SECRET;
+  const evidenceKey = options.evidenceKey || process.env.EVIDENCE_ENCRYPTION_KEY;
 
-  const db = await openDatabase(options.dbFile || path.join(storageDir, 'hawksight.sqlite'));
+  // Check required settings first, so a misconfigured deployment fails with
+  // one clear message instead of a crash part-way through start-up.
+  if (production) {
+    const missing = [];
+    if (!sessionSecret || sessionSecret.length < 32) missing.push('SESSION_SECRET (at least 32 characters)');
+    if (!evidenceKey) missing.push('EVIDENCE_ENCRYPTION_KEY (32 bytes, base64)');
+    if (process.env.VERCEL && !databaseUrl) missing.push('DATABASE_URL (Postgres connection string)');
+    if (missing.length) throw new Error(`Missing required settings: ${missing.join('; ')}`);
+  }
+
+  // Local files are only used with SQLite. With Postgres, nothing is written
+  // to disk, which suits hosts without a persistent file system.
+  const storageDir = options.storageDir || process.env.DATA_DIR || path.join(ROOT, 'storage');
+  if (!databaseUrl || !evidenceKey) fs.mkdirSync(storageDir, { recursive: true, mode: 0o700 });
+
+  const db = await openDatabase(databaseUrl ? { url: databaseUrl } : (options.dbFile || path.join(storageDir, 'hawksight.sqlite')));
   const services = createServices(db);
   const evidenceStore = new EvidenceStore({
+    db: databaseUrl ? db : null,
     directory: path.join(storageDir, 'evidence'),
     key: EvidenceStore.loadKey({
-      envKey: options.evidenceKey || process.env.EVIDENCE_ENCRYPTION_KEY,
+      envKey: evidenceKey,
       keyFile: path.join(storageDir, '.evidence-key'),
       production
     })
   });
 
-  const sessionSecret = options.sessionSecret || process.env.SESSION_SECRET;
-  if (production && (!sessionSecret || sessionSecret.length < 32)) {
-    throw new Error('SESSION_SECRET (at least 32 characters) is required in production');
-  }
-
-  const bootInfo = await bootstrap(db, services, {
+  const bootInfo = await db.withLock(() => bootstrap(db, services, {
     adminEmail: options.adminEmail || process.env.ADMIN_EMAIL,
     adminPassword: options.adminPassword || process.env.ADMIN_PASSWORD,
     seedDemo: options.seedDemo !== undefined ? options.seedDemo : process.env.SEED_DEMO !== 'false',
     log: options.log !== false
-  });
+  }));
 
   const app = express();
   app.disable('x-powered-by');

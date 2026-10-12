@@ -53,7 +53,9 @@ The organisation's plan sets the depth of each new assessment. The questions are
 ```
 server.js                 entry point
 server/app.js             Express app: security headers, sessions, static allow-list
-server/db.js              SQLite schema and migrations
+server/db.js              SQLite schema and migrations (local development)
+server/db-pg.js           Postgres (Neon) schema and migrations
+api/index.js              Vercel serverless entry point
 server/security.js        RBAC capabilities, CSRF guard, rate limits, password policy, session store
 server/services.js        audit log, product events, tenant checks, server-side scoring
 server/evidence-store.js  AES-256-GCM encrypted evidence files
@@ -69,7 +71,7 @@ tests/                    scoring regression fixtures and API authorisation test
 ## Security model
 
 - Every API route checks the signed-in user's role and the organisation that owns the record. Cross-organisation access returns 404.
-- Only `index.html`, `styles.css`, `app.js`, `favicon.svg` and `js/` are served as static files. The database, server code, documents and question data are never exposed.
+- Only `index.html`, `styles.css`, `app.js`, `favicon.svg`, `js/` and `assets/` are served as static files. The database, server code, documents and question data are never exposed.
 - Sessions use an HttpOnly, SameSite=Strict cookie, 30-minute idle timeout and 12-hour absolute lifetime, and are stored in SQLite.
 - State-changing requests require the client header and a same-origin `Origin`.
 - Sign-in is rate limited; accounts lock for 15 minutes after five failed attempts. Passwords need 12+ characters and three character types.
@@ -78,11 +80,32 @@ tests/                    scoring regression fixtures and API authorisation test
 - Issued reports and the audit log are protected by database triggers against modification.
 - Secrets come only from the environment. No keys are stored in the repository.
 
-## Deployment notes (Render)
+## Database
 
-- Set `NODE_ENV=production`, `SESSION_SECRET`, `EVIDENCE_ENCRYPTION_KEY`, `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
-- Attach a persistent disk and set `DATA_DIR` to its mount path. Without one, the database and evidence are lost on every deploy.
-- Back up `DATA_DIR` and keep the evidence key in a secrets manager; evidence cannot be decrypted without it.
+- With `DATABASE_URL` set (Postgres, for example Neon), all data, sessions and encrypted evidence files are stored in Postgres. Nothing is written to disk.
+- Without it, HawkSight uses a SQLite file and an evidence folder in `DATA_DIR` (default `storage/`). This suits local development and hosts with a persistent disk.
+- The schema is created and upgraded automatically on start-up (`server/db-pg.js` for Postgres, `server/db.js` for SQLite).
+- To run the API tests against Postgres: `TEST_DATABASE_URL=postgres://... npm test`. That database is wiped, so never use one holding real data.
+
+## Deployment on Vercel with Neon
+
+1. In the Vercel project settings, set **Root Directory** to `Assessments2`. `vercel.json` there routes every request through `api/index.js`, so only allow-listed files are served, with HawkSight's security headers.
+2. Set these environment variables (Production, and Preview if used):
+   - `DATABASE_URL`: the Neon pooled connection string
+   - `SESSION_SECRET` and `EVIDENCE_ENCRYPTION_KEY`: generate as shown in `.env.example`
+   - `ADMIN_EMAIL` and `ADMIN_PASSWORD`: the first platform administrator
+   - optionally `DEMO_PASSWORD`, `SEED_DEMO=false`, `GROQ_API_KEY`
+3. Redeploy. The first request creates the administrator and, unless disabled, the demonstration organisation.
+4. Check `/api/health`. If a setting is missing, every page shows "HawkSight is not available" and the function log names the missing setting.
+
+Notes:
+- Evidence uploads are limited to 3 MB on Vercel because of its 4.5 MB request limit.
+- Keep the evidence key in a secrets manager; evidence cannot be decrypted without it. Neon handles database backups.
+
+## Deployment on a server with a persistent disk (for example Render)
+
+- Set `NODE_ENV=production`, `SESSION_SECRET`, `EVIDENCE_ENCRYPTION_KEY`, `ADMIN_EMAIL` and `ADMIN_PASSWORD`, plus either `DATABASE_URL` or a persistent disk with `DATA_DIR` set to its mount path.
+- Back up `DATA_DIR` if you use SQLite.
 - Health check path: `/api/health`.
 - The previous version used `database.sqlite` in the project root. It is no longer read; accounts must be recreated.
 

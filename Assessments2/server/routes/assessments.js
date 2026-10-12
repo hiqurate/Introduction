@@ -202,7 +202,8 @@ module.exports = function assessmentRoutes(app, ctx) {
 
     const config = await services.getActiveConfig();
     const result = await db.transaction(async tx => {
-      const a = await tx.get('SELECT * FROM assessments WHERE id = ?', [req.params.id]);
+      // Lock the row on Postgres so concurrent autosaves cannot overwrite each other.
+      const a = await tx.get(`SELECT * FROM assessments WHERE id = ?${tx.dialect === 'postgres' ? ' FOR UPDATE' : ''}`, [req.params.id]);
       if (!a || !(await services.canAccessTenant(req.user, a.tenant_id))) throw new HttpError(404, 'Assessment not found');
       const editable = OPEN_STATUSES.includes(a.status) || (STAFF_ROLES.includes(req.user.role) && a.status === 'in_review');
       if (!editable) throw new HttpError(409, 'This assessment is locked for review. Ask your assessor to return it if changes are needed.');

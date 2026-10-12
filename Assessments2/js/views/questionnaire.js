@@ -5,6 +5,8 @@
 // ============================================
 
 (function (root) {
+  // Upload limit set by the server (lower on serverless hosts).
+  const evidenceLimitMb = () => (root.App && root.App.session && root.App.session.limits && root.App.session.limits.evidenceMb) || 10;
   const { html, raw, icon, esc, $, $all, setHtml, on, fmtTime, fmtDateTime, fileSize, plural } = root.U;
   const { App, API, UI, Content } = root;
   const Scoring = root.HawkScoring;
@@ -415,7 +417,7 @@
         <form class="stack" data-submit="evidence-add" data-qid="${qid}" novalidate>
           <div class="field"><label for="ev-kind">Type</label><select class="select" id="ev-kind" name="kind" data-change="evidence-kind">
             <option value="file">Document or screenshot</option><option value="link">Link to a system or repository</option><option value="policy">Policy or document reference</option><option value="note">Assessor or implementation note</option></select></div>
-          <div class="field" data-ev="file"><label for="ev-file">File</label><input class="input" id="ev-file" name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx,.pptx"><span class="hint">PDF, image, text or Office document up to 10 MB. Files are encrypted at rest.</span></div>
+          <div class="field" data-ev="file"><label for="ev-file">File</label><input class="input" id="ev-file" name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx,.pptx"><span class="hint">PDF, image, text or Office document up to ${evidenceLimitMb()} MB. Files are encrypted at rest.</span></div>
           <div class="field hidden" data-ev="link"><label for="ev-url">Link</label><input class="input" id="ev-url" name="urlReference" type="url" placeholder="https://"></div>
           <div class="field hidden" data-ev="policy"><label for="ev-policy">Reference</label><input class="input" id="ev-policy" name="policyReference" placeholder="e.g. SEC-POL-04 Access Control Policy v3, section 5"></div>
           <div class="field"><label for="ev-notes">Notes</label><textarea class="textarea" id="ev-notes" name="notes" rows="3" placeholder="What this evidence shows and its scope"></textarea></div>
@@ -438,7 +440,7 @@
     if (kind === 'file') {
       const file = form.file.files[0];
       if (!file) { err.textContent = 'Choose a file.'; return; }
-      if (file.size > 10 * 1024 * 1024) { err.textContent = 'File exceeds the 10 MB limit.'; return; }
+      if (file.size > evidenceLimitMb() * 1024 * 1024) { err.textContent = `File exceeds the ${evidenceLimitMb()} MB limit.`; return; }
       body.filename = file.name;
       body.mimeType = file.type || (file.name.endsWith('.csv') ? 'text/csv' : 'application/octet-stream');
       body.dataBase64 = await new Promise((resolve, reject) => {
