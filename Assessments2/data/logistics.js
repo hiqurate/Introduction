@@ -1,89 +1,115 @@
-const LOGISTICS_DATA = {
-  id: 'logistics',
-  modules: [
-    {
-      id: 'iot_assets', name: 'IoT & Asset Security', description: 'Tracking devices, inventory, and fleet security.', icon: '',
-      categories: [
-        { id: 'iot', name: 'GPS/IoT Tracking', description: 'Securing tracking devices.', questions: [
-          { id: 'LOG-1.1', text: 'Are all tracking devices (GPS/IoT) on unique accounts (no default credentials)?', context: 'Device config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.2', text: 'Are IoT device firmware updates managed and applied in a timely manner?', context: 'Firmware update logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.3', text: 'Is communication between IoT devices and central systems encrypted (TLS/MQTT-TLS)?', context: 'Communication protocol config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.4', text: 'Are IoT/telematics devices on a separate network segment from corporate IT?', context: 'Network diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.5', text: 'Is there a process to detect and respond to unauthorized IoT devices on the network?', context: 'NAC policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'inventory', name: 'Asset Management', description: 'Mapping IT/IoT assets.', questions: [
-          { id: 'LOG-1.6', text: 'Do you map and classify all IT/IoT assets (asset inventory)?', context: 'Asset inventory', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.7', text: 'Are end-of-life devices tracked and decommissioned securely (data wiped)?', context: 'Decommission policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-1.8', text: 'Is there an automated system for discovering new devices connected to the logistics network?', context: 'Discovery tool config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'network_data', name: 'Network & Data Protection', description: 'VPN access, encryption, and TMS security.', icon: '',
-      categories: [
-        { id: 'vpn', name: 'Remote Access', description: 'Warehouse and server access.', questions: [
-          { id: 'LOG-2.1', text: 'Is remote warehouse/server access via VPN or zero-trust?', context: 'VPN logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-2.2', text: 'Is MFA enforced for all remote access to logistics systems?', context: 'MFA config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-2.3', text: 'Are mobile apps used by drivers secured with session management and data encryption?', context: 'App security review', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'encryption', name: 'Data Encryption', description: 'Protecting shipment data.', questions: [
-          { id: 'LOG-2.4', text: 'Is shipment/customer data encrypted in transit (mobile apps) and at rest?', context: 'TLS config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-2.5', text: 'Are TMS (Transport Management System) databases encrypted with access logging?', context: 'TMS DB config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-2.6', text: 'Is customer PII (addresses, phone numbers) protected with data masking in operational views?', context: 'Data masking config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'network', name: 'Network Security', description: 'Firewalls and segmentation.', questions: [
-          { id: 'LOG-2.7', text: 'Are warehouse networks segmented from corporate IT and IoT networks?', context: 'Network diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-2.8', text: 'Are firewall rules reviewed regularly and unnecessary rules removed?', context: 'Firewall review logs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'vendor_staff', name: 'Third-Party & Staff Training', description: 'Carriers, dispatchers, and security awareness.', icon: '',
-      categories: [
-        { id: 'vendor', name: 'Partner Vetting', description: 'Cargo vendors and carriers.', questions: [
-          { id: 'LOG-3.1', text: 'Do you vet partner carriers/cargo vendors for security (e.g. data sharing agreements)?', context: 'Vendor audits/SLA', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.2', text: 'Are data sharing agreements in place with all logistics partners specifying security requirements?', context: 'DSA documents', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.3', text: 'Is vendor access to logistics systems time-limited and monitored?', context: 'Vendor access logs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.4', text: 'Do you assess the cybersecurity posture of warehousing and fulfillment partners?', context: 'Partner assessments', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'training', name: 'Staff Awareness', description: 'Driver and dispatcher training.', questions: [
-          { id: 'LOG-3.5', text: 'Are drivers/dispatchers trained to report phishing and system anomalies?', context: 'Training log', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.6', text: 'Is there cybersecurity onboarding training for new warehouse and operations staff?', context: 'Onboarding checklist', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.7', text: 'Are staff trained on secure handling of customer delivery information?', context: 'Data handling training', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'access', name: 'Access Control', description: 'Managing logistics system access.', questions: [
-          { id: 'LOG-3.8', text: 'Is role-based access control enforced on TMS and warehouse management systems?', context: 'RBAC matrix', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-3.9', text: 'Are shared accounts eliminated for warehouse management and dispatch systems?', context: 'Account audit', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'resilience_physical', name: 'Resilience & Physical Security', description: 'Backups, monitoring, gates, and disaster recovery.', icon: '',
-      categories: [
-        { id: 'backup', name: 'Data Backups', description: 'Logistics data backups.', questions: [
-          { id: 'LOG-4.1', text: 'Is logistics data (routes, manifests) backed up to offsite/cloud?', context: 'Backup logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.2', text: 'Are backup restoration procedures tested at least annually?', context: 'Test reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.3', text: 'Is there a defined RTO/RPO for critical logistics systems (TMS, WMS)?', context: 'RTO/RPO documentation', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'physical', name: 'Physical Controls', description: 'Depots and server rooms.', questions: [
-          { id: 'LOG-4.4', text: 'Are truck depot gates and server rooms physically secured (locks, cameras)?', context: 'Photos', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.5', text: 'Is there badge/biometric access control for warehouse and data center areas?', context: 'Access control system', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.6', text: 'Are cargo handling areas under CCTV surveillance?', context: 'CCTV coverage map', weight: 2, options: [{label: 'No', value: 0}, {label: 'Partial', value: 1}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'monitoring', name: 'Real-time Alerts', description: 'Route deviations.', questions: [
-          { id: 'LOG-4.7', text: 'Do you have real-time alerts for route deviations or system failures?', context: 'Monitoring dashboard', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.8', text: 'Is centralized logging/SIEM in place for TMS, WMS, and network systems?', context: 'SIEM dashboard', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.9', text: 'Are alerts configured for unauthorized access attempts to warehouse management systems?', context: 'Alert rules', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'ir', name: 'Incident Response', description: 'Disruption response plans.', questions: [
-          { id: 'LOG-4.10', text: 'Is there a response plan for major disruptions (e.g. cyber attack on TMS)?', context: 'IR plan', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.11', text: 'Can logistics operations switch to manual processes during a system outage?', context: 'Manual fallback plan', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'LOG-4.12', text: 'Is there a communication plan for notifying clients during delivery system disruptions?', context: 'Communication plan', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    }
+// ============================================
+// HawkSight — Logistics & Transport threat-led template
+// Core question set plus the attack paths specific to logistics, freight
+// and transport operators: invoice and payment fraud, partner connections,
+// telematics and IoT, warehouse automation, cyber-enabled cargo theft, and
+// moving goods while core systems are down.
+// ============================================
+
+const { levels, q, composeTemplate } = require('./core.js');
+
+const LOGISTICS_DATA = composeTemplate('logistics', {
+  entry: [
+    { id: 'log_entry', name: 'Partners, devices and payments', description: 'The many external connections that make logistics work, and that attackers use.', questions: [
+      q('LOG-IN-01', 'HS-PAY-02', 'How are changes to carrier, subcontractor and supplier bank details, and unusual freight invoices, verified before payment?',
+        levels(
+          ['Not verified', 'Changes are made from the email or invoice.'],
+          ['Sometimes checked', 'Checked occasionally, with no record.'],
+          ['Call-back and approval', 'A call-back to a number on file and a second approver are required.'],
+          ['Plus anomaly checks', 'As above, with checks for duplicate or unusual invoices before payment.']),
+        { attack: 'High volumes of invoices from many small carriers make logistics a favourite target for invoice fraud and payment diversion.',
+          verify: 'Supplier master-data change log with call-back records.' }),
+      q('LOG-IN-02', 'HS-NET-03', 'How do partners such as carriers, customs brokers and 3PLs connect to your TMS and WMS?',
+        levels(
+          ['Shared logins', 'Partners share logins.'],
+          ['Individual, always on', 'Named partner accounts, always enabled, without MFA.'],
+          ['Individual with MFA or APIs', 'Individual accounts with MFA, or authenticated APIs and EDI, limited to their own shipments.'],
+          ['Reviewed', 'As above, with partner access reviewed and removed when contracts end.']),
+        { attack: 'Partner accounts with shared or weak logins let attackers view and change shipments without breaching you directly.',
+          verify: 'Partner account list and authentication settings.' }),
+      q('LOG-IN-03', 'HS-IAM-05', 'Are telematics, GPS trackers, handheld scanners and their cloud portals free of default passwords and kept updated?',
+        levels(
+          ['Unknown', 'Not checked.'],
+          ['Some defaults remain', 'Some devices or portals keep default credentials.'],
+          ['Unique and updated', 'Unique credentials, and firmware is updated on a schedule.'],
+          ['Managed centrally', 'As above, devices managed centrally with alerts for unauthorised devices.']),
+        { attack: 'Default passwords on trackers and their portals let attackers locate high-value loads or disable tracking.',
+          verify: 'Device management console and portal user list.' })
+    ]}
+  ],
+  spread: [
+    { id: 'log_ops', name: 'Warehouses and operational systems', description: 'How far an attack can reach into operations.', questions: [
+      q('LOG-SP-01', 'HS-NET-01', 'Are warehouse automation, scanners and IoT devices on networks separated from the corporate network?',
+        levels(
+          ['No', 'They share the corporate network.'],
+          ['Partly', 'Some separation.'],
+          ['Separated', 'Dedicated networks with restricted traffic.'],
+          ['Separated and tested', 'As above, tested regularly.']),
+        { attack: 'On a shared network, ransomware that starts in the office stops sortation, scanning and dispatch as well.',
+          verify: 'Network design for warehouse sites.' }),
+      q('LOG-SP-02', 'HS-OT-01', 'Do you know which operational systems (WMS, sortation, yard and terminal systems) depend on corporate IT services such as Active Directory to run?',
+        levels(
+          ['No', 'Dependencies are unknown.'],
+          ['Partly', 'Known for some systems.'],
+          ['Mapped', 'Dependencies are mapped and documented.'],
+          ['Mapped and reduced', 'As above, critical operations can run without corporate IT, and this has been tested.']),
+        { attack: 'In the 2017 NotPetya attack Maersk had to reinstall thousands of servers and PCs. Recovery depended on a single surviving domain controller in Ghana that happened to be offline.',
+          verify: 'Dependency map for operational systems.' })
+    ]}
+  ],
+  protect: [
+    { id: 'log_data', name: 'Shipments and customer data', description: 'Protecting shipment information that criminals can turn into stolen goods.', questions: [
+      q('LOG-PR-01', 'HS-IAM-02', 'Is access to shipment details, consignee data and delivery addresses limited to those who need them, including in driver apps?',
+        levels(
+          ['Broad', 'Most users and devices can see all shipments.'],
+          ['Partly', 'Some restrictions.'],
+          ['Need-to-know', 'Access is limited by role, region and assignment.'],
+          ['Need-to-know and logged', 'As above, with access logged and reviewed.']),
+        { attack: 'Shipment data reveals what high-value goods are moving, where and when. It is used to plan cargo theft.',
+          verify: 'Role configuration in the TMS and driver app.' }),
+      q('LOG-PR-02', 'HS-TPR-01', 'Do you know which partners and platforms would stop your operations if they were breached or went offline?',
+        levels(
+          ['No', 'Not identified.'],
+          ['Known informally', 'Known but not documented.'],
+          ['Identified and assessed', 'Critical partners identified and assessed, with contingency options.'],
+          ['Planned', 'As above, with alternatives tested.']),
+        { attack: 'In November 2023 a cyber incident at DP World Australia halted container movements at major ports for several days.',
+          verify: 'Critical partner list with contingency arrangements.' })
+    ]}
+  ],
+  detect: [
+    { id: 'log_detect', name: 'Spotting cargo fraud', description: 'Noticing manipulation of shipments and bookings.', questions: [
+      q('LOG-DE-01', 'HS-MON-02', 'Would you detect fraudulent changes to consignee details, delivery addresses or carrier assignments?',
+        levels(
+          ['No', 'Changes are not monitored.'],
+          ['After a loss', 'Found after a missed delivery.'],
+          ['Alerted', 'Changes to high-value shipments raise alerts and need confirmation.'],
+          ['Alerted and verified', 'As above, with out-of-band confirmation for every change.']),
+        { attack: 'Criminals use compromised accounts and fake carrier identities to redirect loads. US authorities have warned of cyber-enabled cargo theft through hijacked freight accounts.',
+          verify: 'Change alert rules in the TMS.' })
+    ]}
+  ],
+  recover: [
+    { id: 'log_recover', name: 'Moving goods through an outage', description: 'Continuing deliveries when systems are unavailable.', questions: [
+      q('LOG-RE-01', 'HS-RES-03', 'If the TMS or WMS were down for a week, could you dispatch, track and deliver manually?',
+        levels(
+          ['No', 'Operations would stop.'],
+          ['Briefly', 'Improvised for a day or two.'],
+          ['Documented', 'Documented manual dispatch, picking and tracking procedures.'],
+          ['Rehearsed', 'As above, rehearsed in the last year.']),
+        { attack: 'Logistics attacks cause immediate, visible disruption, which makes logistics companies attractive ransomware targets.',
+          verify: 'Manual operation procedures and rehearsal record.' }),
+      q('LOG-RE-02', 'HS-RES-02', 'Have you tested restoring your identity infrastructure (for example Active Directory) from backup in a clean environment?',
+        levels(
+          ['Never', 'Never tested.'],
+          ['Assumed', 'Backups exist but restoration is untested.'],
+          ['Tested', 'Tested in the last year.'],
+          ['Tested and timed', 'Tested regularly, with time recorded against target.']),
+        { attack: 'Nothing else can be restored until identity services work. Without a tested plan this step alone can take weeks.',
+          verify: 'Identity restore test record.' })
+    ]}
   ]
-};
+});
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { LOGISTICS_DATA };

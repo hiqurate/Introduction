@@ -4,14 +4,17 @@ node_modules/
 # Environment secrets
 .env
 
-# Database (auto-created on startup)
+# Runtime data: database, sessions, encrypted evidence and keys
+storage/
+
+# Legacy database from the previous version
 database.sqlite
 
-# OS files
+# OS and editor files
 .DS_Store
 Thumbs.db
-
-# Editor files
 *.swp
 *.swo
 *~
+
+*.log

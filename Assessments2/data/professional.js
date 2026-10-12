@@ -1,94 +1,107 @@
-const PROFESSIONAL_DATA = {
-  id: 'professional',
-  modules: [
-    {
-      id: 'access_email', name: 'Identity & Email Security', description: 'MFA, encrypted communications, and client data access.', icon: '',
-      categories: [
-        { id: 'mfa', name: 'Authentication', description: 'MFA for remote access.', questions: [
-          { id: 'PRO-1.1', text: 'Is multi-factor auth enforced on all remote-access (VPN, email) and admin accounts?', context: 'Auth logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.2', text: 'Are strong password policies (length, complexity, rotation) enforced firm-wide?', context: 'Password policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.3', text: 'Is SSO (Single Sign-On) implemented for core business applications?', context: 'SSO config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'email', name: 'Email Security', description: 'Protecting client info.', questions: [
-          { id: 'PRO-1.4', text: 'Do you use email encryption for transmitting client confidential info?', context: 'Encryption gateway logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.5', text: 'Are SPF, DKIM, and DMARC records configured for your business email domain?', context: 'DNS records', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.6', text: 'Is there email filtering/gateway to block phishing, malware, and spam?', context: 'Email gateway config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.7', text: 'Is there a process for staff to report and quarantine suspicious emails?', context: 'Reporting procedure', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'client_access', name: 'Client Data Access', description: 'Controlling who sees client files.', questions: [
-          { id: 'PRO-1.8', text: 'Is client data access restricted on a need-to-know basis (matter/engagement level)?', context: 'Access control matrix', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-1.9', text: 'Are ethical walls/information barriers enforced for conflicting client matters?', context: 'Ethical wall policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'endpoint_cloud', name: 'Endpoint & Cloud Security', description: 'MDM, Drive settings, and remote work.', icon: '',
-      categories: [
-        { id: 'endpoint', name: 'Device Security', description: 'Encrypting laptops.', questions: [
-          { id: 'PRO-2.1', text: 'Are employee laptops fully encrypted and managed (MDM)?', context: 'MDM console', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.2', text: 'Is EDR (Endpoint Detection & Response) deployed on all firm devices?', context: 'EDR deployment report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.3', text: 'Are personal devices (BYOD) restricted from accessing client data without security controls?', context: 'BYOD policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.4', text: 'Is remote wipe capability enabled for all firm-issued mobile devices?', context: 'MDM remote wipe config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'cloud', name: 'Cloud & Document Sharing', description: 'Restricting document access.', questions: [
-          { id: 'PRO-2.5', text: 'Are cloud sharing settings (Docs/Drive) restricted by policy?', context: 'Share settings', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.6', text: 'Is DLP (Data Loss Prevention) enabled to prevent external sharing of confidential client documents?', context: 'DLP policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.7', text: 'Are document management systems (DMS) configured with role-based access per client/matter?', context: 'DMS access settings', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.8', text: 'Is there a policy against storing client data on personal cloud accounts (Dropbox, personal Gmail)?', context: 'Acceptable use policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'patching', name: 'Patch Management', description: 'Keeping systems updated.', questions: [
-          { id: 'PRO-2.9', text: 'Are all firm workstations and servers patched within 30 days of security updates?', context: 'Patch compliance report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-2.10', text: 'Is there an inventory of all software used across the firm (including browser extensions)?', context: 'Software inventory', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'access_audit', name: 'Access Reviews & Audits', description: 'Least privilege, monitoring, and compliance.', icon: '',
-      categories: [
-        { id: 'access', name: 'Rights Management', description: 'Quarterly access reviews.', questions: [
-          { id: 'PRO-3.1', text: 'Are access rights reviewed quarterly for each client/project?', context: 'Access matrix', weight: 3, options: [{label: 'Never', value: 0}, {label: 'Annually', value: 1}, {label: 'Quarterly', value: 5}] },
-          { id: 'PRO-3.2', text: 'Are user accounts deactivated within 24 hours of employee departure?', context: 'Off-boarding procedure', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-3.3', text: 'Is there a formal process for granting and revoking access to client files/matters?', context: 'Access request workflow', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'audit', name: 'Audit Logging', description: 'Reviewing file access.', questions: [
-          { id: 'PRO-3.4', text: 'Are audit logs (file access, admin actions) collected and reviewed?', context: 'Audit log', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-3.5', text: 'Are alerts configured for unusual file access patterns (e.g., bulk downloads of client files)?', context: 'Alert configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-3.6', text: 'Is there centralized logging (SIEM) for email, file access, and authentication events?', context: 'SIEM config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'compliance', name: 'Regulatory Compliance', description: 'Industry-specific requirements.', questions: [
-          { id: 'PRO-3.7', text: 'Do you comply with applicable data protection regulations (GDPR, attorney-client privilege, etc.)?', context: 'Compliance documentation', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-3.8', text: 'Is there a designated data protection officer or privacy lead for the firm?', context: 'Org chart', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'training_resilience', name: 'Training, IR & Resilience', description: 'Awareness, IR, backups, and business continuity.', icon: '',
-      categories: [
-        { id: 'training', name: 'Security Training', description: 'Data handling and phishing.', questions: [
-          { id: 'PRO-4.1', text: 'Do you conduct regular security awareness training on phishing and data handling?', context: 'Training certs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.2', text: 'Are phishing simulation exercises conducted at least quarterly?', context: 'Phishing sim results', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.3', text: 'Is there role-specific training for partners/senior staff on business email compromise (BEC)?', context: 'BEC training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.4', text: 'Do new hires receive cybersecurity onboarding covering firm-specific policies?', context: 'Onboarding checklist', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'backup', name: 'Data Backups', description: 'Offline legal records.', questions: [
-          { id: 'PRO-4.5', text: 'Are backups of financial/legal records tested and offline?', context: 'Backup logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.6', text: 'Are backups encrypted and stored in a geographically separate location?', context: 'Backup architecture', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.7', text: 'Are backup restoration procedures tested at least annually?', context: 'Restoration test reports', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'ir', name: 'Incident Response', description: 'Breach notification plan.', questions: [
-          { id: 'PRO-4.8', text: 'Is there a response plan for a major breach (incl. client notification)?', context: 'IR plan', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.9', text: 'Are tabletop IR exercises conducted at least annually?', context: 'Tabletop exercise report', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.10', text: 'Is there cyber insurance coverage appropriate to the firm\'s risk profile?', context: 'Insurance policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.11', text: 'Is there a defined RTO/RPO for critical firm systems (billing, DMS, email)?', context: 'BCP documentation', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'vendor', name: 'Vendor Management', description: 'Third-party risk.', questions: [
-          { id: 'PRO-4.12', text: 'Are external vendors (IT support, cloud providers) assessed for security before engagement?', context: 'Vendor assessment', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'PRO-4.13', text: 'Do vendor contracts include data protection, breach notification, and liability clauses?', context: 'Contract review', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    }
+// ============================================
+// HawkSight — Professional Services threat-led template
+// Core question set plus the attack paths specific to law, accounting and
+// consulting firms: client payment diversion, partner mailbox takeover,
+// file-transfer and data-room tools, matter segregation, confidential
+// documents in AI tools and meeting client deadlines through an outage.
+// ============================================
+
+const { levels, q, composeTemplate } = require('./core.js');
+
+const PROFESSIONAL_DATA = composeTemplate('professional', {
+  entry: [
+    { id: 'pro_entry', name: 'Client money, mailboxes and file sharing', description: 'The routes attackers use against advisory firms and their clients.', questions: [
+      q('PRO-IN-01', 'HS-PAY-02', 'When clients send you money (fees, escrow, settlement funds), how do you prevent fraudsters impersonating the firm to redirect it?',
+        levels(
+          ['Nothing specific', 'Clients are not warned.'],
+          ['Occasional warnings', 'Warnings in some email footers.'],
+          ['Confirmed out of band', 'Bank details are given at engagement and clients are told to confirm any change by phone with a known contact.'],
+          ['Verified each time', 'As above, every large transfer is confirmed by phone before and after.']),
+        { attack: 'Fraudsters who read a firm\'s or client\'s email send "updated payment details" at the moment a large settlement or property payment is due.',
+          verify: 'Engagement letter wording on bank details and the procedure for large transfers.' }),
+      q('PRO-IN-02', 'HS-END-03', 'Are partners and senior staff protected against targeted mailbox takeover, for example with impossible-travel alerts, external email warnings and automatic forwarding blocked?',
+        levels(
+          ['No', 'No specific protection.'],
+          ['External banner only', 'External email warnings only.'],
+          ['Forwarding blocked and alerts', 'Automatic external forwarding blocked and risky sign-ins alerted.'],
+          ['Hardened senior accounts', 'As above, with phishing-resistant MFA for partners and reviewed alerts.']),
+        { attack: 'Partners\' mailboxes hold client secrets and approve payments. Attackers watch them quietly for weeks before acting.',
+          verify: 'Mail transport rules, forwarding policy and sign-in risk alerts.' }),
+      q('PRO-IN-03', 'HS-TPR-01', 'Are file-transfer, data-room and e-signature tools assessed for security and kept up to date?',
+        levels(
+          ['No', 'Chosen by teams without review.'],
+          ['Approved list', 'An approved list exists, not assessed.'],
+          ['Assessed and patched', 'Assessed before use; self-hosted tools patched within days of critical fixes.'],
+          ['Monitored', 'As above, with usage monitored and unapproved tools blocked.']),
+        { attack: 'In 2023 a flaw in the MOVEit file-transfer tool let criminals steal data from more than 2,000 organisations, including several large advisory firms.',
+          verify: 'List of file-transfer and data-room tools with their assessment and patch status.' })
+    ]}
+  ],
+  spread: [
+    { id: 'pro_matters', name: 'Matter and engagement segregation', description: 'How much client information a single compromised account can reach.', questions: [
+      q('PRO-SP-01', 'HS-IAM-02', 'Are client matters segregated so that one compromised account cannot reach every client\'s files, with ethical walls enforced in the document system?',
+        levels(
+          ['No', 'Most staff can open most client files.'],
+          ['By department', 'Restricted by department or office.'],
+          ['By matter', 'Access granted per matter or engagement, with ethical walls enforced.'],
+          ['By matter, reviewed', 'As above, with access reviewed when matters close or teams change.']),
+        { attack: 'Firm-wide access turns one phished junior account into a breach of every client the firm serves.',
+          verify: 'Document management access model and one matter\'s access list.' })
+    ]}
+  ],
+  protect: [
+    { id: 'pro_confidential', name: 'Confidential client documents', description: 'Keeping client documents within the firm\'s control.', questions: [
+      q('PRO-PR-01', 'HS-DAT-03', 'Are confidential documents shared with clients and counterparties through controlled links with expiry and access logs, rather than attachments or personal cloud storage?',
+        levels(
+          ['Attachments and personal tools', 'Email attachments and personal cloud storage are normal.'],
+          ['Mixed', 'A secure tool exists but is used inconsistently.'],
+          ['Controlled by default', 'Controlled sharing is the default and personal cloud storage is blocked.'],
+          ['Enforced and monitored', 'As above, with labelling and data loss prevention on confidential documents.']),
+        { attack: 'Documents emailed as attachments are copied into every mailbox they pass through, and any of them can be breached.',
+          verify: 'File sharing policy and DLP configuration.' }),
+      q('PRO-PR-02', 'HS-DAT-05', 'Are AI tools used on client work approved by the firm, with terms that prevent client data being retained or used for training?',
+        levels(
+          ['No', 'Staff choose their own tools.'],
+          ['Guidance only', 'Guidance issued, not enforced.'],
+          ['Approved tools', 'Approved enterprise tools with suitable terms and a rule on client data.'],
+          ['Enforced and disclosed', 'As above, unapproved tools blocked and use disclosed to clients where required.']),
+        { attack: 'Client documents pasted into consumer AI tools leave the firm\'s control and may breach confidentiality obligations and client contracts.',
+          verify: 'AI policy, approved tool terms and web filter reports.' })
+    ]}
+  ],
+  detect: [
+    { id: 'pro_detect', name: 'Spotting data theft', description: 'Noticing unusual access to client files.', questions: [
+      q('PRO-DE-01', 'HS-MON-02', 'Would you notice bulk downloads of client files, or a user opening matters they have never worked on?',
+        levels(
+          ['No', 'Not monitored.'],
+          ['Logged only', 'Logged but not reviewed.'],
+          ['Alerted', 'Bulk downloads and unusual access raise alerts.'],
+          ['Alerted and investigated', 'As above, investigated within a day.']),
+        { attack: 'Departing staff and intruders take client files in bulk. The signs are visible in document system logs if anyone looks.',
+          verify: 'Document system alert rules and an example investigation.' }),
+      q('PRO-DE-02', 'HS-IR-03', 'Do you know which clients you would have to notify, and within what contractual deadlines, if a system or mailbox were breached?',
+        levels(
+          ['No', 'Not known.'],
+          ['Major clients only', 'Known for a few major clients.'],
+          ['Mapped', 'Client notification obligations are recorded and linked to systems.'],
+          ['Rehearsed', 'As above, rehearsed in an exercise.']),
+        { attack: 'Advisory firms often owe clients notification within days. Missing those deadlines damages relationships more than the breach.',
+          verify: 'Register of client notification obligations.' })
+    ]}
+  ],
+  recover: [
+    { id: 'pro_recover', name: 'Meeting deadlines through an outage', description: 'Continuing client work while systems are unavailable.', questions: [
+      q('PRO-RE-01', 'HS-RES-03', 'Could the firm meet court, filing, audit and regulatory deadlines if its systems were down for two weeks?',
+        levels(
+          ['No', 'No plan.'],
+          ['Improvised', 'Partners would improvise.'],
+          ['Planned', 'Critical deadlines are tracked outside the main systems, with alternative ways to work and file.'],
+          ['Rehearsed', 'As above, rehearsed in the last year.']),
+        { attack: 'Ransomware groups know that advisory firms face hard deadlines and that downtime harms clients directly, which increases the pressure to pay.',
+          verify: 'Business continuity plan for deadline-driven work.' })
+    ]}
   ]
-};
+});
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PROFESSIONAL_DATA };

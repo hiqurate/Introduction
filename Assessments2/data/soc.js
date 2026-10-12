@@ -180,3 +180,7 @@ const SOC_DATA = {
     }
   ]
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { SOC_DATA };
+}

@@ -1,230 +1,149 @@
 // ============================================
-// HawkSight Assessments — Master Framework Registry
+// HawkSight — Assessment Template Registry
+// Version metadata is shown on every report so customers know exactly
+// which template and reference framework version was assessed.
+// Question counts are computed from the template data at runtime.
 // ============================================
 
 const FRAMEWORKS = {
   nist: {
     id: 'nist',
     type: 'framework',
-    name: 'NIST Cybersecurity Framework',
-    shortName: 'NIST CSF',
-    icon: '',
-    color: '#3b82f6',
-    colorGlow: 'rgba(59, 130, 246, 0.2)',
-    description: 'The NIST Cybersecurity Framework (CSF) provides a policy framework of computer security guidance for how private sector organizations can assess and improve their ability to prevent, detect, and respond to cyber attacks.',
-    longDescription: 'Based on NIST SP 800-53 and the Cybersecurity Framework, this assessment evaluates your organization across 5 core functions — Identify, Protect, Detect, Respond, and Recover — with 22 categories and 98 subcategories mapped to industry best practices. Each control is scored on a 1-4 maturity scale.',
-    tags: ['Federal', 'Critical Infrastructure', 'Risk Management', 'Industry Standard'],
-    estimatedTime: '45-60 min',
-    totalQuestions: 98,
-    scoringModel: '4-point maturity (Not Implemented → Fully Implemented)',
-    dataFile: 'nist'
+    name: 'NIST Cybersecurity Framework 2.0 Assessment',
+    shortName: 'NIST CSF 2.0',
+    templateVersion: '3.0',
+    basis: 'NIST Cybersecurity Framework 2.0 Core (Govern, Identify, Protect, Detect, Respond, Recover)',
+    basisVersion: '2.0',
+    basisReleased: '2024-02-26',
+    referenceFrameworks: ['nist_csf_2', 'iso27001', 'cis_v8', 'soc2'],
+    color: '#1F4E8C',
+    description: 'Programme-level assessment of all 106 NIST CSF 2.0 outcomes, including the new Govern function and supply chain risk.',
+    longDescription: 'Rates every NIST CSF 2.0 subcategory on a four-level implementation scale. Each outcome maps to a HawkSight control, so results also show which attack paths are open and are expressed against ISO/IEC 27001:2022, CIS Controls v8.1 and SOC 2.',
+    audience: 'Organisations establishing or benchmarking an enterprise security programme',
+    estimatedTime: '90-120 minutes',
+    scale: 'Not Implemented, Partially Implemented, Largely Implemented, Fully Implemented'
   },
   soc: {
     id: 'soc',
     type: 'framework',
-    name: 'SOC Capability Maturity Assessment',
-    shortName: 'SOC-CMM',
-    icon: '',
-    color: '#7c3aed',
-    colorGlow: 'rgba(124, 58, 237, 0.2)',
-    description: 'Evaluate your Security Operations Center maturity across business drivers, people, processes, technology, and coverage domains using the CoBIT maturity model.',
-    longDescription: 'Based on the SOC Capability Maturity Model (SOC-CMM), this comprehensive assessment examines five critical domains of your SOC: Mission & Governance, People, Process, Technology, and Coverage. Each area is evaluated using the CoBIT 0-5 maturity scale from "Does not exist" to "Optimized".',
-    tags: ['SOC Operations', 'Maturity Model', 'CoBIT', 'Operational Security'],
-    estimatedTime: '40-55 min',
-    totalQuestions: 85,
-    scoringModel: 'CoBIT 0-5 Maturity (Does not exist → Optimized)',
-    dataFile: 'soc'
+    name: 'Security Operations Capability Assessment',
+    shortName: 'SOC Capability',
+    templateVersion: '2.0',
+    basis: 'Based on the SOC Capability Maturity Model (SOC-CMM) domains, using a COBIT-style 0-5 maturity scale',
+    basisVersion: 'SOC-CMM domains',
+    basisReleased: '',
+    referenceFrameworks: ['nist_csf_2', 'iso27001', 'cis_v8'],
+    color: '#3B3F8F',
+    description: 'Maturity assessment of a security operations function across governance, people, process, technology and coverage.',
+    longDescription: 'Designed for organisations that run an internal SOC or rely on a managed detection provider. Each capability is rated from "Does not exist" to "Optimized".',
+    audience: 'Organisations operating or procuring security monitoring',
+    estimatedTime: '40-60 minutes',
+    scale: 'Does Not Exist, Initial, Repeatable, Defined, Managed, Optimized'
   },
   retail: {
-    id: 'retail',
-    type: 'industry',
-    name: 'Retail & E-commerce Security Module',
-    shortName: 'Retail / E-comm',
-    icon: '',
-    color: '#f43f5e',
-    colorGlow: 'rgba(244, 63, 94, 0.2)',
-    description: 'Tailored for retail and e-commerce, focusing on payment systems (POS), customer PII, and supply chain threats.',
-    longDescription: 'Retailers face growing online threats including account takeovers, POS breaches, and ransomware. This assessment prioritizes payment security (PCI essentials), web/app security, identity & access (MFA), and offline backups to protect critical customer and sales data.',
-    tags: ['Retail', 'E-Commerce', 'Payment Security', 'POS', 'SMB'],
-    estimatedTime: '35-50 min',
-    totalQuestions: 53,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'retail'
+    id: 'retail', type: 'industry', name: 'Retail & E-commerce Threat Readiness Assessment', shortName: 'Retail & E-commerce',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['pci_dss', 'cis_v8', 'iso27001', 'dpdp'],
+    color: '#8C2F39',
+    description: 'Helpdesk social engineering, checkout skimming, customer account takeover, store and payment terminal compromise.',
+    longDescription: 'Tests how well a retailer would hold up against the attacks retailers actually suffer: helpdesk impersonation, card skimming on the website, credential stuffing against customer accounts, attacks through store vendors, refund and gift-card abuse, and trading through weeks of central system outage.',
+    audience: 'Retailers and e-commerce businesses', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   healthcare: {
-    id: 'healthcare',
-    type: 'industry',
-    name: 'Healthcare & Pharma Security Module',
-    shortName: 'Healthcare',
-    icon: '',
-    color: '#10b981',
-    colorGlow: 'rgba(16, 185, 129, 0.2)',
-    description: 'Focused on protecting Protected Health Information (PHI), medical devices (IoT), and ransomware readiness.',
-    longDescription: 'Healthcare is India\'s most-attacked sector. This assessment stresses medical device/IoT segmentation, strong authentication for EMRs, PHI encryption, and offsite backups to ensure rapid recovery from ransomware threats.',
-    tags: ['Healthcare', 'Pharma', 'PHI', 'Medical IoT', 'SMB'],
-    estimatedTime: '30-45 min',
-    totalQuestions: 46,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'healthcare'
+    id: 'healthcare', type: 'industry', name: 'Healthcare & Pharma Threat Readiness Assessment', shortName: 'Healthcare & Pharma',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['hipaa', 'cis_v8', 'iso27001', 'dpdp'],
+    color: '#1F6F5C',
+    description: 'Clinical remote access, medical devices, patient-record misuse, clinical vendors and safe downtime operations.',
+    longDescription: 'Tests how well a hospital, clinic, laboratory or pharmaceutical organisation would hold up against healthcare attacks: remote-access compromise of clinical systems, ransomware reaching medical devices, patient-record misuse, breaches at clinical vendors, and running care safely while systems are down.',
+    audience: 'Hospitals, clinics, diagnostics and pharmaceutical companies', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   fintech: {
-    id: 'fintech',
-    type: 'industry',
-    name: 'Financial Services & FinTech Module',
-    shortName: 'FinTech',
-    icon: '',
-    color: '#f59e0b',
-    colorGlow: 'rgba(245, 158, 11, 0.2)',
-    description: 'For financial services, addressing transaction security, APIs, broken access controls, and compliance essentials.',
-    longDescription: 'FinTech relies heavily on APIs and integrations. This module focuses on robust encryption (TLS 1.2+), tokenization of account numbers, real-time fraud monitoring, and secure development practices (SAST/DAST) for in-house applications.',
-    tags: ['FinTech', 'Financial', 'Transactions', 'Fraud', 'SMB'],
-    estimatedTime: '30-45 min',
-    totalQuestions: 42,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'fintech'
+    id: 'fintech', type: 'industry', name: 'BFSI & FinTech Threat Readiness Assessment', shortName: 'BFSI & FinTech',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['pci_dss', 'cis_v8', 'iso27001', 'soc2', 'dpdp'],
+    color: '#7A5B12',
+    description: 'Customer account takeover, API abuse, payment-system compromise, payment file tampering and mule-driven fraud.',
+    longDescription: 'Tests how well a bank, NBFC, insurer or FinTech would hold up against financial-sector attacks: SIM-swap and remote-access scams on customers, API data exposure, partner and outsourcer access, attacks on payment systems, tampered payment files and fraudulent transfers in progress.',
+    audience: 'Banks, NBFCs, insurers, payment and FinTech companies', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   manufacturing: {
-    id: 'manufacturing',
-    type: 'industry',
-    name: 'Manufacturing & Industrial Module',
-    shortName: 'Manufacturing',
-    icon: '',
-    color: '#8b5cf6',
-    colorGlow: 'rgba(139, 92, 246, 0.2)',
-    description: 'Targeted at IT/OT convergence, securing industrial control systems, and preventing intellectual property theft.',
-    longDescription: 'Manufacturers face risks to production lines and supply chains. This module emphasizes IT/OT network segmentation, IoT/SCADA device inventory and patching, vendor risk assessment, and backups for critical operational data (CAD files).',
-    tags: ['Manufacturing', 'Industrial', 'ICS', 'OT', 'SMB'],
-    estimatedTime: '30-45 min',
-    totalQuestions: 43,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'manufacturing'
+    id: 'manufacturing', type: 'industry', name: 'Manufacturing & OT Threat Readiness Assessment', shortName: 'Manufacturing & OT',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['cis_v8', 'iso27001', 'nist_csf_2'],
+    color: '#4A4F59',
+    description: 'Vendor access to equipment, IT-to-OT ransomware, engineering workstations, safety systems and manual production.',
+    longDescription: 'Tests how well a manufacturer or industrial operator would hold up against attacks that stop production: vendor remote access to equipment, ransomware crossing from IT to OT, dependence of the plant on corporate IT, engineering workstation compromise, theft of design IP and producing manually through an outage. Informed by ISA/IEC 62443 concepts.',
+    audience: 'Manufacturers and industrial operators', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   education: {
-    id: 'education',
-    type: 'industry',
-    name: 'Education Sector Security Module',
-    shortName: 'Education',
-    icon: '',
-    color: '#3b82f6',
-    colorGlow: 'rgba(59, 130, 246, 0.2)',
-    description: 'Designed for schools and colleges, handling student data privacy, open networks, and BYOD challenges.',
-    longDescription: 'Educational institutions see a surge in ransomware. Key domains include segmenting student Wi-Fi from administrative networks, protecting minor records, enforcing MFA for staff, and providing phishing training.',
-    tags: ['Education', 'Schools', 'Colleges', 'Student Data', 'SMB'],
-    estimatedTime: '30-45 min',
-    totalQuestions: 41,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'education'
+    id: 'education', type: 'industry', name: 'Education Threat Readiness Assessment', shortName: 'Education',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['cis_v8', 'iso27001', 'dpdp'],
+    color: '#2F5E8C',
+    description: 'Edtech vendor breaches, open campus networks, fee-payment fraud, grade and exam tampering.',
+    longDescription: 'Tests how well a school, college or university would hold up against attacks on education: breaches at edtech vendors holding student data, open campus networks, dormant student accounts, fee-payment fraud against parents, tampering with grades and exam material, and running exams and admissions through an outage.',
+    audience: 'Schools, colleges and universities', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   itservices: {
-    id: 'itservices',
-    type: 'industry',
-    name: 'IT & Software Services Module',
-    shortName: 'IT Services',
-    icon: '',
-    color: '#06b6d4',
-    colorGlow: 'rgba(6, 182, 212, 0.2)',
-    description: 'For IT firms and consultancies, emphasizing secure SDLC, cloud governance, and client data protection.',
-    longDescription: 'IT firms manage sensitive client data and code repositories. This assessment covers secure DevOps, strict IAM for cloud access, MDM for remote workstations, and managing shadow IT risks.',
-    tags: ['IT Services', 'Software', 'SDLC', 'Cloud', 'SMB'],
-    estimatedTime: '25-40 min',
-    totalQuestions: 38,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'itservices'
+    id: 'itservices', type: 'industry', name: 'IT Services & SaaS Threat Readiness Assessment', shortName: 'IT Services & SaaS',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['iso27001', 'soc2', 'cis_v8'],
+    color: '#1D6A7A',
+    description: 'Leaked secrets, stolen developer sessions, poisoned dependencies, client access and cloud takeover.',
+    longDescription: 'Tests how well an IT services firm, managed service provider or SaaS company would hold up against attacks on itself and, through it, its clients: leaked secrets, developer session theft, malicious dependencies, pipeline takeover, access into client environments and rebuilding after a cloud account is destroyed.',
+    audience: 'IT services firms, managed service providers and SaaS companies', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   hospitality: {
-    id: 'hospitality',
-    type: 'industry',
-    name: 'Hospitality (Hotels/Restaurants) Module',
-    shortName: 'Hospitality',
-    icon: '',
-    color: '#eab308',
-    colorGlow: 'rgba(234, 179, 8, 0.2)',
-    description: 'Focused on payment terminals, guest Wi-Fi segregation, and securing booking platforms.',
-    longDescription: 'Hotels and restaurants frequently face POS breaches and Wi-Fi misuse. Key checks include PCI-DSS basics, isolating guest Wi-Fi, managing staff login credentials amid high turnover, and encrypting guest PII.',
-    tags: ['Hospitality', 'Hotels', 'Restaurants', 'POS', 'SMB'],
-    estimatedTime: '25-40 min',
-    totalQuestions: 39,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'hospitality'
+    id: 'hospitality', type: 'industry', name: 'Hospitality Threat Readiness Assessment', shortName: 'Hospitality',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['pci_dss', 'cis_v8', 'dpdp'],
+    color: '#6B4E2E',
+    description: 'Booking-platform phishing, front-desk social engineering, guest and smart-room networks, payment terminals.',
+    longDescription: 'Tests how well a hotel, resort or restaurant group would hold up against hospitality attacks: phishing through booking platforms, social engineering of the front desk, guest and smart-room networks, vendor access, payment terminal compromise, guest identity documents and running the property without the PMS.',
+    audience: 'Hotels, resorts and restaurant groups', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   logistics: {
-    id: 'logistics',
-    type: 'industry',
-    name: 'Logistics & Transport Module',
-    shortName: 'Logistics',
-    icon: '',
-    color: '#f97316',
-    colorGlow: 'rgba(249, 115, 22, 0.2)',
-    description: 'Targeted at protecting IoT tracking assets, route data, and ensuring continuous supply chain operations.',
-    longDescription: 'Logistics relies on IoT, telematics, and cloud TMS. This module weights asset inventory, zero-default credentials for tracking devices, secure VPNs for remote depots, and backing up critical route manifests.',
-    tags: ['Logistics', 'Transport', 'IoT', 'Supply Chain', 'SMB'],
-    estimatedTime: '25-40 min',
-    totalQuestions: 37,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'logistics'
+    id: 'logistics', type: 'industry', name: 'Logistics & Transport Threat Readiness Assessment', shortName: 'Logistics',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['cis_v8', 'iso27001'],
+    color: '#5A6B2E',
+    description: 'Invoice fraud, partner connections, telematics, cyber-enabled cargo theft and manual operations.',
+    longDescription: 'Tests how well a logistics, freight or transport operator would hold up against attacks on logistics: invoice and payment fraud, partner and carrier connections, telematics and IoT devices, warehouse automation, cyber-enabled cargo theft and moving goods while core systems are down.',
+    audience: 'Logistics, freight and transport operators', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   },
   professional: {
-    id: 'professional',
-    type: 'industry',
-    name: 'Professional Services Module',
-    shortName: 'Prof. Services',
-    icon: '',
-    color: '#6366f1',
-    colorGlow: 'rgba(99, 102, 241, 0.2)',
-    description: 'For law firms, consultancies, and accounting, stressing strict client data confidentiality and email security.',
-    longDescription: 'Professional services hold highly sensitive client documents. The module focuses on mitigating human error, enforcing MFA on all remote access, robust email encryption, and careful access control reviews for client projects.',
-    tags: ['Professional', 'Law Firms', 'Consultancy', 'Confidentiality', 'SMB'],
-    estimatedTime: '30-45 min',
-    totalQuestions: 40,
-    scoringModel: 'Risk-weighted percentage (0-100%)',
-    dataFile: 'professional'
+    id: 'professional', type: 'industry', name: 'Professional Services Threat Readiness Assessment', shortName: 'Professional Services',
+    templateVersion: '2.0', basis: 'HawkSight threat-led industry pack: core attack-path questions plus attack scenarios specific to the industry', basisVersion: '2.0', basisReleased: '',
+    referenceFrameworks: ['iso27001', 'cis_v8', 'gdpr', 'dpdp'],
+    color: '#44345E',
+    description: 'Client payment diversion, partner mailbox takeover, file-transfer tools, matter segregation and AI use.',
+    longDescription: 'Tests how well a law, accounting or consulting firm would hold up against attacks on advisory firms: client payment diversion, takeover of partners\' mailboxes, breaches of file-transfer and data-room tools, firm-wide access to client matters, client documents in AI tools and meeting deadlines through an outage.',
+    audience: 'Law, accounting and consulting firms', estimatedTime: '45-60 minutes', scale: 'Four levels, each described for the question'
   }
 };
 
-// Framework ordering for display
-const FRAMEWORK_ORDER = [
-  'retail', 'healthcare', 'fintech', 'manufacturing', 
-  'education', 'itservices', 'hospitality', 'logistics', 'professional',
-  'nist', 'soc'
-];
-
-// Bifurcated lists: Frameworks vs Industry Modules
 const FRAMEWORK_LIST = ['nist', 'soc'];
-const COMPLIANCE_LIST = [
-  'retail', 'healthcare', 'fintech', 'manufacturing', 
-  'education', 'itservices', 'hospitality', 'logistics', 'professional'
-];
+const COMPLIANCE_LIST = ['retail', 'healthcare', 'fintech', 'manufacturing', 'education', 'itservices', 'hospitality', 'logistics', 'professional'];
+const FRAMEWORK_ORDER = [...FRAMEWORK_LIST, ...COMPLIANCE_LIST];
 
-// Scoring helpers
-const SCORING_LABELS = {
-  nist: ['Not Implemented', 'Partially Implemented', 'Largely Implemented', 'Fully Implemented'],
-  soc: ['Does Not Exist', 'Initial', 'Repeatable', 'Defined', 'Managed', 'Optimized'],
-  // For the new industry modules, we use Yes/No/Partial responses mapped to 0-100% scores in the app,
-  // but if we need labels for the options:
-  retail: ['No', 'Partial', 'Yes'],
-  healthcare: ['No', 'Partial', 'Yes'],
-  fintech: ['No', 'Partial', 'Yes'],
-  manufacturing: ['No', 'Partial', 'Yes'],
-  education: ['No', 'Partial', 'Yes'],
-  itservices: ['No', 'Partial', 'Yes'],
-  hospitality: ['No', 'Partial', 'Yes'],
-  logistics: ['No', 'Partial', 'Yes'],
-  professional: ['No', 'Partial', 'Yes']
-};
-
-function getScoreClass(percentage) {
-  if (percentage < 60) return 'critical';
-  if (percentage < 80) return 'warning';
-  return 'good';
+function getFrameworkData(id) {
+  const lookup = {
+    nist: typeof NIST_DATA !== 'undefined' ? NIST_DATA : null,
+    soc: typeof SOC_DATA !== 'undefined' ? SOC_DATA : null,
+    retail: typeof RETAIL_DATA !== 'undefined' ? RETAIL_DATA : null,
+    healthcare: typeof HEALTHCARE_DATA !== 'undefined' ? HEALTHCARE_DATA : null,
+    fintech: typeof FINTECH_DATA !== 'undefined' ? FINTECH_DATA : null,
+    manufacturing: typeof MANUFACTURING_DATA !== 'undefined' ? MANUFACTURING_DATA : null,
+    education: typeof EDUCATION_DATA !== 'undefined' ? EDUCATION_DATA : null,
+    itservices: typeof ITSERVICES_DATA !== 'undefined' ? ITSERVICES_DATA : null,
+    hospitality: typeof HOSPITALITY_DATA !== 'undefined' ? HOSPITALITY_DATA : null,
+    logistics: typeof LOGISTICS_DATA !== 'undefined' ? LOGISTICS_DATA : null,
+    professional: typeof PROFESSIONAL_DATA !== 'undefined' ? PROFESSIONAL_DATA : null
+  };
+  return lookup[id] || null;
 }
 
-function getScoreLabel(percentage) {
-  if (percentage < 60) return 'High/Critical Risk';
-  if (percentage < 80) return 'Moderate Risk';
-  return 'Good Posture';
-}
-
-// Export for module systems if needed
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { FRAMEWORKS, FRAMEWORK_ORDER, FRAMEWORK_LIST, COMPLIANCE_LIST, SCORING_LABELS, getScoreClass, getScoreLabel };
+  module.exports = { FRAMEWORKS, FRAMEWORK_LIST, COMPLIANCE_LIST, FRAMEWORK_ORDER };
 }

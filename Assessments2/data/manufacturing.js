@@ -1,102 +1,149 @@
-const MANUFACTURING_DATA = {
-  id: 'manufacturing',
-  modules: [
-    {
-      id: 'ot_network', name: 'Network & ICS Segmentation', description: 'IT/OT isolation, firewalls, and network controls.', icon: '',
-      categories: [
-        { id: 'segmentation', name: 'IT/OT Segregation', description: 'Separating networks.', questions: [
-          { id: 'MFG-1.1', text: 'Do you segregate your OT/Industrial Control Systems (ICS) network from IT network?', context: 'Network diagram', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.2', text: 'Is a DMZ (demilitarized zone) used between IT and OT networks for data exchange?', context: 'DMZ architecture', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.3', text: 'Are network diagrams maintained and updated showing all IT/OT interconnections?', context: 'Network documentation', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.4', text: 'Is wireless access on the manufacturing floor restricted and monitored?', context: 'Wireless policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'firewall', name: 'IoT Access Control', description: 'Restricting communications.', questions: [
-          { id: 'MFG-1.5', text: 'Do you have firewalls or NAC to restrict communications to/from IoT devices?', context: 'Firewall config, policies', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.6', text: 'Are industrial protocol communications (Modbus, OPC UA) filtered and monitored?', context: 'Protocol monitoring config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.7', text: 'Is outbound internet access blocked from OT/ICS devices unless explicitly required?', context: 'Firewall rules', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'monitoring', name: 'Network Monitoring', description: 'Detecting anomalies on OT network.', questions: [
-          { id: 'MFG-1.8', text: 'Is there network traffic monitoring or anomaly detection on the OT network?', context: 'OT monitoring tool', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-1.9', text: 'Are IDS/IPS systems deployed specifically for industrial network traffic?', context: 'IDS/IPS config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'asset_mgmt', name: 'Asset Management (IoT/OT)', description: 'Inventory, patching, and lifecycle management.', icon: '',
-      categories: [
-        { id: 'inventory', name: 'Device Inventory', description: 'Tracking SCADA/IoT devices.', questions: [
-          { id: 'MFG-2.1', text: 'Are IoT/SCADA devices (sensors, controllers) inventoried and patched?', context: 'Asset inventory, patch logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.2', text: 'Is there a complete asset register including firmware versions and end-of-life dates?', context: 'Asset register', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.3', text: 'Are unauthorized devices automatically detected when connected to the OT network?', context: 'NAC/device detection logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'patching', name: 'Patch Management', description: 'IT and OT updates.', questions: [
-          { id: 'MFG-2.4', text: 'Is there a patch management process for both IT and OT systems?', context: 'PMO policy, patch schedule', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.5', text: 'Are patches tested in a staging environment before deployment to production OT systems?', context: 'Patch testing procedure', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.6', text: 'Are compensating controls applied for legacy OT systems that cannot be patched?', context: 'Compensating controls doc', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.7', text: 'Is vulnerability scanning performed on IT systems connected to the manufacturing network?', context: 'Vulnerability scan reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'access', name: 'Access Control', description: 'Authentication for OT systems.', questions: [
-          { id: 'MFG-2.8', text: 'Are default passwords changed on all PLCs, HMIs, and SCADA systems?', context: 'Password change records', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.9', text: 'Is role-based access control enforced on HMI and SCADA interfaces?', context: 'RBAC configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-2.10', text: 'Are operator actions on critical control systems logged and auditable?', context: 'Audit logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'bcp_ir', name: 'Business Continuity & IR', description: 'Disaster recovery and incident response.', icon: '',
-      categories: [
-        { id: 'ir', name: 'Incident Response', description: 'Planning for disruptions.', questions: [
-          { id: 'MFG-3.1', text: 'Is there an incident response plan specific to production disruptions or ransomware?', context: 'IR plan, BCP procedures', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.2', text: 'Are IR drills/tabletop exercises conducted at least annually including OT scenarios?', context: 'Drill reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.3', text: 'Is there a defined escalation procedure for OT-specific security incidents?', context: 'Escalation matrix', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.4', text: 'Can production line operations switch to manual/standalone mode during a cyber incident?', context: 'Manual operations procedure', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'backup', name: 'Data Backups', description: 'Protecting operational data.', questions: [
-          { id: 'MFG-3.5', text: 'Are backups of operational data (CAD files, specs) stored offline and tested?', context: 'Backup logs, test reports', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.6', text: 'Are PLC/HMI configurations backed up and version-controlled?', context: 'Config backup logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.7', text: 'Is there a defined RTO/RPO for critical production systems?', context: 'BCP metrics', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-3.8', text: 'Are backup restoration procedures tested at least semi-annually?', context: 'Restoration test reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'vendor_supply', name: 'Supply Chain/Vendor Risk', description: 'Remote access, vendor assessments, and supply chain.', icon: '',
-      categories: [
-        { id: 'mfa', name: 'Remote Access', description: 'Vendor maintenance access.', questions: [
-          { id: 'MFG-4.1', text: 'Do you require MFA for remote maintenance or vendor access to equipment?', context: 'MFA logs, vendor access records', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-4.2', text: 'Is vendor remote access time-limited and monitored (no persistent VPN)?', context: 'Remote access policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-4.3', text: 'Are remote maintenance sessions logged and recorded for audit purposes?', context: 'Session recordings', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'vendor_docs', name: 'Supplier Security', description: 'Contracts and assessments.', questions: [
-          { id: 'MFG-4.4', text: 'Are supplier and vendor security requirements documented (supplies, software)?', context: 'Contracts, questionnaires', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-4.5', text: 'Do you perform annual risk assessments for supply chain and vendor cyber risk?', context: 'Risk assessment report', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-4.6', text: 'Is there a process for verifying the integrity of firmware/software updates from equipment vendors?', context: 'Firmware verification process', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-4.7', text: 'Are supply chain dependencies mapped to identify single points of failure?', context: 'Dependency mapping', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'data_physical', name: 'IP, Physical Security & Training', description: 'Design encryption, site security, and staff awareness.', icon: '',
-      categories: [
-        { id: 'ip_encrypt', name: 'IP Encryption', description: 'Securing sensitive designs.', questions: [
-          { id: 'MFG-5.1', text: 'Do you encrypt sensitive design/IP data at rest?', context: 'Encryption policy, logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.2', text: 'Is DLP (Data Loss Prevention) in place to prevent unauthorized transfer of design files?', context: 'DLP configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.3', text: 'Are USB ports and removable media restricted on systems with access to sensitive IP?', context: 'USB policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'physical', name: 'Physical Security', description: 'Guards and CCTV.', questions: [
-          { id: 'MFG-5.4', text: 'Are physical security measures in place (CCTV, guards) around manufacturing floor/servers?', context: 'Security audit logs', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.5', text: 'Is physical access to control rooms restricted to authorized personnel with badge/biometric?', context: 'Access control system', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.6', text: 'Are environmental controls (fire suppression, temperature, UPS) in place for server and control rooms?', context: 'Environmental monitoring', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'training', name: 'Staff Training', description: 'OT and cyber awareness.', questions: [
-          { id: 'MFG-5.7', text: 'Do plant floor operators receive cybersecurity awareness training?', context: 'Training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.8', text: 'Are IT and OT teams cross-trained on each other\'s security requirements?', context: 'Cross-training curriculum', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'MFG-5.9', text: 'Is there a clear reporting procedure for operators who notice unusual system behavior?', context: 'Reporting procedure', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    }
+// ============================================
+// HawkSight — Manufacturing & OT threat-led template
+// Core question set plus the attack paths specific to manufacturers and
+// industrial operators: vendor remote access to equipment, IT-to-OT
+// spread, dependence of production on corporate IT, engineering
+// workstations, safety systems, theft of design IP and running production
+// manually.
+// ============================================
+
+const { levels, q, composeTemplate } = require('./core.js');
+
+const MANUFACTURING_DATA = composeTemplate('manufacturing', {
+  entry: [
+    { id: 'mfg_entry', name: 'Ways into production', description: 'Routes attackers and malware use to reach the plant floor.', questions: [
+      q('MFG-IN-01', 'HS-NET-03', 'How do machine and control-system vendors connect for remote support to PLCs, SCADA, robots or other equipment?',
+        levels(
+          ['Always on', 'Permanent modems, VPNs or remote tools on equipment.'],
+          ['VPN always on', 'A vendor VPN that is always available.'],
+          ['On request via jump host', 'Enabled on request through a jump host with MFA.'],
+          ['Approved, recorded, disconnected', 'As above, approved by operations for each session, recorded, and disconnected when idle.']),
+        { attack: 'Remote vendor access straight to equipment bypasses every other control. Attackers who compromise a vendor, or find its always-on connection, can reach the plant floor directly.',
+          verify: 'List of vendor remote connections to OT, how each is enabled, and session logs.' }),
+      q('MFG-IN-02', 'HS-OT-01', 'Can OT devices such as PLCs, HMIs and SCADA servers reach the internet, or be reached from it?',
+        levels(
+          ['Yes or unknown', 'Some OT devices have internet access or are exposed.'],
+          ['Some', 'Some outbound access is allowed for updates or remote monitoring.'],
+          ['None', 'Outbound and inbound internet access is blocked for OT.'],
+          ['None, verified', 'As above, verified by external scans and monitoring.']),
+        { attack: 'Internet-exposed industrial controllers are found within hours by attackers using search engines such as Shodan, and some have been manipulated remotely.',
+          verify: 'Firewall rules at the OT boundary and an external scan for industrial protocols.' }),
+      q('MFG-IN-03', 'HS-OT-01', 'How are USB drives and laptops brought onto the plant floor by engineers and contractors controlled?',
+        levels(
+          ['Freely', 'Any USB drive or laptop can be connected.'],
+          ['Policy only', 'A written rule, not enforced.'],
+          ['Scanned or dedicated', 'Media is scanned at a kiosk or only dedicated media is allowed.'],
+          ['Blocked by default', 'USB ports on OT assets are blocked except for approved, scanned media, and contractor laptops are checked before connection.']),
+        { attack: 'Air-gapped and isolated OT networks are often infected through USB drives and contractor laptops, which carry malware past the network defences.',
+          verify: 'Removable media procedure and device control settings on HMIs.' })
+    ]}
+  ],
+  spread: [
+    { id: 'mfg_ot', name: 'IT and OT separation', description: 'Whether an attack on the office network can stop production.', questions: [
+      q('MFG-SP-01', 'HS-OT-01', 'What separates the office (IT) network from the production (OT) network?',
+        levels(
+          ['Nothing', 'IT and OT share the network.'],
+          ['Firewall, broad rules', 'A firewall with broad rules allowing direct IT to OT traffic.'],
+          ['DMZ', 'A DMZ for data exchange with no direct IT to OT connections.'],
+          ['Zones and conduits', 'Zones and conduits designed to ISA/IEC 62443, with rules reviewed.']),
+        { attack: 'Ransomware that reaches OT stops production directly. Even without reaching it, a weak boundary forces you to shut production down because you cannot be sure.',
+          verify: 'IT/OT boundary design and firewall rules.' }),
+      q('MFG-SP-02', 'HS-OT-01', 'Do production systems depend on corporate IT services such as Active Directory, ERP or file shares in order to run?',
+        levels(
+          ['Heavily', 'Production cannot run without corporate IT.'],
+          ['Some dependencies', 'Some production systems depend on corporate services.'],
+          ['Separate', 'OT uses its own identity and services, separate from corporate IT.'],
+          ['Proven', 'As above, and it has been tested that production runs with IT disconnected.']),
+        { attack: 'Most attacks that stop production never touch the machines. Colonial Pipeline shut down its pipeline because business IT systems were hit, not the pipeline controls.',
+          verify: 'Dependency map of OT on IT services and the record of a disconnection test.' }),
+      q('MFG-SP-03', 'HS-OT-01', 'Do you have an inventory of OT assets with firmware versions, network connections and vendor support status?',
+        levels(
+          ['No', 'No OT inventory.'],
+          ['Maintenance list', 'An engineering or maintenance list without network or firmware details.'],
+          ['Complete', 'Complete with firmware, connections and support status.'],
+          ['Discovered passively', 'Kept current by passive OT network discovery.']),
+        { attack: 'When an industrial vulnerability is published, plants without an inventory cannot tell whether they are exposed.',
+          verify: 'OT inventory extract for one production line.' }),
+      q('MFG-SP-04', 'HS-IAM-04', 'Are engineering workstations used to program PLCs restricted to authorised engineers, hardened and kept off email and the internet?',
+        levels(
+          ['Shared, general use', 'Shared machines also used for email and browsing.'],
+          ['Dedicated, shared login', 'Dedicated machines with a shared login.'],
+          ['Named and isolated', 'Named accounts, no email or internet access.'],
+          ['Allowlisted and logged', 'As above, with application allowlisting and logging of changes to controller logic.']),
+        { attack: 'An engineering workstation can change what machines do. It is the most valuable target in OT, and often the least protected.',
+          verify: 'Engineering workstation configuration and access list.' }),
+      q('MFG-SP-05', 'HS-OT-01', 'Are safety instrumented systems separated from the control network so that a cyber attack cannot disable safety functions?',
+        levels(
+          ['No or unknown', 'Safety systems share the control network.'],
+          ['Partly', 'Some separation, not verified.'],
+          ['Separated', 'Separated, with a physical key switch for programming mode.'],
+          ['Separated and reviewed', 'As above, verified in a combined safety and cyber review.']),
+        { context: 'Choose Not applicable if you have no safety instrumented systems.',
+          attack: 'The Triton malware discovered in 2017 targeted the safety controllers of a petrochemical plant, the systems that exist to prevent explosions and loss of life.',
+          verify: 'Safety system network design and key switch position records.' })
+    ]}
+  ],
+  protect: [
+    { id: 'mfg_ip', name: 'Design IP and controller logic', description: 'The know-how and configurations that make production possible.', questions: [
+      q('MFG-PR-01', 'HS-DAT-03', 'Is design and process IP (CAD files, recipes, formulations) restricted to those who need it, with large downloads or transfers flagged?',
+        levels(
+          ['Open shares', 'Stored on broadly accessible shares.'],
+          ['Restricted folders', 'Access is restricted to departments.'],
+          ['Need-to-know and controlled', 'Need-to-know access with controls on external transfer.'],
+          ['Alerted', 'As above, with alerts on bulk downloads reviewed.']),
+        { attack: 'Industrial espionage targets design and process data. It is usually taken quietly, often by insiders or long-term intruders.',
+          verify: 'Access list for the main design repository and transfer alert rules.' }),
+      q('MFG-PR-02', 'HS-RES-01', 'Are PLC and HMI programs and configurations backed up offline, version-controlled and compared with what is actually running?',
+        levels(
+          ['No', 'No backups of controller logic.'],
+          ['On engineers\' laptops', 'Copies exist on individual engineers\' laptops.'],
+          ['Central and offline', 'Central, versioned backups kept offline.'],
+          ['Change detection', 'As above, with automated comparison of running logic against the approved baseline.']),
+        { attack: 'Without a trusted copy of controller logic, recovery means re-engineering from scratch, and unauthorised changes go unnoticed.',
+          verify: 'Backup repository for controller logic and the last comparison report.' })
+    ]}
+  ],
+  detect: [
+    { id: 'mfg_detect', name: 'OT monitoring and response', description: 'Seeing and responding to attacks in the production environment.', questions: [
+      q('MFG-DE-01', 'HS-MON-02', 'Is OT network traffic monitored for unusual commands, new devices and new connections?',
+        levels(
+          ['No', 'No monitoring of OT traffic.'],
+          ['Firewall logs', 'Only firewall logs at the boundary.'],
+          ['OT-aware monitoring', 'An OT-aware monitoring tool covers key segments.'],
+          ['Full coverage, 24x7', 'Full coverage reviewed 24x7.']),
+        { attack: 'Attackers can stay in OT networks for months because nobody watches industrial traffic.',
+          verify: 'OT monitoring coverage and recent alerts.' }),
+      q('MFG-DE-02', 'HS-IR-01', 'Does your incident plan say who decides to stop or continue production, and has it been exercised with plant operations?',
+        levels(
+          ['No', 'No OT incident plan.'],
+          ['IT plan only', 'The IT plan does not cover production decisions.'],
+          ['OT playbook', 'An OT playbook names plant decision makers.'],
+          ['Exercised', 'Exercised with plant operations in the last year.']),
+        { attack: 'The decision to stop production is expensive and has to be made fast. Without agreed authority, it is made late or too broadly.',
+          verify: 'OT incident playbook and exercise record.' })
+    ]}
+  ],
+  recover: [
+    { id: 'mfg_recover', name: 'Producing through an outage', description: 'Continuing and restoring production after an attack.', questions: [
+      q('MFG-RE-01', 'HS-RES-03', 'If IT systems such as ERP, MES and email were encrypted, could production, shipping and invoicing continue manually?',
+        levels(
+          ['No', 'Production would stop.'],
+          ['For a day or two', 'Could continue briefly on improvised processes.'],
+          ['Documented manual procedures', 'Manual procedures are documented for production, shipping and invoicing.'],
+          ['Rehearsed', 'As above, rehearsed in the last year.']),
+        { attack: 'When Norsk Hydro was hit by ransomware in 2019, plants switched to manual operation. Manufacturers that can do this lose far less and are under far less pressure to pay.',
+          verify: 'Manual operation procedures and rehearsal record.' }),
+      q('MFG-RE-02', 'HS-RES-02', 'Have you tested rebuilding an HMI or SCADA server and restoring controller logic from backup, and timed it?',
+        levels(
+          ['Never', 'Never tested.'],
+          ['Partly', 'Some components restored.'],
+          ['Tested and timed', 'Rebuild tested in the last year, with the time recorded.'],
+          ['Twice yearly, within target', 'Tested at least twice a year within the agreed recovery time.']),
+        { attack: 'OT systems are often rebuilt by a single specialist or vendor. Without a tested process, recovery time is unknown until it is needed.',
+          verify: 'Rebuild test records.' })
+    ]}
   ]
-};
+});
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { MANUFACTURING_DATA };

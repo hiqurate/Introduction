@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HawkSight Reel</title>
+<style>
+  @font-face { font-family: Inter; src: url(inter-latin.woff2) format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: Mono; src: url(jetbrains-mono-latin.woff2) format("woff2"); font-weight: 100 900; }
+  :root {
+    --night: #07090d; --graphite: #0b0e13; --line: #232a35; --silver: #c9ced6; --slate: #8a93a1;
+    --amber: #f5a524; --amber-deep: #d9890b; --critical: #ef4b3f; --safe: #2fbf7f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  body { display: grid; place-items: center; min-height: 100vh; overflow: hidden; }
+  #stage {
+    position: relative; width: 1080px; height: 1920px; overflow: hidden;
+    background: radial-gradient(120% 70% at 50% 40%, #111722 0%, var(--night) 70%);
+    font-family: Inter, system-ui, sans-serif; color: #fff; transform-origin: center;
+  }
+  .abs { position: absolute; left: 0; right: 0; }
+  .grid {
+    position: absolute; inset: -200px;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 90px 90px; opacity: .35;
+    mask-image: radial-gradient(60% 50% at 50% 45%, #000 0%, transparent 100%);
+  }
+  .kicker { font-family: Mono; font-size: 30px; letter-spacing: .28em; text-transform: uppercase; color: var(--amber); text-align: center; }
+  .h { font-weight: 800; letter-spacing: -0.045em; line-height: .98; text-align: center; padding: 0 90px; }
+  .amber { color: var(--amber); }
+  .dim { color: var(--slate); }
+
+  /* attack path */
+  #path { top: 470px; }
+  .node {
+    position: absolute; left: 150px; width: 780px; height: 150px; border-radius: 26px;
+    background: #10151e; border: 2px solid #2a3240; display: flex; align-items: center; gap: 30px; padding: 0 36px;
+  }
+  .node .num { font-family: Mono; font-size: 26px; color: var(--slate); width: 50px; }
+  .node .lbl { font-size: 46px; font-weight: 700; letter-spacing: -0.03em; }
+  .node .sub { font-family: Mono; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; color: var(--slate); margin-top: 6px; }
+  .node .dot { margin-left: auto; width: 26px; height: 26px; border-radius: 50%; background: var(--critical); box-shadow: 0 0 30px var(--critical); }
+  .wire { position: absolute; left: 538px; width: 4px; background: var(--critical); box-shadow: 0 0 18px var(--critical); transform-origin: top; }
+  .tag {
+    position: absolute; right: 60px; font-family: Mono; font-size: 24px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--graphite); background: var(--amber); padding: 10px 18px; border-radius: 10px;
+  }
+  .cut { position: absolute; left: 470px; width: 140px; height: 8px; background: var(--amber); border-radius: 4px; box-shadow: 0 0 24px var(--amber); }
+
+  .stamp {
+    position: absolute; left: 50%; top: 860px; transform: translateX(-50%) rotate(-8deg);
+    border: 8px solid var(--safe); color: var(--safe); font-family: Mono; font-weight: 800; font-size: 96px;
+    letter-spacing: .12em; padding: 18px 46px; border-radius: 22px;
+  }
+  .strike { position: absolute; left: 230px; top: 940px; height: 14px; width: 620px; background: var(--critical); border-radius: 7px; transform-origin: left; transform: rotate(-8deg); }
+
+  .scan { position: absolute; left: 0; right: 0; height: 220px; background: linear-gradient(to bottom, transparent, rgba(245,165,36,.18), transparent); border-bottom: 3px solid rgba(245,165,36,.7); }
+
+  .dial { position: absolute; left: 50%; top: 560px; width: 620px; height: 620px; margin-left: -310px; }
+  .dial-num { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 210px; letter-spacing: -0.06em; }
+  .cta {
+    position: absolute; left: 50%; transform: translateX(-50%); top: 1310px; white-space: nowrap;
+    background: var(--amber); color: var(--graphite); font-weight: 800; font-size: 46px; letter-spacing: -0.02em;
+    padding: 30px 56px; border-radius: 100px;
+  }
+  .flash { position: absolute; inset: 0; background: #fff; pointer-events: none; }
+  .bar { position: absolute; top: 120px; left: 90px; right: 90px; height: 6px; background: rgba(255,255,255,.12); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--amber); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="grid" id="grid"></div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <!-- S1 hook -->
+  <div id="s1" class="abs" style="top:690px">
+    <div class="h" id="s1a" style="font-size:132px">Hackers don't<br>break in.</div>
+    <div class="h amber" id="s1b" style="font-size:160px;margin-top:40px">They log in.</div>
+  </div>
+
+  <!-- S2 attack path -->
+  <div id="s2" class="abs" style="top:0;height:1920px">
+    <div class="kicker" id="s2k" style="position:absolute;top:290px;left:0;right:0">How it usually goes</div>
+    <div id="path" class="abs"></div>
+  </div>
+
+  <!-- S3 compliance -->
+  <div id="s3" class="abs" style="top:0;height:1920px">
+    <div class="h" id="s3a" style="position:absolute;top:420px;left:0;right:0;font-size:92px">Meanwhile, your audit said:</div>
+    <div class="stamp" id="stamp">COMPLIANT</div>
+    <div class="strike" id="strike"></div>
+    <div class="h" id="s3b" style="position:absolute;top:1170px;left:0;right:0;font-size:104px">Compliant <span class="dim">≠</span><br><span class="amber">ready.</span></div>
+  </div>
+
+  <!-- S4 reveal -->
+  <div id="s4" class="abs" style="top:0;height:1920px">
+    <img id="mark" src="hawksight-mark-reversed.png" style="position:absolute;left:50%;top:560px;width:720px;margin-left:-360px">
+    <div id="glint" style="position:absolute;left:0;top:0;width:60px;height:60px;border-radius:50%;background:radial-gradient(#fff, rgba(245,165,36,.8) 30%, transparent 70%)"></div>
+    <img id="word" src="hawksight-wordmark-reversed.png" style="position:absolute;left:50%;top:1110px;width:760px;margin-left:-380px">
+    <div class="kicker" id="s4k" style="position:absolute;top:1230px;left:0;right:0;color:var(--silver)">Threat readiness, not checkboxes</div>
+  </div>
+
+  <!-- S5 chain breaker -->
+  <div id="s5" class="abs" style="top:0;height:1920px">
+    <div class="h" id="s5a" style="position:absolute;top:250px;left:0;right:0;font-size:86px">See the paths<br>attackers would take.</div>
+    <div id="path2" class="abs" style="top:560px"></div>
+    <div class="scan" id="scan"></div>
+    <div class="h" id="s5b" style="position:absolute;top:1390px;left:0;right:0;font-size:76px">Fix what breaks<br><span class="amber">the most of them.</span></div>
+  </div>
+
+  <!-- S6 score -->
+  <div id="s6" class="abs" style="top:0;height:1920px">
+    <div class="kicker" id="s6k" style="position:absolute;top:400px;left:0;right:0">Cyber Health Score</div>
+    <div class="dial">
+      <svg viewBox="0 0 620 620" width="620" height="620">
+        <circle cx="310" cy="310" r="270" fill="none" stroke="#1c232e" stroke-width="34"/>
+        <circle id="arc" cx="310" cy="310" r="270" fill="none" stroke="#f5a524" stroke-width="34" stroke-linecap="round"
+                transform="rotate(-90 310 310)" stroke-dasharray="1696.5" stroke-dashoffset="1696.5"/>
+      </svg>
+      <div class="dial-num" id="score">0</div>
+    </div>
+    <div class="h" id="s6a" style="position:absolute;top:1260px;left:0;right:0;font-size:80px">Measured against<br>real attacks.</div>
+  </div>
+
+  <!-- S7 CTA -->
+  <div id="s7" class="abs" style="top:0;height:1920px">
+    <div class="h" id="s7a" style="position:absolute;top:450px;left:0;right:0;font-size:86px">See your attack paths<br><span class="amber">before they do.</span></div>
+    <img id="mark2" src="hawksight-mark-reversed.png" style="position:absolute;left:50%;top:850px;width:420px;margin-left:-210px">
+    <img id="word2" src="hawksight-wordmark-reversed.png" style="position:absolute;left:50%;top:1150px;width:560px;margin-left:-280px">
+    <div class="cta" id="cta">Book an assessment · link in bio</div>
+    <div class="kicker" id="s7k" style="position:absolute;top:1470px;left:0;right:0;color:var(--slate)">by HiQurate Ops</div>
+  </div>
+
+  <div class="flash" id="flash"></div>
+</div>
+
+<script>
+const DURATION = 23;
+const STEPS = [
+  ["Phishing email", "Entry", "01"],
+  ["Stolen password", "Credential", "02"],
+  ["VPN with no MFA", "Access", "03"],
+  ["Admin takeover", "Spread", "04"],
+  ["Ransomware", "Impact", "05"],
+];
+const GAP = 210;
+
+function buildPath(el, compact) {
+  const scale = compact ? 0.82 : 1, gap = GAP * scale;
+  el.style.transform = `scale(${scale})`; el.style.transformOrigin = "50% 0";
+  STEPS.forEach((s, i) => {
+    if (i) {
+      const w = document.createElement("div");
+      w.className = "wire"; w.style.top = (i - 1) * GAP + 150 + "px"; w.style.height = (GAP - 150) + "px";
+      el.appendChild(w);
+    }
+    const n = document.createElement("div");
+    n.className = "node"; n.style.top = i * GAP + "px";
+    n.innerHTML = `<div class="num">${s[2]}</div><div><div class="lbl">${s[0]}</div><div class="sub">${s[1]}</div></div><div class="dot"></div>`;
+    el.appendChild(n);
+  });
+}
+buildPath(document.getElementById("path"));
+const p2 = document.getElementById("path2");
+buildPath(p2, true);
+const tag = document.createElement("div"); tag.className = "tag"; tag.textContent = "Chain breaker";
+tag.style.top = (2 * GAP + 54) + "px"; p2.appendChild(tag);
+const cut = document.createElement("div"); cut.className = "cut"; cut.style.top = (2 * GAP + 150 + 26) + "px"; p2.appendChild(cut);
+
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const outBack = x => { const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+
+// scene visibility with quick fade in/out
+function scene(id, t, a, b, fade = 0.18) {
+  const o = Math.min(prog(t, a, a + fade), 1 - prog(t, b - fade, b));
+  const el = $(id); el.style.opacity = o; el.style.display = o <= 0 ? "none" : "block";
+  return o;
+}
+// slam-in text: scale from big + blur
+function slam(el, t, at, dur = 0.35) {
+  const p = prog(t, at, at + dur), e = outBack(p);
+  el.style.opacity = clamp(p * 3);
+  el.style.transform = `scale(${1.6 - 0.6 * e})`;
+  el.style.filter = `blur(${(1 - p) * 14}px)`;
+}
+function rise(el, t, at, dur = 0.45, dist = 60) {
+  const p = outCubic(prog(t, at, at + dur));
+  el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * dist}px)`;
+}
+
+function render(t) {
+  $("prog").style.width = (t / DURATION * 100) + "%";
+  $("grid").style.transform = `translateY(${(t * 22) % 90}px)`;
+
+  // shake on hits
+  const hits = [0.0, 1.15, 8.0, 9.55, 10.9, 20.1];
+  let sh = 0; hits.forEach(h => { const d = t - h; if (d >= 0 && d < .25) sh = Math.max(sh, (1 - d / .25)); });
+  $("stage").style.transform = sh ? `translate(${Math.sin(t * 120) * 14 * sh}px, ${Math.cos(t * 97) * 10 * sh}px)` : "";
+  // flash on reveal
+  $("flash").style.opacity = Math.max(0, .9 * (1 - prog(t, 10.9, 11.35)) * (t >= 10.9 ? 1 : 0), .5 * (1 - prog(t, 0, .2)));
+
+  // S1 0 – 2.7
+  if (scene("s1", t, 0, 2.7, .12)) { slam($("s1a"), t, 0.05); slam($("s1b"), t, 1.15, .3); }
+
+  // S2 2.7 – 8.4
+  if (scene("s2", t, 2.7, 7.9, .12)) {
+    rise($("s2k"), t, 2.75);
+    const nodes = $("path").querySelectorAll(".node"), wires = $("path").querySelectorAll(".wire");
+    nodes.forEach((n, i) => {
+      const at = 3.0 + i * 0.95, p = outBack(prog(t, at, at + .4));
+      n.style.opacity = clamp(prog(t, at, at + .2)); n.style.transform = `translateX(${(1 - p) * (i % 2 ? 300 : -300)}px)`;
+      const hot = prog(t, at + .25, at + .45);
+      n.style.borderColor = hot ? `rgba(239,75,63,${.3 + .6 * hot})` : "";
+      n.querySelector(".dot").style.opacity = hot;
+      if (i === 4) {
+        const pulse = t > at + .4 ? .5 + .5 * Math.sin((t - at) * 14) : 0;
+        n.style.background = `rgba(239,75,63,${.12 + .25 * pulse})`;
+      }
+    });
+    wires.forEach((w, i) => { const at = 3.0 + (i + 1) * 0.95 - .35; w.style.transform = `scaleY(${outCubic(prog(t, at, at + .35))})`; });
+  }
+
+  // S3 8.4 – 10.9
+  if (scene("s3", t, 7.9, 10.9, .1)) {
+    rise($("s3a"), t, 7.9, .35);
+    const sp = prog(t, 8.0, 8.3);
+    $("stamp").style.opacity = clamp(sp * 3) * (1 - prog(t, 9.6, 9.9) * .6);
+    $("stamp").style.transform = `translateX(-50%) rotate(-8deg) scale(${2.4 - 1.4 * outCubic(sp)})`;
+    $("strike").style.transform = `rotate(-8deg) scaleX(${outCubic(prog(t, 9.4, 9.6))})`;
+    slam($("s3b"), t, 9.55, .3);
+  }
+
+  // S4 10.9 – 14.2
+  if (scene("s4", t, 10.9, 14.2, .15)) {
+    const mp = outCubic(prog(t, 10.9, 12.2));
+    $("mark").style.transform = `scale(${1.35 - .35 * mp})`; $("mark").style.opacity = clamp(prog(t, 10.9, 11.3));
+    // glint on hawk eye (78%, 30% of mark)
+    const g = prog(t, 11.9, 12.6), gs = Math.sin(g * Math.PI);
+    const mw = 720 * (1.35 - .35 * mp), mh = mw * 334 / 512;
+    $("glint").style.left = (540 - mw / 2 + mw * .78 - 30) + "px";
+    $("glint").style.top = (560 + 360 * 334 / 512 - mh / 2 + mh * .30 - 30) + "px";
+    $("glint").style.opacity = gs; $("glint").style.transform = `scale(${1 + gs * 3})`;
+    rise($("word"), t, 12.1, .5, 40); rise($("s4k"), t, 12.5, .5, 30);
+  }
+
+  // S5 14.2 – 18
+  if (scene("s5", t, 14.2, 18)) {
+    rise($("s5a"), t, 14.25, .4);
+    const nodes = p2.querySelectorAll(".node"), wires = p2.querySelectorAll(".wire");
+    nodes.forEach((n, i) => { const at = 14.4 + i * .08; rise(n, t, at, .35, 40); n.style.borderColor = "rgba(239,75,63,.6)"; });
+    wires.forEach(w => w.style.transform = "scaleY(1)");
+    const scanY = 560 + inOut(prog(t, 14.9, 15.9)) * 1100 - 220;
+    $("scan").style.top = scanY + "px"; $("scan").style.opacity = Math.sin(prog(t, 14.9, 15.9) * Math.PI);
+    // breaker at node 3
+    const b = prog(t, 15.7, 16.0);
+    nodes[2].style.borderColor = b ? `rgba(245,165,36,${.4 + .6 * b})` : nodes[2].style.borderColor;
+    nodes[2].style.boxShadow = b ? `0 0 ${60 * b}px rgba(245,165,36,.45)` : "";
+    nodes[2].querySelector(".dot").style.background = b > .5 ? "var(--amber)" : "";
+    nodes[2].querySelector(".dot").style.boxShadow = b > .5 ? "0 0 30px var(--amber)" : "";
+    const tg = outBack(prog(t, 15.85, 16.2)); tag.style.opacity = clamp(tg); tag.style.transform = `scale(${tg})`;
+    const c = outCubic(prog(t, 16.1, 16.35)); cut.style.opacity = c; cut.style.transform = `scaleX(${c}) rotate(-12deg)`;
+    // downstream goes dark/safe
+    const d = prog(t, 16.3, 16.8);
+    for (let i = 3; i < 5; i++) {
+      nodes[i].style.opacity = 1 - .65 * d;
+      nodes[i].style.borderColor = d ? `rgba(47,191,127,${.7 * d})` : nodes[i].style.borderColor;
+      nodes[i].querySelector(".dot").style.background = d > .5 ? "var(--safe)" : "";
+      nodes[i].querySelector(".dot").style.boxShadow = d > .5 ? "0 0 30px var(--safe)" : "";
+    }
+    for (let i = 2; i < 4; i++) wires[i].style.opacity = 1 - .8 * d;
+    rise($("s5b"), t, 16.5, .4);
+  }
+
+  // S6 18 – 20.4
+  if (scene("s6", t, 18, 20.1, .12)) {
+    rise($("s6k"), t, 18.05, .35);
+    const sp = inOut(prog(t, 18.2, 19.5)), val = Math.round(38 + sp * 46);
+    $("score").textContent = val;
+    $("score").style.color = val < 55 ? "#ef4b3f" : val < 70 ? "#f5a524" : "#fff";
+    $("arc").setAttribute("stroke-dashoffset", 1696.5 * (1 - val / 100));
+    $("arc").setAttribute("stroke", val < 55 ? "#ef4b3f" : "#f5a524");
+    rise($("s6a"), t, 18.6, .4);
+  }
+
+  // S7 20.1 – end
+  if (scene("s7", t, 20.1, DURATION + 1, .12)) {
+    slam($("s7a"), t, 20.1, .32);
+    rise($("mark2"), t, 20.6, .5, 40); rise($("word2"), t, 20.8, .5, 30);
+    const cp = outBack(prog(t, 21.1, 21.5)), pulse = t > 21.6 ? 1 + .03 * Math.sin((t - 21.6) * 7) : 1;
+    $("cta").style.opacity = clamp(prog(t, 21.1, 21.3)); $("cta").style.transform = `translateX(-50%) scale(${cp * pulse})`;
+    rise($("s7k"), t, 21.4, .4, 20);
+  }
+}
+window.render = render; window.DURATION = DURATION;
+
+// live preview unless capturing
+if (!location.search.includes("capture")) {
+  const fit = () => { const s = Math.min(innerWidth / 1080, innerHeight / 1920); document.body.style.zoom = s; };
+  fit(); addEventListener("resize", fit);
+  let t0 = performance.now();
+  (function loop(now) { const t = ((now - t0) / 1000) % DURATION; render(t); requestAnimationFrame(loop); })(t0);
+}
+</script>
+</body>
+</html>

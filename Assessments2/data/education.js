@@ -1,100 +1,117 @@
-const EDUCATION_DATA = {
-  id: 'education',
-  modules: [
-    {
-      id: 'access_control', name: 'Access Control (MFA)', description: 'MFA, account management, and identity governance.', icon: '',
-      categories: [
-        { id: 'mfa', name: 'Authentication', description: 'Protecting staff and student accounts.', questions: [
-          { id: 'EDU-1.1', text: 'Are student/staff accounts protected with MFA (especially admin)?', context: 'MFA config screenshot', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.2', text: 'Are shared/generic accounts eliminated or strictly controlled in educational systems?', context: 'Account audit report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.3', text: 'Is Single Sign-On (SSO) implemented for staff access to LMS, SIS, and email?', context: 'SSO configuration', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.4', text: 'Are strong password policies enforced for all staff and admin accounts?', context: 'Password policy document', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'logs', name: 'Access Logging', description: 'Reviewing authentication logs.', questions: [
-          { id: 'EDU-1.5', text: 'Do you log and review network access/authentication logs regularly?', context: 'SIEM reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.6', text: 'Are failed login attempts monitored and accounts locked after repeated failures?', context: 'Lockout policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.7', text: 'Are user accounts deactivated promptly when students graduate or staff leave?', context: 'Off-boarding procedure', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'rbac', name: 'Role-Based Access', description: 'Restricting access by role.', questions: [
-          { id: 'EDU-1.8', text: 'Is access to student records (grades, health, financial aid) restricted by role?', context: 'RBAC matrix', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-1.9', text: 'Do administrators have separate accounts for daily use vs. privileged admin tasks?', context: 'Admin account policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'endpoint_patch', name: 'Endpoint & Patch Management', description: 'EDR, LMS updates, and device management.', icon: '',
-      categories: [
-        { id: 'mdm', name: 'Device Management', description: 'Managing student/staff devices.', questions: [
-          { id: 'EDU-2.1', text: 'Are laptops/tablets used by students managed by the school (EDR/antivirus)?', context: 'MDM/EDR logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-2.2', text: 'Is there an approved BYOD policy with minimum security requirements for personal devices?', context: 'BYOD policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-2.3', text: 'Are school-issued devices encrypted and configured with remote wipe capability?', context: 'MDM console', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-2.4', text: 'Are lab computers reset to a clean state between user sessions (e.g., Deep Freeze)?', context: 'Lab management policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'patching', name: 'System Updates', description: 'Patching educational platforms.', questions: [
-          { id: 'EDU-2.5', text: 'Do you regularly update/patch learning management systems and admin portals?', context: 'Update schedule, logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-2.6', text: 'Are critical security patches applied within 30 days across all school IT systems?', context: 'Patch compliance report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-2.7', text: 'Is there an inventory of all software used across the institution (including free/open-source)?', context: 'Software inventory', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'network_data', name: 'Network & Data Protection', description: 'Segmentation, student privacy, and data controls.', icon: '',
-      categories: [
-        { id: 'segmentation', name: 'Network Segmentation', description: 'Guest vs. staff networks.', questions: [
-          { id: 'EDU-3.1', text: 'Are school networks segmented (guest Wi-Fi vs staff vs servers)?', context: 'Network config diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.2', text: 'Is web content filtering applied on student networks to block malicious sites?', context: 'Content filter config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.3', text: 'Are firewall rules reviewed and updated at least annually?', context: 'Firewall review records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.4', text: 'Is DNS filtering or DNS security implemented to block known malicious domains?', context: 'DNS filter config', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'privacy', name: 'Student Data Privacy', description: 'Encrypting records and compliance.', questions: [
-          { id: 'EDU-3.5', text: 'Is personal data of minors (health, guardian info) encrypted and access-controlled?', context: 'Data protection policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.6', text: 'Are you compliant with student data privacy regulations (FERPA, COPPA, or local equivalents)?', context: 'Compliance documentation', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.7', text: 'Is there a data classification policy distinguishing public, internal, and confidential student data?', context: 'Data classification matrix', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.8', text: 'Are third-party edtech vendors assessed for data privacy before adoption?', context: 'Vendor privacy assessment', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'dlp', name: 'File Sharing', description: 'Monitoring cloud and USB transfers.', questions: [
-          { id: 'EDU-3.9', text: 'Do you restrict and monitor file sharing (e.g. Google Drive, USB) to prevent data leaks?', context: 'DLP policy, logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-3.10', text: 'Are email and communication platforms configured to prevent external sharing of sensitive data?', context: 'Email DLP rules', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'backup_continuity', name: 'Backup & Continuity', description: 'Protecting educational records and disaster recovery.', icon: '',
-      categories: [
-        { id: 'backup', name: 'Data Backups', description: 'Offline backups of grades/records.', questions: [
-          { id: 'EDU-4.1', text: 'Are backups of student records and admin data kept offsite/offline?', context: 'Backup logs', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Monthly', value: 2}, {label: 'Weekly', value: 4}, {label: 'Daily', value: 5}] },
-          { id: 'EDU-4.2', text: 'Are backup restoration procedures tested at least annually?', context: 'Restoration test reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-4.3', text: 'Are exam papers and assessment results backed up separately from general data?', context: 'Exam backup policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'ir', name: 'Incident Response', description: 'Notifying parents and authorities.', questions: [
-          { id: 'EDU-4.4', text: 'Is there a plan for incident communication (to parents, authorities) if breach occurs?', context: 'Communication plan', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-4.5', text: 'Is there a documented incident response plan specific to educational data breaches?', context: 'IR plan', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-4.6', text: 'Are roles and responsibilities clearly defined for the IR team (IT, admin, legal)?', context: 'IR team roster', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-4.7', text: 'Is there a defined RTO for restoring student information systems after an incident?', context: 'RTO documentation', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'awareness_policies', name: 'Awareness, Policies & Email', description: 'Training, platform audits, and email security.', icon: '',
-      categories: [
-        { id: 'training', name: 'Security Training', description: 'Educating staff and students.', questions: [
-          { id: 'EDU-5.1', text: 'Do employees and students receive security awareness training (phishing/QR)?', context: 'Training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-5.2', text: 'Are phishing simulation exercises conducted at least annually for staff?', context: 'Phishing sim results', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-5.3', text: 'Is there age-appropriate cyber safety education included in the curriculum?', context: 'Curriculum outline', weight: 2, options: [{label: 'No', value: 0}, {label: 'Partial', value: 1}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-5.4', text: 'Are IT staff given specialized training on educational technology security?', context: 'IT training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'audit', name: 'Platform Audits', description: 'Assessing SIS and LMS.', questions: [
-          { id: 'EDU-5.5', text: 'Are major educational platforms (SIS, LMS) audited for security?', context: 'Audit reports', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-5.6', text: 'Is there an acceptable use policy for school IT resources signed by staff and students?', context: 'AUP document', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'email', name: 'Email Security', description: 'Protecting school email.', questions: [
-          { id: 'EDU-5.7', text: 'Are SPF, DKIM, and DMARC configured for the school email domain?', context: 'DNS records', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'EDU-5.8', text: 'Is there email filtering to block phishing and malware targeting staff and students?', context: 'Email filter config', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    }
+// ============================================
+// HawkSight — Education threat-led template
+// Core question set plus the attack paths specific to schools, colleges and
+// universities: edtech vendor breaches of student data, open campus
+// networks, orphaned student accounts, fee-payment fraud against parents,
+// tampering with grades and exam material, and running exams and
+// admissions through an outage.
+// ============================================
+
+const { levels, q, composeTemplate } = require('./core.js');
+
+const EDUCATION_DATA = composeTemplate('education', {
+  entry: [
+    { id: 'edu_entry', name: 'Campus, vendors and accounts', description: 'Entry points shaped by open campuses, large user populations and many edtech vendors.', questions: [
+      q('EDU-IN-01', 'HS-TPR-01', 'Do you know which edtech vendors hold student data (SIS, LMS, exam and admission platforms, apps), and have you checked how they protect it and how quickly they would tell you about a breach?',
+        levels(
+          ['No', 'No list of vendors holding student data.'],
+          ['List only', 'Vendors are known, not assessed.'],
+          ['Assessed with notification terms', 'Assessed before adoption, with breach-notification and data-deletion terms in contracts.'],
+          ['Minimised and reviewed', 'As above, data shared is minimised and vendors are reviewed every year.']),
+        { attack: 'In December 2024 attackers used a stolen support credential at PowerSchool, a student information system provider, and took data on tens of millions of students from its school customers.',
+          verify: 'Edtech vendor register with contract terms and assessment dates.' }),
+      q('EDU-IN-02', 'HS-NET-01', 'Are student and guest devices on campus Wi-Fi kept separate from staff systems, exam systems and servers?',
+        levels(
+          ['Same network', 'Students, guests and staff share a network.'],
+          ['Separate SSID only', 'Separate Wi-Fi names, but students can reach internal systems.'],
+          ['Isolated', 'Student and guest networks are isolated from staff and administrative systems.'],
+          ['Isolated with access control', 'As above, with network access control for staff networks.']),
+        { attack: 'Thousands of unmanaged personal devices join campus networks every day. If they can reach administrative systems, so can any malware they carry.',
+          verify: 'Network design and firewall rules between student and administrative networks.' }),
+      q('EDU-IN-03', 'HS-IAM-03', 'Are accounts of students and staff who have left disabled promptly, including in third-party apps?',
+        levels(
+          ['They stay active', 'Accounts remain active indefinitely.'],
+          ['Annual clean-up', 'Removed in a yearly clean-up.'],
+          ['Within 30 days', 'Disabled automatically within 30 days.'],
+          ['Lifecycle automated', 'Created and removed automatically from the SIS and HR systems, including connected apps.']),
+        { attack: 'Thousands of dormant student and alumni accounts are a ready supply of logins for attackers, who use them to phish staff from a trusted address.',
+          verify: 'Count of active accounts for people who left more than 90 days ago.' }),
+      q('EDU-IN-04', 'HS-PAY-02', 'How are parents protected from fake fee-payment requests and "changed bank details" messages?',
+        levels(
+          ['Nothing', 'No guidance to parents.'],
+          ['Occasional warnings', 'Warnings sent after incidents.'],
+          ['Single official channel', 'Fees are paid only through one published official channel, and parents are told the institution never changes bank details by email or message.'],
+          ['Protected and monitored', 'As above, with DMARC enforced and lookalike domains and social media accounts monitored.']),
+        { attack: 'Fraudsters send parents fake fee notices from lookalike addresses or WhatsApp numbers at admission and term time, when payments are expected.',
+          verify: 'Fee payment communications and the published guidance to parents.' })
+    ]}
+  ],
+  spread: [
+    { id: 'edu_access', name: 'Academic systems and shared devices', description: 'Who can reach grades, exams and admissions, and the state of shared computers.', questions: [
+      q('EDU-SP-01', 'HS-IAM-02', 'Can student or general staff accounts reach grade, exam or admission systems beyond what their role needs?',
+        levels(
+          ['Yes', 'Access is broad.'],
+          ['Partly restricted', 'Restricted by department, not by role.'],
+          ['Role-based', 'Access is role-based and changes are approved.'],
+          ['Role-based and reviewed', 'As above, with access reviewed each term and changes to grades logged.']),
+        { attack: 'Students and outsiders target grade and exam systems. Broad access turns one stolen staff password into changed results.',
+          verify: 'Role configuration in the SIS or exam system and the last access review.' }),
+      q('EDU-SP-02', 'HS-END-02', 'Are shared lab and library computers reset to a clean state between users and prevented from saving passwords?',
+        levels(
+          ['No', 'Shared computers keep changes between users.'],
+          ['Occasionally reimaged', 'Rebuilt occasionally.'],
+          ['Reset each session', 'Reset to a clean state after each session.'],
+          ['Reset and locked down', 'As above, with credential saving disabled and USB restricted.']),
+        { attack: 'Keyloggers and saved browser sessions on shared computers hand staff and student credentials to whoever sits down next.',
+          verify: 'Configuration of lab and library machines.' })
+    ]}
+  ],
+  protect: [
+    { id: 'edu_data', name: 'Student data and exam integrity', description: 'Children\'s data and the integrity of exams and results.', questions: [
+      q('EDU-PR-01', 'HS-DAT-04', 'Is children\'s data (health, guardian contacts, photos, identity documents) collected only where needed and access-restricted, with verifiable parental consent where the law requires it?',
+        levels(
+          ['No controls', 'Collected broadly, widely accessible.'],
+          ['Partly', 'Some restrictions, consent not tracked.'],
+          ['Minimised and consented', 'Collected only where needed, access-restricted, consent recorded.'],
+          ['Reviewed', 'As above, reviewed yearly and deleted when no longer needed.']),
+        { context: 'The DPDP Act requires verifiable consent of a parent or guardian before processing a child\'s personal data.',
+          attack: 'Children\'s data is valuable to criminals because it can be used for identity fraud for years before anyone notices.',
+          verify: 'Data inventory for student records and the consent mechanism.' }),
+      q('EDU-PR-02', 'HS-DAT-03', 'Are exam papers, results and admission decisions protected against leaks and tampering before release, with access restricted and changes logged?',
+        levels(
+          ['No', 'Stored and shared like any other file.'],
+          ['Restricted', 'Access restricted to named people.'],
+          ['Restricted and logged', 'Restricted, with every access and change logged.'],
+          ['Controlled release', 'As above, with controlled release and integrity checks on results.']),
+        { attack: 'Exam paper leaks and changed results cause public harm and loss of trust. They usually start with a compromised staff account or a shared drive.',
+          verify: 'Access list and logs for exam material storage.' })
+    ]}
+  ],
+  detect: [
+    { id: 'edu_detect', name: 'Spotting misuse', description: 'Noticing compromised accounts and tampering.', questions: [
+      q('EDU-DE-01', 'HS-MON-02', 'Would IT notice mass email sending from a compromised staff or student account, or grade changes outside the normal process?',
+        levels(
+          ['No', 'Neither is monitored.'],
+          ['After complaints', 'Usually found after complaints.'],
+          ['Alerted', 'Both raise alerts reviewed by IT.'],
+          ['Alerted and acted on', 'As above, with accounts suspended automatically for mass sending.']),
+        { attack: 'Compromised education accounts are used to phish other institutions and parents because messages from a school or university are trusted.',
+          verify: 'Alert rules for outbound mail volume and grade changes.' })
+    ]}
+  ],
+  recover: [
+    { id: 'edu_recover', name: 'Exams and admissions through an outage', description: 'Continuing teaching, exams and admissions while systems are down.', questions: [
+      q('EDU-RE-01', 'HS-RES-03', 'If systems were down during exams or admissions season, is there a plan to run exams, publish results and accept applications?',
+        levels(
+          ['No', 'No plan.'],
+          ['Informal', 'Ideas, nothing written.'],
+          ['Documented', 'Documented contingency plans for exams, results and admissions.'],
+          ['Rehearsed', 'As above, rehearsed or tested in the last year.']),
+        { attack: 'Attacks on schools and universities often land at the start of term or around exams, when disruption hurts most and the pressure to pay is highest.',
+          verify: 'Contingency plans for exams and admissions.' })
+    ]}
   ]
-};
+});
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { EDUCATION_DATA };

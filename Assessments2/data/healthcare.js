@@ -1,109 +1,140 @@
-const HEALTHCARE_DATA = {
-  id: 'healthcare',
-  modules: [
-    {
-      id: 'data_privacy', name: 'Data & Privacy (PHI)', description: 'Encryption and compliance for patient data.', icon: '',
-      categories: [
-        { id: 'encryption', name: 'Encryption', description: 'Patient data protection.', questions: [
-          { id: 'HC-1.1', text: 'Do you encrypt patient/PHI data at rest and in transit (DB, EMR, devices)?', context: 'Encryption certificates/logs', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.2', text: 'Are encryption keys managed through a dedicated key management system with defined rotation?', context: 'KMS configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.3', text: 'Is TLS 1.2 or higher enforced on all patient-facing portals and health apps?', context: 'TLS scan results', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.4', text: 'Are portable devices (USB drives, external HDDs) containing PHI encrypted?', context: 'Device encryption policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'compliance', name: 'Compliance', description: 'HIPAA/PDPA programs.', questions: [
-          { id: 'HC-1.5', text: 'Is there a formal HIPAA/PDPA compliance program or privacy officer designated?', context: 'Compliance policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.6', text: 'Do you conduct annual HIPAA risk assessments to identify gaps in PHI protection?', context: 'Risk assessment report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.7', text: 'Are Business Associate Agreements (BAAs) signed with all vendors handling PHI?', context: 'BAA documents', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.8', text: 'Is there a documented data breach notification procedure meeting regulatory timelines (e.g., 72 hours)?', context: 'Breach notification SOP', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'data_handling', name: 'Data Handling', description: 'Classification and retention.', questions: [
-          { id: 'HC-1.9', text: 'Is patient data classified by sensitivity level (e.g., demographic vs. diagnosis vs. billing)?', context: 'Data classification policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-1.10', text: 'Are data retention and disposal schedules defined and enforced for patient records?', context: 'Retention schedule', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'endpoint_medical', name: 'Endpoint & Medical Device Security', description: 'EDR, patching, and medical IoT segmentation.', icon: '',
-      categories: [
-        { id: 'edr', name: 'Endpoint Protection', description: 'Antivirus and EDR.', questions: [
-          { id: 'HC-2.1', text: 'Do you use an EDR (Endpoint Detection & Response) or behavior-based antivirus on all hospital/clinic endpoints?', context: 'EDR deployment report', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.2', text: 'Are all workstations configured with host-based firewalls and automatic screen locks?', context: 'Group policy settings', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.3', text: 'Is full-disk encryption enabled on all clinical workstations and laptops?', context: 'Encryption status report', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'patching', name: 'Patching', description: 'System updates.', questions: [
-          { id: 'HC-2.4', text: 'Are all systems (servers, medical devices, workstations) patched within 30 days?', context: 'Patch management logs', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.5', text: 'Do you have a process for patching legacy/end-of-life systems that cannot be updated (compensating controls)?', context: 'Legacy system policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.6', text: 'Is there a vulnerability management program that prioritizes patches by CVSS severity?', context: 'Vulnerability scan reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'iot', name: 'Medical Devices', description: 'Segmentation of medical equipment.', questions: [
-          { id: 'HC-2.7', text: 'Do you segregate medical devices (MRI, infusion pumps) on a separate VLAN/air-gapped network?', context: 'Network diagrams', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.8', text: 'Is there a complete inventory of all connected medical devices including make, model, and firmware version?', context: 'Medical device inventory', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.9', text: 'Are default passwords changed on all medical IoT devices before deployment?', context: 'Device commissioning checklist', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-2.10', text: 'Do you assess cybersecurity risk of new medical devices during the procurement process?', context: 'Procurement checklist', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'access_training', name: 'Access Control & Training', description: 'MFA, RBAC, and phishing awareness.', icon: '',
-      categories: [
-        { id: 'mfa', name: 'MFA', description: 'Multi-factor authentication.', questions: [
-          { id: 'HC-3.1', text: 'Are staff required to use MFA for hospital systems (EMR, admin portals)?', context: 'MFA configuration screenshot', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-3.2', text: 'Is MFA enforced for remote/VPN access to clinical systems?', context: 'VPN MFA config', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'rbac', name: 'Role-Based Access', description: 'Least-privilege for clinical staff.', questions: [
-          { id: 'HC-3.3', text: 'Is access to patient records restricted based on clinical role (e.g., nurse vs. billing vs. physician)?', context: 'RBAC matrix', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-3.4', text: 'Are privileged accounts (system admin, DBA) limited and monitored with elevated logging?', context: 'Privileged access management', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-3.5', text: 'Are user accounts deactivated within 24 hours of employment termination?', context: 'Off-boarding procedure', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'training', name: 'Security Training', description: 'Staff awareness.', questions: [
-          { id: 'HC-3.6', text: 'Do you conduct annual security awareness training (phishing simulations)?', context: 'Training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-3.7', text: 'Are clinical staff trained on secure handling of PHI (verbal, printed, and digital)?', context: 'Training materials', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-3.8', text: 'Is there role-specific security training for IT administrators handling health systems?', context: 'Advanced training records', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'monitoring_physical', name: 'Monitoring & Physical Security', description: 'Logging, SIEM, and physical access controls.', icon: '',
-      categories: [
-        { id: 'monitoring', name: 'Access Logging', description: 'Monitoring of patient records.', questions: [
-          { id: 'HC-4.1', text: 'Do you log and monitor access to patient records and admin systems 24/7?', context: 'SIEM/monitoring screenshots', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.2', text: 'Are automated alerts configured for unusual EMR access patterns (e.g., bulk record views)?', context: 'Alert configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.3', text: 'Are audit logs tamper-proof and retained for at least 6 years (HIPAA requirement)?', context: 'Log retention policy', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.4', text: 'Is there a process for periodic review of access logs to detect insider threats?', context: 'Log review schedule', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'physical', name: 'Physical Security', description: 'Server and pharmacy locks.', questions: [
-          { id: 'HC-4.5', text: 'Are physical areas (server room, pharmacy) locked and access-logged?', context: 'Access log prints', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.6', text: 'Are workstations in public areas (reception, nurse stations) positioned to prevent screen visibility by patients?', context: 'Workstation placement policy', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.7', text: 'Is CCTV monitoring active in areas with sensitive equipment (data centers, lab)?', context: 'CCTV coverage map', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-4.8', text: 'Are visitor access procedures enforced for restricted clinical and IT areas?', context: 'Visitor log', weight: 2, options: [{label: 'No', value: 0}, {label: 'Partial', value: 1}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    },
-    {
-      id: 'backup_ir', name: 'Backup, IR & Network Security', description: 'Ransomware readiness, network, and disaster recovery.', icon: '',
-      categories: [
-        { id: 'backup', name: 'Offline Backups', description: 'Data backups.', questions: [
-          { id: 'HC-5.1', text: 'Are there offline (disconnected) backups of critical data (imaging, records)?', context: 'Backup logs', weight: 5, options: [{label: 'Never', value: 0}, {label: 'Monthly', value: 2}, {label: 'Weekly', value: 4}, {label: 'Daily', value: 5}] },
-          { id: 'HC-5.2', text: 'Are backup restoration procedures tested at least quarterly?', context: 'Restoration test reports', weight: 4, options: [{label: 'No', value: 0}, {label: 'Annually', value: 2}, {label: 'Quarterly+', value: 5}] },
-          { id: 'HC-5.3', text: 'Are backups encrypted and stored in a geographically separate location?', context: 'Backup architecture diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'rto', name: 'Recovery Time', description: 'Restoration speed.', questions: [
-          { id: 'HC-5.4', text: 'How quickly can you restore operations from backups after an outage?', context: 'RTO/RPO documentation', weight: 4, options: [{label: 'More than 3 days', value: 1}, {label: '1-3 days', value: 3}, {label: 'Under 24 hours', value: 5}] },
-          { id: 'HC-5.5', text: 'Is there a defined RPO (Recovery Point Objective) for critical patient systems?', context: 'RPO documentation', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'ir', name: 'Incident Response', description: 'IR planning.', questions: [
-          { id: 'HC-5.6', text: 'Is an incident response team/plan in place for cyber incidents?', context: 'IR plan document', weight: 5, options: [{label: 'No', value: 0}, {label: 'Partial', value: 3}, {label: 'Yes', value: 5}] },
-          { id: 'HC-5.7', text: 'Are tabletop exercises or IR drills conducted at least annually?', context: 'Drill reports', weight: 3, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-5.8', text: 'Is there a designated communication plan for notifying patients and regulators after a breach?', context: 'Communication plan', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]},
-        { id: 'network', name: 'Network Security', description: 'Segmentation and monitoring.', questions: [
-          { id: 'HC-5.9', text: 'Is the clinical network segmented from administrative and guest Wi-Fi networks?', context: 'Network architecture diagram', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] },
-          { id: 'HC-5.10', text: 'Are intrusion detection/prevention systems (IDS/IPS) deployed on the hospital network?', context: 'IDS/IPS configuration', weight: 4, options: [{label: 'No', value: 0}, {label: 'Partial', value: 2}, {label: 'Yes', value: 5}] }
-        ]}
-      ]
-    }
+// ============================================
+// HawkSight — Healthcare & Pharma threat-led template
+// Core question set plus the attack paths specific to hospitals, clinics,
+// diagnostics and pharmaceutical organisations: clinical remote access,
+// medical devices, patient-record misuse, clinical vendors and running
+// care safely while systems are down.
+// ============================================
+
+const { levels, q, composeTemplate } = require('./core.js');
+
+const HEALTHCARE_DATA = composeTemplate('healthcare', {
+  entry: [
+    { id: 'hc_access', name: 'Clinical remote access and exposure', description: 'The ways into clinical systems that attackers target in healthcare.', questions: [
+      q('HC-IN-01', 'HS-NET-03', 'Do all remote-access routes into clinical systems require MFA, including those used by visiting doctors, radiologists reporting from home, billing staff and vendors?',
+        levels(
+          ['None or few', 'Most clinical remote-access routes rely on a password alone.'],
+          ['Staff only', 'Employed staff use MFA; visiting clinicians, vendors or legacy portals do not.'],
+          ['All but legacy', 'All routes require MFA except documented legacy systems with compensating controls.'],
+          ['All, monitored', 'Every route requires MFA and remote sessions are logged and reviewed.']),
+        { context: 'Include Citrix or remote desktop gateways, VPNs, teleradiology and PACS viewers, web access to the EMR or HIS, and vendor support connections.',
+          attack: 'In the 2024 Change Healthcare attack, criminals used stolen credentials on a remote-access portal that had no MFA. Claims and pharmacy payments across the US were disrupted for weeks.',
+          verify: 'List of clinical remote-access routes with the authentication policy applied to each.' }),
+      q('HC-IN-02', 'HS-VUL-03', 'Are any imaging (PACS or DICOM), laboratory or EMR servers reachable directly from the internet?',
+        levels(
+          ['Yes', 'One or more are directly reachable from the internet.'],
+          ['Protected by password', 'Some are reachable but require a login.'],
+          ['None, except portals', 'None are directly exposed; patient-facing portals sit behind a web application firewall.'],
+          ['None, verified', 'As above, confirmed by regular external scans.']),
+        { attack: 'Security researchers repeatedly find thousands of imaging servers worldwide exposing patient scans and personal details to anyone on the internet.',
+          verify: 'External scan of your IP ranges for DICOM (ports 104 and 11112), PACS web viewers and database ports.' }),
+      q('HC-IN-03', 'HS-IAM-05', 'Are shared logins used on clinical workstations, such as a ward or nursing-station account?',
+        levels(
+          ['Widely', 'Shared accounts and passwords are common on wards and in departments.'],
+          ['Some areas', 'Some departments still share logins.'],
+          ['Individual with fast switching', 'Individual logins everywhere, with tap-badge or fast user switching.'],
+          ['Individual, shared accounts removed', 'Individual logins everywhere and shared accounts are removed or locked to a single kiosk function.']),
+        { attack: 'Shared clinical logins are rarely changed when staff leave, make it impossible to tell who viewed a record, and give attackers a password that works across a whole department.',
+          verify: 'Directory list of generic or shared accounts and where each is used.' }),
+      q('HC-IN-04', 'HS-PPL-01', 'Are clinical, front-desk and billing staff trained on the scams aimed at healthcare, such as fake IT support calls, fake requests for patient records and QR-code phishing?',
+        levels(
+          ['No', 'No security training for these groups.'],
+          ['Generic only', 'Generic annual training not tailored to healthcare.'],
+          ['Role-specific', 'Role-specific training at induction and every year.'],
+          ['Reinforced', 'Role-specific training reinforced with simulations and a quick way to report suspicious contact.']),
+        { attack: 'Busy clinical and front-desk staff are targeted because they are helpful under time pressure. A convincing call from "IT" or a "doctor" is often all an attacker needs.',
+          verify: 'Training content and completion records for clinical and front-desk roles.' })
+    ]}
+  ],
+  spread: [
+    { id: 'hc_devices', name: 'Medical devices and clinical systems', description: 'Connected devices that often run outdated software and cannot be patched quickly.', questions: [
+      q('HC-SP-01', 'HS-OT-01', 'Can connected medical devices such as infusion pumps, imaging modalities, monitors and lab analysers be reached from the general hospital network?',
+        levels(
+          ['Yes', 'Medical devices share the general network.'],
+          ['Partly separated', 'Some devices are on separate VLANs; others are not.'],
+          ['Separated', 'All connected devices are in dedicated segments that allow only the traffic they need.'],
+          ['Separated and monitored', 'As above, with monitoring that understands medical device traffic.']),
+        { attack: 'Many medical devices run old versions of Windows that cannot be updated. On a shared network, ransomware reaches them and can stop treatment and diagnostics.',
+          verify: 'Network diagram and firewall rules for medical device segments.' }),
+      q('HC-SP-02', 'HS-OT-01', 'Do you have an inventory of connected medical devices showing operating system, software version, network location and who maintains each?',
+        levels(
+          ['No', 'No inventory of connected devices.'],
+          ['Biomedical asset list', 'A maintenance list without software or network details.'],
+          ['Complete', 'Complete, including operating system, firmware and vendor support status.'],
+          ['Automated', 'Automatically discovered and linked to vulnerability advisories.']),
+        { attack: 'When a flaw in a device model is announced, hospitals without an inventory cannot tell whether they are affected, or where the devices are.',
+          verify: 'Inventory extract for one clinical department compared with what is on the network.' }),
+      q('HC-SP-03', 'HS-OT-01', 'Before buying a connected medical device, do you require security information from the manufacturer, such as an MDS2 form, a software bill of materials and the patch support period?',
+        levels(
+          ['No', 'Security is not part of procurement.'],
+          ['Sometimes', 'Asked for informally on some purchases.'],
+          ['Always required', 'Required for every connected device before purchase.'],
+          ['Contractual', 'Required, with contract terms for patch timelines and vulnerability disclosure.']),
+        { attack: 'Devices bought without security commitments stay in service for ten years or more, long after their software stops being supported.',
+          verify: 'Procurement checklist and the security documents for the last connected device purchased.' }),
+      q('HC-SP-04', 'HS-IAM-02', 'Is access to patient records limited by role and by relationship to the patient, with emergency ("break-glass") access logged and reviewed?',
+        levels(
+          ['Broad access', 'Most users can open most patient records.'],
+          ['Role-based only', 'Access is role-based, without break-glass controls.'],
+          ['Role-based with break-glass', 'Role-based access with break-glass use logged.'],
+          ['Break-glass reviewed', 'As above, with every break-glass use reviewed within days.']),
+        { attack: 'Broad access lets a single compromised account, or a curious employee, read thousands of patient records without any barrier.',
+          verify: 'EMR role configuration and the last break-glass review.' })
+    ]}
+  ],
+  protect: [
+    { id: 'hc_vendors', name: 'Clinical vendors and patient data', description: 'Organisations that hold or process patient data on your behalf.', questions: [
+      q('HC-PR-01', 'HS-TPR-01', 'Do vendors that host or process patient data (labs, billing, telemedicine, transcription, cloud EMR) have security and breach-notification obligations, and have you checked their security?',
+        levels(
+          ['No', 'Contracts are silent on security and breach notification.'],
+          ['Contract terms only', 'Contracts include security terms, but vendors are not assessed.'],
+          ['Assessed', 'Critical vendors are assessed and contracts require prompt breach notification.'],
+          ['Assessed and rehearsed', 'Reassessed yearly and included in incident exercises.']),
+        { attack: 'Healthcare breaches increasingly start at a vendor holding patient data. Their breach becomes your notification, and their outage stops your services.',
+          verify: 'Vendor register for patient-data processors with contract terms and assessment dates.' })
+    ]}
+  ],
+  detect: [
+    { id: 'hc_monitoring', name: 'Patient-record misuse and clinical response', description: 'Spotting misuse of patient data and responding safely.', questions: [
+      q('HC-DE-01', 'HS-MON-02', 'Would you notice if an account viewed or exported an unusual number of patient records, or records of a public figure or a colleague?',
+        levels(
+          ['No', 'Record access is not reviewed.'],
+          ['Logged only', 'Access is logged but nobody reviews it.'],
+          ['Periodic audit', 'Record access is audited proactively at regular intervals.'],
+          ['Automated alerts', 'Unusual access patterns raise alerts that are investigated.']),
+        { attack: 'Attackers and insiders who reach the EMR export records in bulk. Without monitoring, the first sign is the data appearing for sale.',
+          verify: 'Access monitoring rules and the last investigation they triggered.' }),
+      q('HC-DE-02', 'HS-IR-01', 'Does your incident plan cover clinical safety decisions during a cyber incident, such as diverting patients or ambulances, with clinical leaders involved?',
+        levels(
+          ['No', 'The incident plan, if any, is IT-only.'],
+          ['IT-focused', 'Clinical impact is mentioned but not planned for.'],
+          ['Clinically owned', 'Clinical decision makers and diversion criteria are part of the plan.'],
+          ['Exercised', 'As above, exercised with clinical teams in the last 12 months.']),
+        { attack: 'Ransomware in hospitals forces clinical decisions within hours. Without a plan, those decisions are made in confusion.',
+          verify: 'Incident plan sections covering clinical escalation and diversion.' })
+    ]}
+  ],
+  recover: [
+    { id: 'hc_downtime', name: 'Clinical downtime', description: 'Keeping care safe while clinical systems are unavailable.', questions: [
+      q('HC-RE-01', 'HS-RES-03', 'If the EMR or HIS, laboratory and imaging systems were down for two weeks, could wards, outpatient clinics, pharmacy and the laboratory keep operating safely?',
+        levels(
+          ['No', 'No downtime procedures.'],
+          ['Some departments', 'Some departments have paper forms.'],
+          ['All critical departments', 'Documented downtime procedures for all critical departments, with printed forms and current patient lists ready.'],
+          ['Drilled', 'As above, with a downtime drill in the last 12 months.']),
+        { attack: 'When AIIMS New Delhi was hit by ransomware in 2022, hospital services ran manually for about two weeks. Downtime procedures decide whether that is safe.',
+          verify: 'Downtime procedures and kit for one ward and the laboratory, and the last drill record.' }),
+      q('HC-RE-02', 'HS-RES-02', 'Have you tested restoring the EMR or HIS and the imaging archive from backup, and measured how long it takes?',
+        levels(
+          ['Never', 'Never tested.'],
+          ['Partly', 'Parts of the data have been restored.'],
+          ['Full, timed', 'A full restore tested in the last 12 months with the time recorded.'],
+          ['Twice yearly, within target', 'Tested at least twice a year and completed within the agreed recovery time.']),
+        { attack: 'Imaging archives are huge. Restoring them can take far longer than the business expects, which matters most when attackers have destroyed the live copy.',
+          verify: 'Restore test reports for the EMR or HIS and the PACS archive.' })
+    ]}
   ]
-};
+});
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { HEALTHCARE_DATA };
